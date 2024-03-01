@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Linq;
 using Test.Areas.Identity.Data;
 using Test.Data;
+using Test.Data.Enum;
 using Test.Models;
 
 namespace Test.Controllers
@@ -24,7 +26,6 @@ namespace Test.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["UserId"] = _userManager.GetUserId(this.User);
-
             var data = await _context.Posts.ToListAsync();
             return View(data);
         }
@@ -35,10 +36,17 @@ namespace Test.Controllers
             var allPosts = await _context.Posts.ToListAsync();
             if (!string.IsNullOrEmpty(searchString))
             {
-                var matchedResult = allPosts.Where(str => str.Title.ToLower().Contains(searchString.ToLower()) || str.Description.ToLower().Contains(searchString.ToLower())).ToList();
+                var matchedResult = allPosts.Where(p => p.Title.ToLower().Contains(searchString.ToLower()) || p.Description.ToLower().Contains(searchString.ToLower())).ToList();
                 return View("Index", matchedResult);
             }
             return View("Index", allPosts);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> Filter(Tag tag)
+        {
+            var filteredPosts = await _context.Posts.Where(p => p.Tag == tag).ToListAsync();
+            return View("Index", filteredPosts);
         }
 
         [Authorize]

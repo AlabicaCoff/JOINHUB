@@ -1,8 +1,21 @@
-﻿@model IEnumerable<Post>
+﻿@using Test.Data.Enum
+@model IEnumerable<Post>
 
 @{
     ViewData["Title"] = "List of Posts";
 }
+<div class="row">
+    <div class="col-md-1">
+        <ul>
+            @foreach (Tag tag in Enum.GetValues(typeof(Tag)))
+            {
+                <li>
+                    <a asp-controller="Post" asp-action="Filter" asp-route-tag="@tag">@tag</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-8 offset-md-2">
