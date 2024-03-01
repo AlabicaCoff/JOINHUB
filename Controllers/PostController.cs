@@ -72,7 +72,14 @@ namespace Test.Controllers
 
         public async Task<IActionResult> Detail(int id)
         {
-            var data = _context.Posts.SingleOrDefaultAsync(p => p.Id == id);
+            var data = await _context.Posts.Include(a => a.Author).Include(pp => pp.Post_Participants).ThenInclude(u => u.ApplicationUser).SingleOrDefaultAsync(p => p.Id == id);
+            if (data == default)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
+
+            ViewData["Expired Date"] = data.ExpireTime.HasValue? data.ExpireTime.Value
+                .ToString("dddd, dd MMMM yyyy") : "<not available>"; ;
             return View(data);
         }
     }

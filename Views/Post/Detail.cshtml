@@ -1,0 +1,28 @@
+﻿@model Post
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Title: @Model.Title</h1>
+<p>Tag: @Model.Tag</p>
+<p>Status: @Model.Status</p>
+<p>Description: @Model.Description</p>
+<p>@Model.Post_Participants.Count() / @Model.NumberOfParticipants</p>
+<hr />
+<ul>
+    @foreach (var user in Model.Post_Participants)
+    {
+        <li>@user.ApplicationUser.Fullname</li>
+    }
+</ul>
+<hr />
+<p>Author: @Model.Author.FullName</p>
+<p>Posted at @Model.CreatedTime.ToString("dddd, dd MMMM yyyy")</p>
+@if (Model.ExpireTime != null)
+{
+    <p>Expired at @ViewData["Expired Date"]</p>
+}
+
+

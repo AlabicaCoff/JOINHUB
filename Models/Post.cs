@@ -12,7 +12,8 @@ namespace Test.Models
         [Required(ErrorMessage = "Title is required")]
         public string Title { get; set; }
         [Display(Name = "Description")]
-        public string? Description { get; set; }
+        [Required(ErrorMessage = "Description is required")]
+        public string Description { get; set; }
         public DateTime CreatedTime { get; set; }
         [Display(Name = "Expired Date")]
         public DateTime? ExpireTime { get; set; }
