@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Post>
+
+@{
+    ViewData["Title"] = "List of Posts";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+
+        <table class="table w-auto">
+            <thead>
+                <tr class="text-center">
+                    <th>@Html.DisplayNameFor(model => model.Title)</th>
+                    <th>@Html.DisplayNameFor(model => model.Description)</th>
+                    <th>@Html.DisplayNameFor(model => model.Status)</th>
+                    <th>@Html.DisplayNameFor(model => model.Tag)</th>
+                    <th>@Html.DisplayNameFor(model => model.NumberOfParticipants)</th>
+                    <th>@Html.DisplayNameFor(model => model.CreatedTime)</th>
+                    <th>@Html.DisplayNameFor(model => model.ExpireTime)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Tag)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.NumberOfParticipants)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.CreatedTime)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.ExpireTime)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+        <p>User ID: @ViewData["UserId"]</p>
+    </div>
+</div>
