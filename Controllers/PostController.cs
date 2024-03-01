@@ -20,12 +20,25 @@ namespace Test.Controllers
             this._userManager = userManager;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             ViewData["UserId"] = _userManager.GetUserId(this.User);
 
             var data = await _context.Posts.ToListAsync();
             return View(data);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> Search(string searchString)
+        {
+            var allPosts = await _context.Posts.ToListAsync();
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                var matchedResult = allPosts.Where(str => str.Title.ToLower().Contains(searchString.ToLower()) || str.Description.ToLower().Contains(searchString.ToLower())).ToList();
+                return View("Index", matchedResult);
+            }
+            return View("Index", allPosts);
         }
 
         [Authorize]
@@ -82,5 +95,7 @@ namespace Test.Controllers
                 .ToString("dddd, dd MMMM yyyy") : "<not available>"; ;
             return View(data);
         }
+
+        
     }
 }
