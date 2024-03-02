@@ -25,4 +25,40 @@
     <p>Expired at @ViewData["Expired Date"]</p>
 }
 
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            @if (User.Identity.IsAuthenticated)
+            {
+                var userId = (string)ViewData["UserId"];
+                @if (userId == Model.AuthorId)
+                {
+                    <a asp-controller="Post" asp-action="Edit" class="btn btn-primary">Edit</a>
+                    <a asp-controller="Post" asp-action="Close" class="btn btn-primary btn-danger">Close</a>
+                }
+                else
+                {
+                    var isParticipant = (bool)ViewData["isParticipant"];
+                    <p>@isParticipant</p>
+                    @if(!isParticipant)
+                    {
+                        <a asp-controller="Post" asp-action="Join" asp-route-id="@Model.Id" class="btn btn-primary">Join</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Post" asp-action="Unjoin" asp-route-id="@Model.Id" class="btn btn-primary btn-danger">Cancel</a>
+                    }
+                }
+            }
+            else
+            {
+                <p>Please Login to Join this Post</p>
+            }
+        </section>
+    </div>
+</div>
+    
+        
+
+
 

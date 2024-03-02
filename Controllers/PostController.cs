@@ -93,17 +93,43 @@ namespace Test.Controllers
 
         public async Task<IActionResult> Detail(int id)
         {
+            var user = await _userManager.GetUserAsync(this.User);
             var data = await _context.Posts.Include(a => a.Author).Include(pp => pp.Post_Participants).ThenInclude(u => u.ApplicationUser).SingleOrDefaultAsync(p => p.Id == id);
             if (data == default)
             {
                 return RedirectToAction("NotFound", "Home");
             }
-
+            ViewData["UserId"] = user.Id;
+            ViewData["isParticipant"] = _context.Post_Participants.Any(pp => pp.PostId == data.Id && pp.UserId == user.Id);
             ViewData["Expired Date"] = data.ExpireTime.HasValue? data.ExpireTime.Value
                 .ToString("dddd, dd MMMM yyyy") : "<not available>"; ;
             return View(data);
         }
 
-        
+        public async Task<IActionResult> Join(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var participant = new Post_Participant
+            {
+                PostId = id,
+                UserId = user.Id
+            };
+            _context.Post_Participants.Add(participant);
+            await _context.SaveChangesAsync();
+            return Redirect("../detail/" + id);
+        }
+
+        public async Task<IActionResult> Unjoin(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var participant = _context.Post_Participants.Single(pp => pp.PostId == id && pp.UserId == user.Id);
+            if (participant != null)
+            {
+                _context.Post_Participants.Remove(participant);
+                await _context.SaveChangesAsync();
+                return Redirect("../detail/" + id);
+            }
+            return View("NotFound", "Home");
+        }
     }
 }
