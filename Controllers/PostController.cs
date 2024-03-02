@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 using Test.Areas.Identity.Data;
 using Test.Data;
 using Test.Data.Enum;
@@ -87,15 +88,24 @@ namespace Test.Controllers
         }
 
         [Authorize]
-        public IActionResult MyPost()
+        public async Task<IActionResult> MyPost()
         {
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+            var allPosts = await _context.Posts.ToListAsync();
+            var posts = allPosts.Where(p => p.AuthorId == user.Id);
+            ViewData["UserId"] = user.Id;
+            return View(posts);
         }
 
         [Authorize]
-        public IActionResult MyActivity()
+        public async Task<IActionResult> MyActivity()
         {
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+            var allPosts = await _context.Posts.ToListAsync();
+            var post_participants = await _context.Post_Participants.Where(pp => pp.UserId == user.Id).Select(pp => pp.PostId).ToListAsync();
+            var posts = allPosts.Where(p => post_participants.Contains(p.Id));
+            ViewData["UserId"] = user.Id;
+            return View(posts);
         }
 
         [AllowAnonymous]
