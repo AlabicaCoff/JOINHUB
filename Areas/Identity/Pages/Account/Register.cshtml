@@ -8,21 +8,22 @@
     <h1>Register</h1>
     <h3>Create a new account.</h3>
     <form class="form" id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div asp-validation-summary="ModelOnly" class="error" role="alert"></div>
         <div>
             <input asp-for="Input.Fullname" class="input" aria-required="true" placeholder="Full Name" />
-            <span asp-validation-for="Input.Fullname" class="text-danger"></span>
+            <span asp-validation-for="Input.Fullname" class="error"></span>
         </div>
         <div>
             <input asp-for="Input.Email" class="input" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-            <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <span asp-validation-for="Input.Email" class="error"></span>
         </div>
         <div>
             <input asp-for="Input.Password" class="input" autocomplete="new-password" aria-required="true" placeholder="Password" />
-            <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <span asp-validation-for="Input.Password" class="error"></span>
         </div>
         <div>
             <input asp-for="Input.ConfirmPassword" class="input" autocomplete="new-password" aria-required="true" placeholder="Confirm Password" />
-            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            <span asp-validation-for="Input.ConfirmPassword" class="error"></span>
         </div>
         <button id="registerSubmit" type="submit">Register</button>
     </form>
