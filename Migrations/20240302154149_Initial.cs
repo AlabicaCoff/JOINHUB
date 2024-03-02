@@ -201,7 +201,7 @@ namespace Test.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExpireTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
@@ -223,12 +223,14 @@ namespace Test.Migrations
                 name: "Post_Participants",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     PostId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Post_Participants", x => new { x.PostId, x.UserId });
+                    table.PrimaryKey("PK_Post_Participants", x => new { x.Id, x.PostId, x.UserId });
                     table.ForeignKey(
                         name: "FK_Post_Participants_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -286,6 +288,11 @@ namespace Test.Migrations
                 name: "IX_Notifications_UserId",
                 table: "Notifications",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Post_Participants_PostId",
+                table: "Post_Participants",
+                column: "PostId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Post_Participants_UserId",

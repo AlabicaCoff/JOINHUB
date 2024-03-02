@@ -1,0 +1,25 @@
+﻿<script>
+    $(document).ready(function () {
+        // Function to periodically check post expiration
+        function checkPostExpiration() {
+            $.ajax({
+                url: '@Url.Action("CheckPostExpiration", "Post")',
+                type: 'POST',
+                success: function (data) {
+                    // Handle the response data as needed
+                    console.log(data);
+                    // For example, you can update the UI based on the response
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+        // Call the function initially
+        checkPostExpiration();
+
+        // Set up the interval to call the function every minute (adjust as needed)
+        setInterval(checkPostExpiration, 30000); // 60000 milliseconds = 1 minute
+    });
+</script>

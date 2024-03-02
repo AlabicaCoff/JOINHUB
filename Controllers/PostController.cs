@@ -197,10 +197,37 @@ namespace Test.Controllers
             {
                 return View("NotFound", "Home");
             }
+
+            var AllParticipants = _context.Post_Participants.ToList();
+            var diff = AllParticipants.Count() - post.NumberOfParticipants;
+           
+            while (diff > 0) 
+            {
+                var lastParticipant = AllParticipants.LastOrDefault();
+                _context.Post_Participants.Remove(lastParticipant);
+                diff--;
+            }
+    
             post.Status = PostStatus.Closed;
             _context.Update(post);
             await _context.SaveChangesAsync();
             return Redirect("../detail/" + post.Id);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CheckPostExpiration()
+        {
+            // Logic to check if any posts have expired
+            DateTime currentTime = DateTime.Now;
+            var expiredPosts = _context.Posts.Where(p => p.ExpireTime <= currentTime).ToList();
+
+            foreach (var post in expiredPosts)
+            {
+                post.Status = PostStatus.Closed;
+            }
+
+            await _context.SaveChangesAsync();
+            return Json(expiredPosts);
         }
     }
 }
