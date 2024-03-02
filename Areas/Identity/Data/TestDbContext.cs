@@ -18,9 +18,12 @@ public class TestDbContext : IdentityDbContext<ApplicationUser>
     {
         builder.Entity<Post_Participant>().HasKey(pp => new
         {
+            pp.Id,
             pp.PostId,
             pp.UserId
         });
+
+        builder.Entity<Post_Participant>().Property(pp => pp.Id).ValueGeneratedOnAdd();
         builder.Entity<Post_Participant>().HasOne(p => p.Post).WithMany(pp => pp.Post_Participants).HasForeignKey(p => p.PostId);
         builder.Entity<Post_Participant>().HasOne(p => p.ApplicationUser).WithMany(pp => pp.Post_Participants).HasForeignKey(p => p.UserId);
 

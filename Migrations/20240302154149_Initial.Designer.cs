@@ -12,7 +12,7 @@ using Test.Data;
 namespace Test.Migrations
 {
     [DbContext(typeof(TestDbContext))]
-    [Migration("20240301120424_Initial")]
+    [Migration("20240302154149_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -302,6 +302,7 @@ namespace Test.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ExpireTime")
@@ -329,13 +330,21 @@ namespace Test.Migrations
 
             modelBuilder.Entity("Test.Models.Post_Participant", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("PostId", "UserId");
+                    b.HasKey("Id", "PostId", "UserId");
+
+                    b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
 
