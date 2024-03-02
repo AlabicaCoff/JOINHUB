@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "List of Posts";
 }
-<div class="row">
+<div class="row position-fixed top-50 start-0">
     <div class="col-md-1">
         <ul>
             @foreach (Tag tag in Enum.GetValues(typeof(Tag)))
@@ -37,7 +37,7 @@
                 {
                     <tr>
                         <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Title)
+                            <a asp-controller="Post" asp-action="Detail" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
                         </td>
                         <td class="align-middle">
                             @Html.DisplayFor(modelItem => item.Description)
