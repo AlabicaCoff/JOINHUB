@@ -7,13 +7,18 @@
 <div class="login">
     <h1>Login</h1>
     <form class="form" id="account" method="post">
+        <div asp-validation-summary="ModelOnly" class="error" role="alert"></div>
         <div>
             <input asp-for="Input.Email" class="input" aria-required="true" placeholder="name@example.com" />
-            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+        <div>
+            <span asp-validation-for="Input.Email" class="error"></span>
         </div>
         <div>
             <input asp-for="Input.Password" class="input" aria-required="true" placeholder="Password" />
-            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+        <div>
+            <span asp-validation-for="Input.Password" class="error"></span>
         </div>
         <button id="login-submit" type="submit">Log in</button>
         <div class="goRegister">
