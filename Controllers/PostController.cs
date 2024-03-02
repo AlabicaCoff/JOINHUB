@@ -197,6 +197,17 @@ namespace Test.Controllers
             {
                 return View("NotFound", "Home");
             }
+
+            var AllParticipants = _context.Post_Participants.ToList();
+            var diff = AllParticipants.Count() - post.NumberOfParticipants;
+           
+            while (diff > 0) 
+            {
+                var lastParticipant = AllParticipants.LastOrDefault();
+                _context.Post_Participants.Remove(lastParticipant);
+                diff--;
+            }
+    
             post.Status = PostStatus.Closed;
             _context.Update(post);
             await _context.SaveChangesAsync();
