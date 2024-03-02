@@ -27,14 +27,14 @@ namespace Test.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["UserId"] = _userManager.GetUserId(this.User);
-            var data = await _context.Posts.ToListAsync();
+            var data = await _context.Posts.Where(p => p.Status == PostStatus.Active).ToListAsync();
             return View(data);
         }
 
         [AllowAnonymous]
         public async Task<IActionResult> Search(string searchString)
         {
-            var allPosts = await _context.Posts.ToListAsync();
+            var allPosts = await _context.Posts.Where(p => p.Status == PostStatus.Active).ToListAsync();
             if (!string.IsNullOrEmpty(searchString))
             {
                 var matchedResult = allPosts.Where(p => p.Title.ToLower().Contains(searchString.ToLower()) || p.Description.ToLower().Contains(searchString.ToLower())).ToList();
@@ -46,7 +46,8 @@ namespace Test.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Filter(Tag tag)
         {
-            var filteredPosts = await _context.Posts.Where(p => p.Tag == tag).ToListAsync();
+            var allPosts = await _context.Posts.Where(p => p.Status == PostStatus.Active).ToListAsync();
+            var filteredPosts = allPosts.Where(p => p.Tag == tag);
             return View("Index", filteredPosts);
         }
 
@@ -119,8 +120,9 @@ namespace Test.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
+            var user = await _userManager.GetUserAsync(User);
             var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == id);
-            if (post == default)
+            if (post == default || post.AuthorId != user.Id)
             {
                 return RedirectToAction("NotFound", "Home");
             }
@@ -142,6 +144,7 @@ namespace Test.Controllers
             return Redirect("../detail/" + id);
         }
 
+        [Authorize]
         public async Task<IActionResult> Join(int id)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -155,6 +158,7 @@ namespace Test.Controllers
             return Redirect("../detail/" + id);
         }
 
+        [Authorize]
         public async Task<IActionResult> Unjoin(int id)
         {
             var user = await _userManager.GetUserAsync(User);
