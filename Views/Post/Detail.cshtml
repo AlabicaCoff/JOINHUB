@@ -1,4 +1,5 @@
-﻿@model Post
+﻿@using Test.Data.Enum
+@model Post
 
 @{
     ViewData["Title"] = "Detail";
@@ -28,31 +29,38 @@
 <div class="row">
     <div class="col-md-4">
         <section>
-            @if (User.Identity.IsAuthenticated)
+            @if (Model.Status == PostStatus.Active)
             {
-                var userId = (string)ViewData["UserId"];
-                @if (userId == Model.AuthorId)
+                @if (User.Identity.IsAuthenticated)
                 {
-                    <a asp-controller="Post" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-                    <a asp-controller="Post" asp-action="Close" asp-route-id="@Model.Id" class="btn btn-primary btn-danger">Close</a>
-                }
-                else
-                {
-                    var isParticipant = (bool)ViewData["isParticipant"];
-                    <p>@isParticipant</p>
-                    @if(!isParticipant)
+                    var userId = (string)ViewData["UserId"];
+                    @if (userId == Model.AuthorId)
                     {
-                        <a asp-controller="Post" asp-action="Join" asp-route-id="@Model.Id" class="btn btn-primary">Join</a>
+                        <a asp-controller="Post" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                        <a asp-controller="Post" asp-action="Close" asp-route-id="@Model.Id" class="btn btn-primary btn-danger">Close</a>
                     }
                     else
                     {
-                        <a asp-controller="Post" asp-action="Unjoin" asp-route-id="@Model.Id" class="btn btn-primary btn-danger">Cancel</a>
+                        var isParticipant = (bool)ViewData["isParticipant"];
+                        <p>@isParticipant</p>
+                        @if (!isParticipant)
+                        {
+                            <a asp-controller="Post" asp-action="Join" asp-route-id="@Model.Id" class="btn btn-primary">Join</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Post" asp-action="Unjoin" asp-route-id="@Model.Id" class="btn btn-primary btn-danger">Cancel</a>
+                        }
                     }
+                }
+                else
+                {
+                    <p>Please Login to Join this Post</p>
                 }
             }
             else
             {
-                <p>Please Login to Join this Post</p>
+                <p>This Post is Closed.</p>
             }
         </section>
     </div>

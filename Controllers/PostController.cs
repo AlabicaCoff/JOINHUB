@@ -28,7 +28,7 @@ namespace Test.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["UserId"] = _userManager.GetUserId(this.User);
-            var data = await _context.Posts.Where(p => p.Status == PostStatus.Active).ToListAsync();
+            var data = await _context.Posts.Where(p => p.Status == PostStatus.Active).Include(a => a.Author).ToListAsync();
             return View(data);
         }
 
@@ -111,20 +111,21 @@ namespace Test.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Detail(int id)
         {
-            var data = await _context.Posts.Include(a => a.Author).Include(pp => pp.Post_Participants).ThenInclude(u => u.ApplicationUser).SingleOrDefaultAsync(p => p.Id == id);
-            if (data == default)
-            {
-                return RedirectToAction("NotFound", "Home");
-            }
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(this.User);
                 ViewData["UserId"] = user.Id;
-                ViewData["isParticipant"] = _context.Post_Participants.Any(pp => pp.PostId == data.Id && pp.UserId == user.Id);
+                ViewData["isParticipant"] = _context.Post_Participants.Any(pp => pp.PostId == id && pp.UserId == user.Id);
             }
-            ViewData["Expired Date"] = data.ExpireTime.HasValue ? data.ExpireTime.Value
+            var post = await _context.Posts.Include(a => a.Author).Include(pp => pp.Post_Participants).ThenInclude(u => u.ApplicationUser).SingleOrDefaultAsync(p => p.Id == id);
+            if (post == default)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
+
+            ViewData["Expired Date"] = post.ExpireTime.HasValue ? post.ExpireTime.Value
                 .ToString("dddd, dd MMMM yyyy") : "<not available>"; ;
-            return View(data);
+            return View(post);
         }
 
         [Authorize]
@@ -132,7 +133,7 @@ namespace Test.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == id);
-            if (post == default || post.AuthorId != user.Id)
+            if (post == default || post.AuthorId != user.Id || post.Status == PostStatus.Closed)
             {
                 return RedirectToAction("NotFound", "Home");
             }
@@ -147,8 +148,7 @@ namespace Test.Controllers
             {
                 return View(post);
             }
-            var author = await _context.Authors.SingleOrDefaultAsync(a => a.Id == user.Id);
-            post.AuthorId = author.Id;
+            post.AuthorId = user.Id;
             _context.Posts.Update(post);
             await _context.SaveChangesAsync();
             return Redirect("../detail/" + id);
@@ -157,29 +157,50 @@ namespace Test.Controllers
         [Authorize]
         public async Task<IActionResult> Join(int id)
         {
+            var post = _context.Posts.SingleOrDefault(p => p.Id == id);
+            if (post == default || post.Status == PostStatus.Closed)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
             var user = await _userManager.GetUserAsync(User);
             var participant = new Post_Participant
             {
-                PostId = id,
+                PostId = post.Id,
                 UserId = user.Id
             };
             _context.Post_Participants.Add(participant);
             await _context.SaveChangesAsync();
-            return Redirect("../detail/" + id);
+            return Redirect("../detail/" + post.Id);
         }
 
         [Authorize]
         public async Task<IActionResult> Unjoin(int id)
         {
+            var post = _context.Posts.SingleOrDefault(p => p.Id == id);
             var user = await _userManager.GetUserAsync(User);
             var participant = await _context.Post_Participants.SingleOrDefaultAsync(pp => pp.PostId == id && pp.UserId == user.Id);
-            if (participant != null)
+            if (participant == default || post == default || post.Status == PostStatus.Closed)
             {
-                _context.Post_Participants.Remove(participant);
-                await _context.SaveChangesAsync();
-                return Redirect("../detail/" + id);
+                return View("NotFound", "Home");
             }
-            return View("NotFound", "Home");
+            _context.Post_Participants.Remove(participant);
+            await _context.SaveChangesAsync();
+            return Redirect("../detail/" + post.Id);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Close(int id)
+        {   
+            var user = await _userManager.GetUserAsync(User);
+            var post = _context.Posts.SingleOrDefault(p => p.Id == id);
+            if (post == default || post.Status == PostStatus.Closed)
+            {
+                return View("NotFound", "Home");
+            }
+            post.Status = PostStatus.Closed;
+            _context.Update(post);
+            await _context.SaveChangesAsync();
+            return Redirect("../detail/" + post.Id);
         }
     }
 }
