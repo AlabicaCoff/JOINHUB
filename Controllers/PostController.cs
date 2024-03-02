@@ -225,7 +225,7 @@ namespace Test.Controllers
             {
                 post.Status = PostStatus.Closed;
             }
-
+            
             await _context.SaveChangesAsync();
             return Json(expiredPosts);
         }
