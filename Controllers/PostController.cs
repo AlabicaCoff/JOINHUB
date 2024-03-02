@@ -213,5 +213,21 @@ namespace Test.Controllers
             await _context.SaveChangesAsync();
             return Redirect("../detail/" + post.Id);
         }
+
+        [HttpPost]
+        public async Task<ActionResult> CheckPostExpiration()
+        {
+            // Logic to check if any posts have expired
+            DateTime currentTime = DateTime.Now;
+            var expiredPosts = _context.Posts.Where(p => p.ExpireTime <= currentTime).ToList();
+
+            foreach (var post in expiredPosts)
+            {
+                post.Status = PostStatus.Closed;
+            }
+
+            await _context.SaveChangesAsync();
+            return Json(expiredPosts);
+        }
     }
 }
