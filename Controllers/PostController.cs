@@ -8,6 +8,7 @@ using Test.Areas.Identity.Data;
 using Test.Data;
 using Test.Data.Enum;
 using Test.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Test.Controllers
 {
@@ -65,14 +66,19 @@ namespace Test.Controllers
             }
 
             var user = await _userManager.GetUserAsync(User);
-            var author = new Author
+            var author = await _context.Authors.SingleOrDefaultAsync(a => a.Id == user.Id);
+            if (author == default)
             {
-                Id = user.Id,
-                Username = user.UserName,
-                Password = user.PasswordHash,
-                FullName = user.Fullname
-            };
-            _context.Authors.Add(author);
+                author = new Author
+                {
+                    Id = user.Id,
+                    Username = user.UserName,
+                    Password = user.PasswordHash,
+                    FullName = user.Fullname
+                };
+                _context.Authors.Add(author);
+            }
+
             post.AuthorId = author.Id;
             _context.Posts.Add(post);
             _context.SaveChanges();
@@ -91,19 +97,49 @@ namespace Test.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Detail(int id)
         {
-            var user = await _userManager.GetUserAsync(this.User);
             var data = await _context.Posts.Include(a => a.Author).Include(pp => pp.Post_Participants).ThenInclude(u => u.ApplicationUser).SingleOrDefaultAsync(p => p.Id == id);
             if (data == default)
             {
                 return RedirectToAction("NotFound", "Home");
             }
-            ViewData["UserId"] = user.Id;
-            ViewData["isParticipant"] = _context.Post_Participants.Any(pp => pp.PostId == data.Id && pp.UserId == user.Id);
-            ViewData["Expired Date"] = data.ExpireTime.HasValue? data.ExpireTime.Value
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(this.User);
+                ViewData["UserId"] = user.Id;
+                ViewData["isParticipant"] = _context.Post_Participants.Any(pp => pp.PostId == data.Id && pp.UserId == user.Id);
+            }
+            ViewData["Expired Date"] = data.ExpireTime.HasValue ? data.ExpireTime.Value
                 .ToString("dddd, dd MMMM yyyy") : "<not available>"; ;
             return View(data);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == id);
+            if (post == default)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
+            return View(post);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, Post post)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (!ModelState.IsValid)
+            {
+                return View(post);
+            }
+            var author = await _context.Authors.SingleOrDefaultAsync(a => a.Id == user.Id);
+            post.AuthorId = author.Id;
+            _context.Posts.Update(post);
+            await _context.SaveChangesAsync();
+            return Redirect("../detail/" + id);
         }
 
         public async Task<IActionResult> Join(int id)
@@ -122,7 +158,7 @@ namespace Test.Controllers
         public async Task<IActionResult> Unjoin(int id)
         {
             var user = await _userManager.GetUserAsync(User);
-            var participant = _context.Post_Participants.Single(pp => pp.PostId == id && pp.UserId == user.Id);
+            var participant = await _context.Post_Participants.SingleOrDefaultAsync(pp => pp.PostId == id && pp.UserId == user.Id);
             if (participant != null)
             {
                 _context.Post_Participants.Remove(participant);
