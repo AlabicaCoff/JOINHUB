@@ -1,23 +1,79 @@
 ﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "poppins", sans-serif;
 }
 
-a {
-  color: #0077cc;
+header {
+    width: 100vw;
+    height: 50px;
+    background: whitesmoke;
+}
+
+.navTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgb(21, 51, 169);
+    padding: 5px 5%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 50px;
+    z-index: 2;
+}
+
+.logoFont {
+    font-size: 2rem;
+    margin-right: 45px
+}
+.navLeft, .navRight{
+    display: flex;
+    align-items: center;
+    width: 50%;
+}
+.navLeft ul li, .navRight ul li{
+    list-style: none;
+    display: inline-block;
+}
+.navItem li{
+    font-size: 1rem;
+    margin: 0 15px;
+}       
+.navRight ul li a {
+    color: whitesmoke;
+}
+
+.searchBox {
+    background: whitesmoke;
+    width: 50%;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    padding: 0, 15px;
+    margin-right: 45px
+}
+.searchBox form input{
+    width: 100%;
+    background: transparent;
+    padding: 10px;  
+    outline: none;
+    border: 0;
+}
+
+.container {
+    width: 100vw;
+}
+.main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;

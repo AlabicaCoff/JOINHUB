@@ -2,13 +2,14 @@
 }
 
 .login {
-    position: relative;
     display: flex;
     flex-direction: column;
     background-color: rgb(21, 51, 169);
     height: 400px;
     width: 400px;
     border-radius: 10px;
+    align-items: center;
+    margin-top: 20px;
 }
 
     .login h1 {
@@ -28,11 +29,11 @@
 }
 
 .input {
-    width: 100%;
+    width: 300px;
     height: 40px;
     font-size: 1rem;
     background: whitesmoke;
-    padding: 10px;
+    padding: 10px 10px;
     margin-top: 15px;
     border: none;
     outline: none;
@@ -42,7 +43,7 @@
     width: 100%;
     height: 10px;
     font-size: 1rem;
-    color: rgb(132, 17, 17);
+    color: rgb(255, 0, 0);
     padding: 10px;
 }
 
