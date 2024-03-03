@@ -2,11 +2,18 @@ using Microsoft.EntityFrameworkCore;
 using Test.Data;
 using Microsoft.AspNetCore.Identity;
 using Test.Areas.Identity.Data;
+using Test.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<TestDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
+
+// Services Configuration
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IPost_ParticipantService, Post_ParticipantService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<TestDbContext>();
 
