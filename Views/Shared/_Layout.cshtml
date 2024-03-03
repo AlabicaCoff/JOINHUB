@@ -4,59 +4,65 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Test</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Test.styles.css" asp-append-version="true" />
     @RenderSection("AddToHead", required: false)
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Test</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="Index">Home</a>
+        <nav class="navTop">
+            <div class="navLeft">
+                <ul class="navItem">
+                    <a class="logofont" asp-area="" asp-controller="Home" asp-action="Index", style="color: whitesmoke">Join Me</a>
+                    <li>
+                        <a asp-area="" asp-controller="Post" asp-action="Index" , style="color: whitesmoke">Home</a>
+                    </li>
+                </ul>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                    <ul class="navItem">
+                        <li>
+                            <a asp-area="" asp-controller="Post" asp-action="Create", style="color: whitesmoke">Post</a>
                         </li>
-                        @if(User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="Create">Post</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="MyPost">My Posts</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="MyActivity">My Activities</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="/Identity/Account/Logout">Logout</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="/Identity/Account/Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="/Identity/Account/Register">Register</a>
-                            </li>
-                        }
-                        <form class="form-inline my-2 my-lg-0 flex-row" asp-controller="Post" asp-action="Search" style="padding-right: 25px;">
-                            <input name="searchString" type="text" class="form-control" placeholder="Search for a post...">
-                        </form>
+                        <li>
+                            <a asp-area="" asp-controller="Post" asp-action="MyPost" , style="color: whitesmoke">My Posts</a>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Post" asp-action="MyActivity" , style="color: whitesmoke">My Activities</a>
+                        </li>
                     </ul>
+                    }
+            </div>
+
+            <div class="navRight">
+                <div class="searchBox">
+                    <form asp-controller="Post" asp-action="Search">
+                        <input name="searchString" type="text" placeholder="Search for a post...">
+                    </form>
                 </div>
+                <ul class="navItem">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <a href="/Identity/Account/Login">Login</a>
+                        </li>
+                        <li>
+                            <a href="/Identity/Account/Register">Register</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="/Identity/Account/Logout">Logout</a>
+                        </li>
+                    }
+                </ul>
             </div>
         </nav>
     </header>
+
     <div class="container">
-        <main role="main" class="pb-3">
+        <main class="main">
             @RenderBody()
         </main>
     </div>

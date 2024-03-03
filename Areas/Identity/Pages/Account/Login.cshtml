@@ -4,10 +4,10 @@
     <link href="@Url.Content("~/css/login.css")" rel="stylesheet" type="text/css" />
 }
 
-<div class="login">
-    <h1>Login</h1>
-    <form class="form" id="account" method="post">
-        <div asp-validation-summary="ModelOnly" class="error" role="alert"></div>
+<form class="form" id="account" method="post">
+    <div asp-validation-summary="ModelOnly" class="error" role="alert"></div>
+    <div class="login">
+        <h1>Login</h1>
         <div>
             <input asp-for="Input.Email" class="input" aria-required="true" placeholder="name@example.com" />
         </div>
@@ -26,8 +26,9 @@
                 <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
             </p>
         </div>
-    </form>
-</div>
+    </div>
+</form>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

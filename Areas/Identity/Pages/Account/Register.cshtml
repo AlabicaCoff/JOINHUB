@@ -4,30 +4,38 @@
     <link href="@Url.Content("~/css/register.css")" rel="stylesheet" type="text/css" />
 }
 
-<div class="register">
-    <h1>Register</h1>
-    <h3>Create a new account.</h3>
-    <form class="form" id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-        <div asp-validation-summary="ModelOnly" class="error" role="alert"></div>
+<form class="form" id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+    <div asp-validation-summary="ModelOnly" class="error" role="alert"></div>
+    <div class="register">
+        <h1>Register</h1>
+        <h3>Create a new account.</h3>
         <div>
             <input asp-for="Input.Fullname" class="input" aria-required="true" placeholder="Full Name" />
+        </div>
+        <div>
             <span asp-validation-for="Input.Fullname" class="error"></span>
         </div>
         <div>
             <input asp-for="Input.Email" class="input" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+        </div>
+        <div>
             <span asp-validation-for="Input.Email" class="error"></span>
         </div>
         <div>
             <input asp-for="Input.Password" class="input" autocomplete="new-password" aria-required="true" placeholder="Password" />
+        </div>
+        <div>
             <span asp-validation-for="Input.Password" class="error"></span>
         </div>
         <div>
             <input asp-for="Input.ConfirmPassword" class="input" autocomplete="new-password" aria-required="true" placeholder="Confirm Password" />
+        </div>
+        <div>
             <span asp-validation-for="Input.ConfirmPassword" class="error"></span>
         </div>
         <button id="registerSubmit" type="submit">Register</button>
-    </form>
-</div>
+    </div>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
