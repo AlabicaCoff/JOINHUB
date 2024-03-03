@@ -8,6 +8,7 @@ using System.Linq;
 using Test.Areas.Identity.Data;
 using Test.Data;
 using Test.Data.Enum;
+using Test.Data.Services;
 using Test.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -15,12 +16,18 @@ namespace Test.Controllers
 {
     public class PostController : Controller
     {
-        private readonly TestDbContext _context;
+        private readonly IPostService _postService;
+        private readonly IAuthorService _authorService;
+        private readonly IPost_ParticipantService _participantService;
+        private readonly INotificationService _notificationService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public PostController(TestDbContext context, UserManager<ApplicationUser> userManager)
+        public PostController(IPostService postService, IAuthorService authorService, IPost_ParticipantService participantService, INotificationService notificationService, UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            _postService = postService;
+            _authorService = authorService;
+            _participantService = participantService;
+            _notificationService = notificationService;
             this._userManager = userManager;
         }
 
@@ -28,17 +35,19 @@ namespace Test.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["UserId"] = _userManager.GetUserId(this.User);
-            var data = await _context.Posts.Where(p => p.Status == PostStatus.Active).Include(a => a.Author).ToListAsync();
-            return View(data);
+            var allPosts = _postService.GetAllInclude();
+            var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
+            return View(allPosts);
         }
 
         [AllowAnonymous]
         public async Task<IActionResult> Search(string searchString)
         {
-            var allPosts = await _context.Posts.Where(p => p.Status == PostStatus.Active).ToListAsync();
+            var allPosts = _postService.GetAllInclude();
+            var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
             if (!string.IsNullOrEmpty(searchString))
             {
-                var matchedResult = allPosts.Where(p => p.Title.ToLower().Contains(searchString.ToLower()) || p.Description.ToLower().Contains(searchString.ToLower())).ToList();
+                var matchedResult = activePosts.Where(p => p.Title.ToLower().Contains(searchString.ToLower()) || p.Description.ToLower().Contains(searchString.ToLower())).ToList();
                 return View("Index", matchedResult);
             }
             return View("Index", allPosts);
@@ -47,8 +56,9 @@ namespace Test.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Filter(Tag tag)
         {
-            var allPosts = await _context.Posts.Where(p => p.Status == PostStatus.Active).ToListAsync();
-            var filteredPosts = allPosts.Where(p => p.Tag == tag);
+            var allPosts = _postService.GetAllInclude();
+            var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
+            var filteredPosts = activePosts.Where(p => p.Tag == tag);
             return View("Index", filteredPosts);
         }
 
@@ -68,7 +78,7 @@ namespace Test.Controllers
             }
 
             var user = await _userManager.GetUserAsync(User);
-            var author = await _context.Authors.SingleOrDefaultAsync(a => a.Id == user.Id);
+            var author = _authorService.GetById(user.Id);
             if (author == default)
             {
                 author = new Author
@@ -78,12 +88,11 @@ namespace Test.Controllers
                     Password = user.PasswordHash,
                     FullName = user.Fullname
                 };
-                _context.Authors.Add(author);
+                _authorService.Add(author);
             }
 
             post.AuthorId = author.Id;
-            _context.Posts.Add(post);
-            _context.SaveChanges();
+            _postService.Add(post);
             return RedirectToAction("Index");
         }
 
@@ -91,19 +100,20 @@ namespace Test.Controllers
         public async Task<IActionResult> MyPost()
         {
             var user = await _userManager.GetUserAsync(User);
-            var allPosts = await _context.Posts.ToListAsync();
-            var posts = allPosts.Where(p => p.AuthorId == user.Id);
+            var allPosts = _postService.GetAll();
+            var myPosts = allPosts.Where(p => p.AuthorId == user.Id);
             ViewData["UserId"] = user.Id;
-            return View(posts);
+            return View(myPosts);
         }
 
         [Authorize]
         public async Task<IActionResult> MyActivity()
         {
             var user = await _userManager.GetUserAsync(User);
-            var allPosts = await _context.Posts.ToListAsync();
-            var post_participants = await _context.Post_Participants.Where(pp => pp.UserId == user.Id).Select(pp => pp.PostId).ToListAsync();
-            var posts = allPosts.Where(p => post_participants.Contains(p.Id));
+            var allPosts = _postService.GetAll();
+            var allParticipants = _participantService.GetAll();
+            var postParticipants =allParticipants.Where(pp => pp.UserId == user.Id).Select(pp => pp.PostId).ToList();
+            var posts = allPosts.Where(p => postParticipants.Contains(p.Id));
             ViewData["UserId"] = user.Id;
             return View(posts);
         }
@@ -115,29 +125,28 @@ namespace Test.Controllers
             {
                 var user = await _userManager.GetUserAsync(this.User);
                 ViewData["UserId"] = user.Id;
-                ViewData["isParticipant"] = _context.Post_Participants.Any(pp => pp.PostId == id && pp.UserId == user.Id);
+                ViewData["isParticipant"] = _participantService.GetAll().Any(pp => pp.PostId == id && pp.UserId == user.Id);
             }
-            var post = await _context.Posts.Include(a => a.Author).Include(pp => pp.Post_Participants).ThenInclude(u => u.ApplicationUser).SingleOrDefaultAsync(p => p.Id == id);
-            if (post == default)
+            var post = _postService.GetByIdInclude(id);
+            if (post != default)
             {
-                return RedirectToAction("NotFound", "Home");
-            }
-
-            ViewData["Expired Date"] = post.ExpireTime.HasValue ? post.ExpireTime.Value
+                ViewData["Expired Date"] = post.ExpireTime.HasValue ? post.ExpireTime.Value
                 .ToString("dddd, dd MMMM yyyy") : "<not available>"; ;
-            return View(post);
+                return View(post);
+            }
+            return RedirectToAction("NotFound", "Home");
         }
 
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
             var user = await _userManager.GetUserAsync(User);
-            var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == id);
-            if (post == default || post.AuthorId != user.Id || post.Status == PostStatus.Closed)
+            var post = _postService.GetById(id);
+            if (post != default || post.AuthorId == user.Id || post.Status != PostStatus.Closed)
             {
-                return RedirectToAction("NotFound", "Home");
+                return View(post);
             }
-            return View(post);
+            return RedirectToAction("NotFound", "Home");
         }
 
         [HttpPost]
@@ -149,69 +158,66 @@ namespace Test.Controllers
                 return View(post);
             }
             post.AuthorId = user.Id;
-            _context.Posts.Update(post);
-            await _context.SaveChangesAsync();
+            _postService.Update(id, post);
             return Redirect("../detail/" + id);
         }
 
         [Authorize]
         public async Task<IActionResult> Join(int id)
         {
-            var post = _context.Posts.SingleOrDefault(p => p.Id == id);
-            if (post == default || post.Status == PostStatus.Closed)
+            var post = _postService.GetById(id);
+            if (post != default || post.Status != PostStatus.Closed)
             {
-                return RedirectToAction("NotFound", "Home");
+                var user = await _userManager.GetUserAsync(User);
+                var participant = new Post_Participant
+                {
+                    PostId = post.Id,
+                    UserId = user.Id
+                };
+                _participantService.Add(participant);
+                return Redirect("../detail/" + post.Id);
             }
-            var user = await _userManager.GetUserAsync(User);
-            var participant = new Post_Participant
-            {
-                PostId = post.Id,
-                UserId = user.Id
-            };
-            _context.Post_Participants.Add(participant);
-            await _context.SaveChangesAsync();
-            return Redirect("../detail/" + post.Id);
+            return RedirectToAction("NotFound", "Home");
         }
 
         [Authorize]
         public async Task<IActionResult> Unjoin(int id)
         {
-            var post = _context.Posts.SingleOrDefault(p => p.Id == id);
+            var post = _postService.GetById(id);
             var user = await _userManager.GetUserAsync(User);
-            var participant = await _context.Post_Participants.SingleOrDefaultAsync(pp => pp.PostId == id && pp.UserId == user.Id);
-            if (participant == default || post == default || post.Status == PostStatus.Closed)
+            var participant = _participantService.GetAll().SingleOrDefault(pp => pp.PostId == id && pp.UserId == user.Id);
+            if (participant != default || post != default || post.Status != PostStatus.Closed)
             {
-                return View("NotFound", "Home");
+                _participantService.Delete(participant);
+                return Redirect("../detail/" + post.Id);
             }
-            _context.Post_Participants.Remove(participant);
-            await _context.SaveChangesAsync();
-            return Redirect("../detail/" + post.Id);
+            return View("NotFound", "Home");
         }
 
         [Authorize]
         public async Task<IActionResult> Close(int id)
         {   
             var user = await _userManager.GetUserAsync(User);
-            var post = _context.Posts.SingleOrDefault(p => p.Id == id);
-            if (post == default || post.Status == PostStatus.Closed)
-            {
-                return View("NotFound", "Home");
-            }
+            var post = _postService.GetById(id);
+            var link = "../post/detail/" + post.Id;
 
-            var AllParticipants = _context.Post_Participants.ToList();
-            var diff = AllParticipants.Count() - post.NumberOfParticipants;
-           
-            while (diff > 0) 
+            if (post != default || post.Status != PostStatus.Closed)
             {
-                var lastParticipant = AllParticipants.LastOrDefault();
-                _context.Post_Participants.Remove(lastParticipant);
-                diff--;
+                var PostParticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
+                var diff = PostParticipants.Count() - post.NumberOfParticipants;
+
+                while (diff > 0)
+                {
+                    var lastParticipant = PostParticipants.LastOrDefault();
+                    _participantService.Delete(lastParticipant);
+                    diff--;
+                }
+
+                post.Status = PostStatus.Closed;
+                _postService.Update(id, post);
+                return Redirect("../detail/" + post.Id);
             }
-    
-            post.Status = PostStatus.Closed;
-            _context.Update(post);
-            await _context.SaveChangesAsync();
-            return Redirect("../detail/" + post.Id);
+            return View("NotFound", "Home");
         }
 
         [HttpPost]
@@ -219,14 +225,13 @@ namespace Test.Controllers
         {
             // Logic to check if any posts have expired
             DateTime currentTime = DateTime.Now;
-            var expiredPosts = _context.Posts.Where(p => p.ExpireTime <= currentTime).ToList();
-
+            var expiredPosts = _postService.GetAll().Where(p => p.ExpireTime <= currentTime).ToList();
             foreach (var post in expiredPosts)
             {
                 post.Status = PostStatus.Closed;
             }
-            
-            await _context.SaveChangesAsync();
+
+            _postService.Save();
             return Json(expiredPosts);
         }
     }
