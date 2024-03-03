@@ -20,7 +20,6 @@ namespace Test.Data.Services
         public void Delete(Post_Participant post_participant)
         {
             _context.Post_Participants.Remove(post_participant);
-            _context.SaveChanges();
         }
 
         public IEnumerable<Post_Participant> GetAll()
