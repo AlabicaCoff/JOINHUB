@@ -32,7 +32,7 @@ namespace Test.Data.Services
 
         public IEnumerable<Post> GetAllInclude()
         {
-            var result = _context.Posts.Include(a => a.Author).Include(pp => pp.Post_Participants).ThenInclude(u => u.ApplicationUser);
+            var result = _context.Posts.Include(a => a.Author).Include(pp => pp.Post_Participants.OrderBy(pp => pp.Id)).ThenInclude(u => u.ApplicationUser);
             return result;
         }
 
@@ -44,7 +44,7 @@ namespace Test.Data.Services
 
         public Post GetByIdInclude(int id)
         {
-            var result = _context.Posts.Include(a => a.Author).Include(pp => pp.Post_Participants).ThenInclude(u => u.ApplicationUser).SingleOrDefault(p => p.Id == id);
+            var result = _context.Posts.Include(a => a.Author).Include(pp => pp.Post_Participants.OrderBy(pp => pp.Id)).ThenInclude(u => u.ApplicationUser).SingleOrDefault(p => p.Id == id);
             return result;
         }
 
