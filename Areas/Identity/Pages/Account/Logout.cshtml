@@ -1,16 +1,19 @@
 ﻿@page
 @model LogoutModel
+@section AddToHead {
+    <link href="@Url.Content("~/css/logout.css")" rel="stylesheet" type="text/css" />
+}
 @{
     ViewData["Title"] = "Log out";
 }
 
-<header>
+<div class="logout">
     <h1>@ViewData["Title"]</h1>
     @{
         if (User.Identity?.IsAuthenticated ?? false)
         {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
+            <form class="form" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit">Click here to Logout</button>
             </form>
         }
         else
@@ -18,4 +21,4 @@
             <p>You have successfully logged out of the application.</p>
         }
     }
-</header>
+</div>
