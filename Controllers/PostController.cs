@@ -208,7 +208,7 @@ namespace Test.Controllers
 
                 while (diff > 0)
                 {
-                    var lastParticipant = PostParticipants.LastOrDefault();
+                    var lastParticipant = PostParticipants.OrderBy(pp => pp.Id).LastOrDefault();
                     _participantService.Delete(lastParticipant);
                     diff--;
                 }
