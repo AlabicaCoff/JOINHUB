@@ -7,8 +7,8 @@ for details on configuring this project to bundle and minify static web assets. 
     font-family: "poppins", sans-serif;
 }
 
-header {
-    position: absolute;
+.navBar {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -18,6 +18,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 100;
 }
 .logo{
     color: whitesmoke;
@@ -30,14 +31,14 @@ header {
     display: flex;
     align-items: center;
 }
-header ul{
+.navBar ul {
     position: relative;
     display: flex;
     gap: 20px
 }
-header ul li{
-    list-style: none;
-}
+    .navBar ul li {
+        list-style: none;
+    }
 .item{
     position: relative;
     text-decoration: none;
@@ -50,7 +51,7 @@ header ul li{
     .logo:hover {
         color: rgb(232, 206, 29)
     }
-header .search{
+.navBar .search {
     position: relative;
     display: flex;
     justify-content: center;
@@ -104,7 +105,7 @@ header .search{
 
 .container {
     width: 100vw;
-    margin: 0;
+    margin-top: 50px;
 }
 
 .main {
