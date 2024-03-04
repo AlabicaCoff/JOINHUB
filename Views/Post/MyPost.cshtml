@@ -1,6 +1,8 @@
 ﻿@using Test.Data.Enum
 @model IEnumerable<Post>
-
+@section AddToHead {
+    <link href="@Url.Content("~/css/mypost.css")" rel="stylesheet" type="text/css" />
+}
 @{
     ViewData["Title"] = "My Posts";
 }
@@ -9,15 +11,6 @@
     <div class="col-md-8 offset-md-2">
         <table class="table w-auto">
             <thead>
-                <tr class="text-center">
-                    <th>@Html.DisplayNameFor(model => model.Title)</th>
-                    <th>@Html.DisplayNameFor(model => model.Description)</th>
-                    <th>@Html.DisplayNameFor(model => model.Status)</th>
-                    <th>@Html.DisplayNameFor(model => model.Tag)</th>
-                    <th>@Html.DisplayNameFor(model => model.NumberOfParticipants)</th>
-                    <th>@Html.DisplayNameFor(model => model.CreatedTime)</th>
-                    <th>@Html.DisplayNameFor(model => model.ExpireTime)</th>
-                </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
