@@ -1,22 +1,32 @@
-﻿﻿.container {
-    margin-top: -10px;
-    padding: 20px;
+﻿.form-wrapper {
+    padding: 30px;
+    margin-top: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    background-color: white;
+    font-family: Arial;
 }
 
 h1 {
     display: block;
     font-size: 2.5rem;
     margin-bottom: 10px;
-    line-height: 1.2;
+    line-height: 1.1;
     color: rgb(21, 51, 169);
     text-align: center;
     font-family: Arial;
 }
 
+.form-details {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
 .form-group {
-    margin: 30px;
-    margin-left: 10%;
-    margin-right: 10%;
+    margin-bottom: 30px;
 }
 
     .form-group label {
@@ -25,20 +35,19 @@ h1 {
         color: black;
         font-size: 1.1rem;
         font-weight: 700;
-        text-align: left;
         font-family: Arial;
     }
 
 .form-control {
     display: block;
-    width: 100%;
+    width: 700px;
     font-size: 1.1rem;
     color: black;
     background-color: white;
     border: 1px solid #ccc;
     line-height: 1.5rem;
     border-radius: 3px;
-    height: 52px;
+    height: 45px;
     font-family: inherit;
     padding: 0.375rem 0.75rem;
 }
