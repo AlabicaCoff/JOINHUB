@@ -10,55 +10,34 @@
 </head>
 <body>
     <header>
-        <nav class="navTop">
-            <div class="navLeft">
-                <ul class="navItem">
-                    <a class="logofont" asp-area="" asp-controller="Home" asp-action="Index", style="color: whitesmoke">Join Me</a>
-                    <li>
-                        <a asp-area="" asp-controller="Post" asp-action="Index" , style="color: whitesmoke">Home</a>
-                    </li>
-                </ul>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                    <ul class="navItem">
-                        <li>
-                            <a asp-area="" asp-controller="Post" asp-action="Create", style="color: whitesmoke">Post</a>
-                        </li>
-                        <li>
-                            <a asp-area="" asp-controller="Post" asp-action="MyPost" , style="color: whitesmoke">My Posts</a>
-                        </li>
-                        <li>
-                            <a asp-area="" asp-controller="Post" asp-action="MyActivity" , style="color: whitesmoke">My Activities</a>
-                        </li>
-                    </ul>
-                    }
+        <a class="logo" href="/">JOIN HUB</a>
+        <div class="group">
+            <ul class="navigation">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li><a class="item" href="/post/create">Post</a></li>
+                    <li><a class="item" href="/post/mypost">My Post</a></li>
+                    <li><a class="item" href="/post/myactivity">My Activity</a></li>
+                    <li><a class="item" href="/Identity/Account/Logout">Logout</a></li>
+                }
+                else
+                {
+                    <li><a class="item" href="/Identity/Account/Login">Login</a></li>
+                    <li><a class="item" href="/Identity/Account/Register">Register</a></li>
+                }
+            </ul>
+            <div class="search">
+                <span class="icon">
+                    <ion-icon name="search-outline" class="searchBtn"></ion-icon>
+                    <ion-icon name="close-outline" class="closeBtn"></ion-icon>
+                </span>
             </div>
-
-            <div class="navRight">
-                <div class="searchBox">
-                    <form asp-controller="Post" asp-action="Search">
-                        <input name="searchString" type="text" placeholder="Search for a post...">
-                    </form>
-                </div>
-                <ul class="navItem">
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <li>
-                            <a href="/Identity/Account/Login">Login</a>
-                        </li>
-                        <li>
-                            <a href="/Identity/Account/Register">Register</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li>
-                            <a href="/Identity/Account/Logout">Logout</a>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </nav>
+        </div>
+        <div class="searchBox">
+            <form class="form" asp-controller="Post" asp-action="Search">
+                <input class="searchInput" name="searchString" type="text" placeholder="Search Posts...">
+            </form>
+        </div>
     </header>
 
     <div class="container">
@@ -67,14 +46,32 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Test - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <footer class="border-top footer">
+        <h5>&copy; 2024 - JOIN HUB - by av-enger</h5>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        let searchBtn = document.querySelector('.searchBtn');
+        let closeBtn = document.querySelector('.closeBtn');
+        let searchBox = document.querySelector('.searchBox');
+
+        searchBtn.onclick = function () {
+            searchBox.classList.add('active');
+            closeBtn.classList.add('active');
+            searchBtn.classList.add('active');
+        }
+        closeBtn.onclick = function () {
+            searchBox.classList.remove('active');
+            closeBtn.classList.remove('active');
+            searchBtn.classList.remove('active');
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
     @Html.Partial("_ExpiredPosts")
 </body>

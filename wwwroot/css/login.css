@@ -71,6 +71,7 @@
 
     .goRegister p a {
         color: whitesmoke;
+        text-decoration: none;
     }
 
         .goRegister p a:hover {

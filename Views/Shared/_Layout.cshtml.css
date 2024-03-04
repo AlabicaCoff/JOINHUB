@@ -1,104 +1,131 @@
 ﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-*{
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
     font-family: "poppins", sans-serif;
 }
 
 header {
-    width: 100vw;
-    height: 50px;
-    background: whitesmoke;
-}
-
-.navTop {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgb(21, 51, 169);
-    padding: 5px 5%;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 50px;
-    z-index: 2;
-}
-
-.logoFont {
-    font-size: 2rem;
-    margin-right: 45px
-}
-.navLeft, .navRight{
-    display: flex;
-    align-items: center;
-    width: 50%;
-}
-.navLeft ul li, .navRight ul li{
-    list-style: none;
-    display: inline-block;
-}
-.navItem li{
-    font-size: 1rem;
-    margin: 0 15px;
-}       
-.navRight ul li a {
-    color: whitesmoke;
-}
-
-.searchBox {
-    background: whitesmoke;
-    width: 50%;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    padding: 0, 15px;
-    margin-right: 45px
-}
-.searchBox form input{
     width: 100%;
-    background: transparent;
-    padding: 10px;  
-    outline: none;
-    border: 0;
+    height: 50px;
+    background: rgb(71, 123, 220);
+    padding: 12.5px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+.logo{
+    color: whitesmoke;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+}
+.group{
+    display: flex;
+    align-items: center;
+}
+header ul{
+    position: relative;
+    display: flex;
+    gap: 20px
+}
+header ul li{
+    list-style: none;
+}
+.item{
+    position: relative;
+    text-decoration: none;
+    font-size: 1em;
+    color: whitesmoke;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+    .item:hover,
+    .logo:hover {
+        color: rgb(232, 206, 29)
+    }
+header .search{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    z-index: 10;
+    cursor: pointer;
+}
+.searchBox{
+    position: absolute;
+    right: -100%;
+    width: 100%;
+    height: 100%;
+    background: whitesmoke;
+    padding: 0 30px;
+    transition: 0.5s ease-in-out;
+}
+.searchBox.active {
+    right: 0;
+}
+.searchBox input {
+    width: 100%;
+    border: none;
+    outline:none;
+    height: 40px;
+    padding: 5px 0;
+    color: black;
+    background: whitesmoke;
+    font-size: 1.25em;
+    border-bottom: 1px solid rgba(0,0,0,0.5);
+}
+.searchBtn{
+    position: relative;
+    left: 30px;
+    transition: 0.5s ease-in-out;
+}
+.searchBtn.active{
+    left: 0;
+}
+.closeBtn {
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.5s;
+}
+.closeBtn.active{
+    opacity: 1;
+    visibility: visible;
+    transition: 0.5s;
+}
+
 
 .container {
     width: 100vw;
+    margin: 0;
 }
+
 .main {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
 .border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    border-top: 1px solid #e5e5e5;
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 768px) {
+    
 }
