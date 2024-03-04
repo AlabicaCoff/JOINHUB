@@ -1,0 +1,82 @@
+﻿.form-wrapper {
+    padding: 30px;
+    margin-top: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    background-color: white;
+    font-family: Arial;
+}
+
+h1 {
+    display: block;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    line-height: 1.1;
+    color: rgb(21, 51, 169);
+    text-align: center;
+    font-family: Arial;
+}
+
+.form-details {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: black;
+        font-size: 1.1rem;
+        font-weight: 700;
+        font-family: Arial;
+    }
+
+.form-control {
+    display: block;
+    width: 700px;
+    font-size: 1.1rem;
+    color: black;
+    background-color: white;
+    border: 1px solid #ccc;
+    line-height: 1.5rem;
+    border-radius: 3px;
+    height: 45px;
+    font-family: inherit;
+    padding: 0.375rem 0.75rem;
+}
+
+    .form-control:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+.form-group .text-danger {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+.form-group .btn {
+    display: block;
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 1.4rem;
+    color: white;
+    background-color: rgb(21, 51, 169);
+    border: 1px solid #007bff;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+    .form-group .btn:hover {
+        background-color: rgb(71, 123, 220);
+    }
