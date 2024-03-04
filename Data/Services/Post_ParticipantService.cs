@@ -37,6 +37,10 @@ namespace Test.Data.Services
         public void Update(int id, Post_Participant post_participant)
         {
             _context.Post_Participants.Update(post_participant);
+        }
+
+        public void Save()
+        {
             _context.SaveChanges();
         }
     }

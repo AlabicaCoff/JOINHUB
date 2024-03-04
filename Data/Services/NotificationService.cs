@@ -54,7 +54,6 @@ namespace Test.Data.Services
                 UserId = userId
             };
             Add(notification);
-            Save();
         }
     }
 }

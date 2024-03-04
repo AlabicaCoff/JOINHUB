@@ -76,6 +76,11 @@ namespace Test.Controllers
             {
                 return View(post);
             }
+            if (post.ExpireTime < DateTime.Now)
+            {
+                ViewData["WrongExpireTime"] = "Expired Date is incorrect";
+                return View(post);
+            }
 
             var user = await _userManager.GetUserAsync(User);
             var author = _authorService.GetById(user.Id);
@@ -100,7 +105,7 @@ namespace Test.Controllers
         public async Task<IActionResult> MyPost()
         {
             var user = await _userManager.GetUserAsync(User);
-            var allPosts = _postService.GetAll();
+            var allPosts = _postService.GetAllInclude();
             var myPosts = allPosts.Where(p => p.AuthorId == user.Id);
             ViewData["UserId"] = user.Id;
             return View(myPosts);
@@ -110,7 +115,7 @@ namespace Test.Controllers
         public async Task<IActionResult> MyActivity()
         {
             var user = await _userManager.GetUserAsync(User);
-            var allPosts = _postService.GetAll();
+            var allPosts = _postService.GetAllInclude();
             var allParticipants = _participantService.GetAll();
             var postParticipants =allParticipants.Where(pp => pp.UserId == user.Id).Select(pp => pp.PostId).ToList();
             var posts = allPosts.Where(p => postParticipants.Contains(p.Id));
@@ -159,6 +164,7 @@ namespace Test.Controllers
             }
             post.AuthorId = user.Id;
             _postService.Update(id, post);
+            _postService.Save();
             return Redirect("../detail/" + id);
         }
 
@@ -189,58 +195,79 @@ namespace Test.Controllers
             if (participant != default || post != default || post.Status != PostStatus.Closed)
             {
                 _participantService.Delete(participant);
+                _participantService.Save();
                 return Redirect("../detail/" + post.Id);
             }
             return View("NotFound", "Home");
         }
 
         [Authorize]
+        public async void FilterParticipants(Post post)
+        {
+            var urlLink = "../detail/" + post.Id;
+            var PostParticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
+            var diff = PostParticipants.Count() - post.NumberOfParticipants;
+
+            while (diff > 0)
+            {
+                var lastParticipant = PostParticipants.OrderBy(pp => pp.Id).LastOrDefault();
+                _participantService.Delete(lastParticipant);
+                PostParticipants.Remove(lastParticipant);
+                _notificationService.Send("Sorry", post.Title, urlLink, lastParticipant.UserId);
+                diff--;
+            }
+
+            foreach (var person in PostParticipants)
+            {
+                _notificationService.Send("Congrats", post.Title, urlLink, person.UserId);
+            }
+        }
+
+        [Authorize]
         public async Task<IActionResult> Close(int id)
         {   
-            var user = await _userManager.GetUserAsync(User);
             var post = _postService.GetById(id);
-            var link = "../post/detail/" + post.Id;
 
             if (post != default || post.Status != PostStatus.Closed)
             {
-                var urlLink = "../detail/" + post.Id;
-                var PostParticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
-                var diff = PostParticipants.Count() - post.NumberOfParticipants;
-
-                while (diff > 0)
-                {
-                    var lastParticipant = PostParticipants.OrderBy(pp => pp.Id).LastOrDefault();
-                    _participantService.Delete(lastParticipant);
-
-                    _notificationService.Send("Sorry", post.Title, urlLink, lastParticipant.UserId);
-                    diff--;
-                }
-
-                var realPariticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
-                foreach (var person in realPariticipants)
-                {
-                    _notificationService.Send("Congrats", post.Title, urlLink, person.UserId);
-                }
+                FilterParticipants(post);
                 post.Status = PostStatus.Closed;
                 _postService.Update(id, post);
+                _postService.Save();
                 return Redirect("../detail/" + post.Id);
             }
             return View("NotFound", "Home");
         }
 
         [HttpPost]
-        public async Task<ActionResult> CheckPostExpiration()
+        public async void CheckPostExpiration()
         {
-            // Logic to check if any posts have expired
             DateTime currentTime = DateTime.Now;
             var expiredPosts = _postService.GetAll().Where(p => p.ExpireTime <= currentTime).ToList();
             foreach (var post in expiredPosts)
             {
+                FilterParticipants(post);
                 post.Status = PostStatus.Closed;
+                _postService.Update(post.Id, post);
             }
-
             _postService.Save();
-            return Json(expiredPosts);
+        }
+
+        public async void DeletePost()
+        {
+            DateTime currentTime = DateTime.Now;
+            DateTime expirationThreshold = currentTime.AddMinutes(-1);
+            var deletePosts = _postService.GetAll().Where(p => p.ExpireTime <= expirationThreshold).ToList();
+            foreach(var post in deletePosts)
+            {
+                _postService.Delete(post);
+            }
+            _postService.Save();
+        }
+
+        private void AddMinutes()
+        {
+            throw new NotImplementedException();
         }
     }
 }
