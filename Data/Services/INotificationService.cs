@@ -9,5 +9,7 @@ namespace Test.Data.Services
         void Add(Notification notification);
         void Update(int id, Notification notification);
         void Delete(Notification notification);
+        void Save();
+        void Send(string title, string postTitle, string link, string userId);
     }
 }
