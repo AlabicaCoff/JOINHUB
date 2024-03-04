@@ -242,9 +242,8 @@ namespace Test.Controllers
         [HttpPost]
         public async void CheckPostExpiration()
         {
-            // Logic to check if any posts have expired
             DateTime currentTime = DateTime.Now;
-            var expiredPosts = _postService.GetAll().Where(p => p.ExpireTime <= currentTime && p.Status == PostStatus.Active).ToList();
+            var expiredPosts = _postService.GetAll().Where(p => p.ExpireTime <= currentTime).ToList();
             foreach (var post in expiredPosts)
             {
                 FilterParticipants(post);
@@ -252,6 +251,23 @@ namespace Test.Controllers
                 _postService.Update(post.Id, post);
             }
             _postService.Save();
+        }
+
+        public async void DeletePost()
+        {
+            DateTime currentTime = DateTime.Now;
+            DateTime expirationThreshold = currentTime.AddMinutes(-1);
+            var deletePosts = _postService.GetAll().Where(p => p.ExpireTime <= expirationThreshold).ToList();
+            foreach(var post in deletePosts)
+            {
+                _postService.Delete(post);
+            }
+            _postService.Save();
+        }
+
+        private void AddMinutes()
+        {
+            throw new NotImplementedException();
         }
     }
 }

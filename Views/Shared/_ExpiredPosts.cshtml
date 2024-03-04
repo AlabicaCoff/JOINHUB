@@ -16,10 +16,25 @@
             });
         }
 
-        // Call the function initially
-        checkPostExpiration();
+        function deletePost() {
+            $.ajax({
+                url: '@Url.Action("DeletePost", "Post")',
+                type: 'POST',
+                success: function (data) {
+                    // Handle the response data as needed
+                    console.log(data);
+                    // For example, you can update the UI based on the response
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
 
-        // Set up the interval to call the function every minute (adjust as needed)
-        setInterval(checkPostExpiration, 30000); // 60000 milliseconds = 1 minute
+        checkPostExpiration();
+        deletePost();
+
+        setInterval(checkPostExpiration, 30000);
+        setInterval(deletePost, 30000);
     });
 </script>
