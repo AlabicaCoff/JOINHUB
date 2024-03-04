@@ -76,6 +76,11 @@ namespace Test.Controllers
             {
                 return View(post);
             }
+            if (post.ExpireTime < DateTime.Now)
+            {
+                ViewData["WrongExpireTime"] = "Expired Date is incorrect";
+                return View(post);
+            }
 
             var user = await _userManager.GetUserAsync(User);
             var author = _authorService.GetById(user.Id);

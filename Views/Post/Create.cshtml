@@ -41,6 +41,7 @@
                     <label asp-for="ExpireTime" class="control-label"></label>
                     <input asp-for="ExpireTime" class="form-control" />
                     <span asp-validation-for="ExpireTime" class="text-danger"></span>
+                    @if (ViewData["WrongExpireTime"] != null) { <span class="text-danger">@ViewData["WrongExpireTime"]</span> }
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Post" class="btn btn-outline-success float-right" />
