@@ -21,7 +21,6 @@ namespace Test.Data.Services
         public void Delete(Post post)
         {
             _context.Posts.Remove(post);
-            _context.SaveChanges();
         }
 
         public IEnumerable<Post> GetAll()
@@ -51,7 +50,6 @@ namespace Test.Data.Services
         public void Update(int id, Post post)
         {
             _context.Posts.Update(post);
-            _context.SaveChanges();
         }
 
         public void Save()
