@@ -19,10 +19,13 @@
                         <li><a class="item" href="/post/create">Post</a></li>
                         <li><a class="item" href="/post/mypost">My Post</a></li>
                         <li><a class="item" href="/post/myactivity">My Activity</a></li>
+                        <li><a class="item" href="/notification">Notifications</a></li>
                         <li><a class="item" href="/Identity/Account/Logout">Logout</a></li>
                     }
                     else
                     {
+                        <li><a class="item" href="/Identity/Account/Login">Login</a></li>
+                        <li><a class="item" href="/Identity/Account/Register">Register</a></li>
                     }
                 </ul>
                 <div class="search">
@@ -33,7 +36,7 @@
                 </div>
             </div>
             <div class="searchBox">
-                <form class="form" asp-controller="Post" asp-action="Search">
+                <form class="searchForm" asp-controller="Post" asp-action="Search">
                     <input class="searchInput" name="searchString" type="text" placeholder="Search Posts...">
                 </form>
             </div>
