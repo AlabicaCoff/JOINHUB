@@ -203,6 +203,7 @@ namespace Test.Controllers
 
             if (post != default || post.Status != PostStatus.Closed)
             {
+                var urlLink = "../detail/" + post.Id;
                 var PostParticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
                 var diff = PostParticipants.Count() - post.NumberOfParticipants;
 
@@ -210,9 +211,16 @@ namespace Test.Controllers
                 {
                     var lastParticipant = PostParticipants.OrderBy(pp => pp.Id).LastOrDefault();
                     _participantService.Delete(lastParticipant);
+
+                    _notificationService.Send("Sorry", post.Title, urlLink, lastParticipant.UserId);
                     diff--;
                 }
 
+                var realPariticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
+                foreach (var person in realPariticipants)
+                {
+                    _notificationService.Send("Congrats", post.Title, urlLink, person.UserId);
+                }
                 post.Status = PostStatus.Closed;
                 _postService.Update(id, post);
                 return Redirect("../detail/" + post.Id);

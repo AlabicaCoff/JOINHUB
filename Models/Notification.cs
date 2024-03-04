@@ -21,6 +21,7 @@ namespace Test.Models
 
         public Notification()
         {
+            this.Description = "Click this notification to see more detail";
             this.Status = NotificationStatus.unread;
         }
     }
