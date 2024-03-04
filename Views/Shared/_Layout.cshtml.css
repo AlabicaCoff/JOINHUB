@@ -20,26 +20,33 @@ for details on configuring this project to bundle and minify static web assets. 
     align-items: center;
     z-index: 100;
 }
-.logo{
+
+.logo {
     color: whitesmoke;
     text-decoration: none;
     font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: 0.1rem;
 }
-.group{
+    .logo:hover {
+        color: rgb(232, 206, 29)
+    }
+.group {
     display: flex;
     align-items: center;
 }
+
 .navBar ul {
     position: relative;
     display: flex;
     gap: 20px
 }
+
     .navBar ul li {
         list-style: none;
     }
-.item{
+
+.item {
     position: relative;
     text-decoration: none;
     font-size: 1em;
@@ -47,10 +54,22 @@ for details on configuring this project to bundle and minify static web assets. 
     text-transform: uppercase;
     letter-spacing: 0.2em;
 }
-    .item:hover,
-    .logo:hover {
-        color: rgb(232, 206, 29)
+    .item::before {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        width: 100%;
+        height: 2px;
+        background: rgb(232, 206, 29);
+        transform: scaleX(0);
+        transition: transform 0.5s ease-in-out;
+        transform-origin: right;
     }
+    .item:hover::before {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+
 .navBar .search {
     position: relative;
     display: flex;
@@ -60,7 +79,8 @@ for details on configuring this project to bundle and minify static web assets. 
     z-index: 10;
     cursor: pointer;
 }
-.searchBox{
+
+.searchBox {
     position: absolute;
     right: -100%;
     width: 100%;
@@ -69,37 +89,48 @@ for details on configuring this project to bundle and minify static web assets. 
     padding: 0 30px;
     transition: 0.5s ease-in-out;
 }
-.searchBox.active {
-    right: 0;
-}
-.searchBox input {
-    width: 100%;
-    border: none;
-    outline:none;
-    height: 40px;
-    padding: 5px 0;
-    color: black;
-    background: whitesmoke;
-    font-size: 1.25em;
-    border-bottom: 1px solid rgba(0,0,0,0.5);
-}
-.searchBtn{
+
+    .searchBox.active {
+        right: 0;
+    }
+
+    .searchBox input {
+        width: 100%;
+        border: none;
+        outline: none;
+        height: 40px;
+        padding: 5px 0;
+        color: black;
+        background: whitesmoke;
+        font-size: 1.25em;
+        border-bottom: 1px solid rgba(0,0,0,0.5);
+    }
+
+.searchBtn {
     position: relative;
     left: 30px;
     transition: 0.5s ease-in-out;
 }
-.searchBtn.active{
-    left: 0;
-}
+
+    .searchBtn.active {
+        left: 0;
+    }
+
 .closeBtn {
     opacity: 0;
     visibility: hidden;
     transition: 0.5s;
 }
-.closeBtn.active{
-    opacity: 1;
-    visibility: visible;
-    transition: 0.5s;
+
+    .closeBtn.active {
+        opacity: 1;
+        visibility: visible;
+        transition: 0.5s;
+    }
+
+.menuToggle {
+    position: relative;
+    display: none;
 }
 
 
@@ -127,6 +158,48 @@ for details on configuring this project to bundle and minify static web assets. 
 }
 
 /* Responsive Styles */
-@media only screen and (max-width: 768px) {
-    
+@media only screen and (max-width: 800px) {
+
+    .searchBtn {
+        left: 0;
+    }
+
+    .menuToggle {
+        position: absolute;
+        display: block;
+        font-size: 2em;
+        cursor: pointer;
+        transform: translateX(30px);
+        z-index: 10;
+    }
+
+    .navBar .navigation {
+        position: absolute;
+        opacity: 0;
+        visibility: hidden;
+        left: 100%;
+    }
+
+    .navBar.open .navigation {
+        top: 50px;
+        opacity: 1;
+        visibility: visible;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        background: rgb(21, 51, 169);
+        width: 100%;
+        height: calc(100vh-50px);
+        padding: 40px;
+        border-top: 1px solid rgba(0,0,0,0.5);
+    }
+
+        .navBar.open .navigation li a {
+            font-size: 1.25em;
+        }
+
+    .hide {
+        display: none;
+        transition: 0.5s ease-in-out;
+    }
 }
