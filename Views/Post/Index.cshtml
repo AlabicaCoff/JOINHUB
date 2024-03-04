@@ -28,6 +28,7 @@
                     <th>@Html.DisplayNameFor(model => model.Description)</th>
                     <th>@Html.DisplayNameFor(model => model.Status)</th>
                     <th>@Html.DisplayNameFor(model => model.Tag)</th>
+                    <th>Participants</th>
                     <th>@Html.DisplayNameFor(model => model.NumberOfParticipants)</th>
                     <th>@Html.DisplayNameFor(model => model.CreatedTime)</th>
                     <th>@Html.DisplayNameFor(model => model.ExpireTime)</th>
@@ -36,32 +37,37 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td class="align-middle">
-                            <a asp-controller="Post" asp-action="Detail" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Author.FullName)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Tag)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.NumberOfParticipants)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.CreatedTime)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.ExpireTime)
-                        </td>
-                    </tr>
+                    <a asp-controller="Post" asp-action="Detail" asp-route-id="@item.Id">
+                        <tr>
+                            <td class="align-middle">
+                                @item.Title
+                            </td>
+                            <td class="align-middle">
+                                @item.Author.FullName
+                            </td>
+                            <td class="align-middle">
+                                @item.Description
+                            </td>
+                            <td class="align-middle">
+                                @item.Status
+                            </td>
+                            <td class="align-middle">
+                                @item.Tag
+                            </td>
+                            <td class="align-middle">
+                                @item.Post_Participants.Count()
+                            </td>
+                            <td class="align-middle">
+                                @item.NumberOfParticipants
+                            </td>
+                            <td class="align-middle">
+                                @item.CreatedTime
+                            </td>
+                            <td class="align-middle">
+                                @item.ExpireTime
+                            </td>
+                        </tr>
+                    </a>
                 }
             </tbody>
 

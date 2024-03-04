@@ -1,4 +1,5 @@
-﻿using Test.Models;
+﻿using System.Diagnostics;
+using Test.Models;
 
 namespace Test.Data.Services
 {
@@ -12,13 +13,11 @@ namespace Test.Data.Services
         public void Add(Notification notification)
         {
             _context.Notifications.Add(notification);
-            _context.SaveChanges();
         }
 
         public void Delete(Notification notification)
         {
             _context.Notifications.Remove(notification);
-            _context.SaveChanges();
         }
 
         public IEnumerable<Notification> GetAll()
@@ -37,6 +36,24 @@ namespace Test.Data.Services
         {
             _context.Notifications.Update(notification);
             _context.SaveChanges();
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
+        public void Send(string title, string postTitle, string link, string userId)
+        {
+            var notificationTitle = (title == "Congrats") ? "Congrats! you got a permission to join this post" + postTitle
+                : "Sorry! you don't got a permission to join this post" + postTitle;
+            var notification = new Notification()
+            {
+                Title = notificationTitle,
+                Link = link,
+                UserId = userId
+            };
+            Add(notification);
         }
     }
 }

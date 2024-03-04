@@ -26,47 +26,38 @@
     <p>Expired at @ViewData["Expired Date"]</p>
 }
 
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            @if (Model.Status == PostStatus.Active)
+<section>
+    @if (Model.Status == PostStatus.Active)
+    {
+        @if (User.Identity.IsAuthenticated)
+        {
+            var userId = (string)ViewData["UserId"];
+            @if (userId == Model.AuthorId)
             {
-                @if (User.Identity.IsAuthenticated)
-                {
-                    var userId = (string)ViewData["UserId"];
-                    @if (userId == Model.AuthorId)
-                    {
-                        <a asp-controller="Post" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-                        <a asp-controller="Post" asp-action="Close" asp-route-id="@Model.Id" class="btn btn-primary btn-danger">Close</a>
-                    }
-                    else
-                    {
-                        var isParticipant = (bool)ViewData["isParticipant"];
-                        <p>@isParticipant</p>
-                        @if (!isParticipant)
-                        {
-                            <a asp-controller="Post" asp-action="Join" asp-route-id="@Model.Id" class="btn btn-primary">Join</a>
-                        }
-                        else
-                        {
-                            <a asp-controller="Post" asp-action="Unjoin" asp-route-id="@Model.Id" class="btn btn-primary btn-danger">Cancel</a>
-                        }
-                    }
-                }
-                else
-                {
-                    <p>Please Login to Join this Post</p>
-                }
+                <a asp-controller="Post" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                <a asp-controller="Post" asp-action="Close" asp-route-id="@Model.Id" class="btn btn-primary btn-danger">Close</a>
             }
             else
             {
-                <p>This Post is Closed.</p>
+                var isParticipant = (bool)ViewData["isParticipant"];
+                <p>@isParticipant</p>
+                @if (!isParticipant)
+                {
+                    <a asp-controller="Post" asp-action="Join" asp-route-id="@Model.Id" class="btn btn-primary">Join</a>
+                }
+                else
+                {
+                    <a asp-controller="Post" asp-action="Unjoin" asp-route-id="@Model.Id" class="btn btn-primary btn-danger">Cancel</a>
+                }
             }
-        </section>
-    </div>
-</div>
-    
-        
-
-
-
+        }
+        else
+        {
+            <p>Please Login to Join this Post</p>
+        }
+    }
+    else
+    {
+        <p>This Post is Closed.</p>
+    }
+</section>
