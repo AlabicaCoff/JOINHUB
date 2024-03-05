@@ -9,11 +9,9 @@
         <table class="table w-auto">
             <thead>
                 <tr class="text-center">
-                    <th>@Html.DisplayNameFor(model => model.Id)</th>
                     <th>@Html.DisplayNameFor(model => model.Title)</th>
                     <th>@Html.DisplayNameFor(model => model.Description)</th>
                     <th>@Html.DisplayNameFor(model => model.Status)</th>
-                    <th>@Html.DisplayNameFor(model => model.Link)</th>
                     <th>@Html.DisplayNameFor(model => model.UserId)</th>
                 </tr>
             </thead>
@@ -22,22 +20,19 @@
                 {
                     <tr>
                         <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Id)
+                            @item.Title
                         </td>
                         <td class="align-middle">
-                            <a asp-controller="Notification" asp-action="Read" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
+                            @item.Description
                         </td>
                         <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Description)
+                            @item.Status
                         </td>
                         <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Status)
+                            @item.UserId
                         </td>
                         <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Link)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.UserId)
+                            <a href="~/notification/read/@item.Id">Click</a>
                         </td>
                     </tr>
                 }
