@@ -93,3 +93,39 @@ h1 {
         width: 400px;
     }
 }
+
+@media only screen and (max-width: 600px) {
+    .form-control {
+        width: 300px;
+    }
+}
+
+@media only screen and (max-width: 430px) {
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    .form-control {
+        width: 260px;
+        height: 30px;
+    }
+
+    .form-group .btn {
+        font-size: 1.3rem;
+    }
+}
+
+@media only screen and (max-width: 375px) {
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    .form-control {
+        width: 180px;
+        height: 30px;
+    }
+
+    .form-group .btn {
+        font-size: 1.3rem;
+    }
+}
