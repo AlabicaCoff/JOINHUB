@@ -204,7 +204,7 @@ namespace Test.Controllers
         [Authorize]
         public async Task FilterParticipants(Post post)
         {
-            var urlLink = "../detail/" + post.Id;
+            var urlLink = "~/post/detail/" + post.Id;
             var PostParticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
             var diff = PostParticipants.Count() - post.NumberOfParticipants;
 

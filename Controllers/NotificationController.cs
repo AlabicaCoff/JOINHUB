@@ -36,6 +36,10 @@ namespace Test.Controllers
             var noti = _notificationService.GetById(id);
             if (noti != default)
             {
+                if (noti.Status == NotificationStatus.read)
+                {
+                    return Redirect(noti.Link);
+                }
                 noti.Status = NotificationStatus.read;
                 _notificationService.Save();
                 return Redirect(noti.Link);
