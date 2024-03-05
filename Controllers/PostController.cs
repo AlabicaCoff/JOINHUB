@@ -217,6 +217,7 @@ namespace Test.Controllers
             foreach (var person in PostParticipants)
             {
                 _notificationService.Send("Congrats", post.Title, urlLink, person.UserId);
+                PostParticipants.Remove(person);
             }
         }
 
@@ -240,7 +241,7 @@ namespace Test.Controllers
         public async Task CheckPostExpiration()
         {
             DateTime currentTime = DateTime.Now;
-            var expiredPosts = _postService.GetAll().Where(p => p.ExpireTime <= currentTime).ToList();
+            var expiredPosts = _postService.GetAll().Where(p => p.ExpireTime <= currentTime && p.Status == PostStatus.Active).ToList();
             foreach (var post in expiredPosts)
             {
                 FilterParticipants(post);
@@ -256,7 +257,7 @@ namespace Test.Controllers
             foreach (var post in expiredPosts)
             {
                 DateTime currentTime = DateTime.UtcNow;
-                DateTime expirationThreshold = post.ExpireTime.ToUniversalTime().AddMinutes(2);
+                DateTime expirationThreshold = post.ExpireTime.ToUniversalTime().AddMinutes(1);
 
                 if (currentTime >= expirationThreshold)
                 {
@@ -264,6 +265,12 @@ namespace Test.Controllers
                 }
             }
             await _postService.Save();
+        }
+
+        public async Task BackgroundTasks()
+        {
+            await CheckPostExpiration();
+            await DeletePost();
         }
     }
 }
