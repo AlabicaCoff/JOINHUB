@@ -7,49 +7,8 @@
     ViewData["Title"] = "My Posts";
 }
 
-<div class="row">
-    <div class="col-md-8 offset-md-2">
-        <table class="table w-auto">
-            <thead>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <a asp-controller="Post" asp-action="Detail" asp-route-id="@item.Id">
-                    <tr>
-                        <td class="align-middle">
-                                @item.Title
-                        </td>
-                        <td class="align-middle">
-                                @item.Author.FullName
-                        </td>
-                        <td class="align-middle">
-                                @item.Description
-                        </td>
-                        <td class="align-middle">
-                                @item.Status
-                        </td>
-                        <td class="align-middle">
-                                @item.Tag
-                        </td>
-                        <td class="align-middle">
-                                @item.Post_Participants.Count()
-                        </td>
-                        <td class="align-middle">
-                                @item.NumberOfParticipants
-                        </td>
-                        <td class="align-middle">
-                                @item.CreatedTime
-                        </td>
-                        <td class="align-middle">
-                                @item.ExpireTime
-                        </td>
-                    </tr>
-                    </a>
-                }
-            </tbody>
-        </table>
-        <p>User ID: @ViewData["UserId"]</p>
-    </div>
+<div class="center">
+    <h2>My Posts</h2>
+    @await Component.InvokeAsync("PostList", new {posts = Model})
 </div>
 

@@ -1,0 +1,30 @@
+@model IEnumerable<Post>
+
+<link href="@Url.Content("~/css/postlist.css")" rel="stylesheet" type="text/css" />
+<div class="row">
+    <h1>test1234</h1>
+
+    @foreach (var item in Model) {
+        <div class="crd">
+            <div class="crd-header">
+                <div class="crd-header-left">
+                    <h3 class="crdTitle">@item.Title</h3>
+                    <h4 class="crd-time">@Html.DisplayFor(modelItem => item.ExpireTime)</h4>
+                </div>
+                <div class="crd-header-right">
+                    <h4 class="crd-status">@Html.DisplayFor(modelItem => item.Status)</h4>
+                    <h5 class="crd-number">@item.NumberOfParticipants/@item.Post_Participants.Count</h5>
+                </div>
+            </div>
+                
+            <div class="crd-content">
+                <p class="crd-text">@item.Description</p>
+            </div>
+
+            <div class="crd-foot">
+                <h5 class="crd-tag">@Html.DisplayFor(modelItem => item.Tag)</h5>
+                <h5 class="crd-author">123 @Html.DisplayFor(modelItem => item.Author.Username)·@Html.DisplayFor(modelItem => item.CreatedTime)</h5>
+            </div>
+        </div>
+    }
+</div>
