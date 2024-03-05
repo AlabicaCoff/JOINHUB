@@ -164,7 +164,7 @@ namespace Test.Controllers
             }
             post.AuthorId = user.Id;
             _postService.Update(id, post);
-            _postService.Save();
+            await _postService.Save();
             return Redirect("../detail/" + id);
         }
 
@@ -202,7 +202,7 @@ namespace Test.Controllers
         }
 
         [Authorize]
-        public async void FilterParticipants(Post post)
+        public async Task FilterParticipants(Post post)
         {
             var urlLink = "../detail/" + post.Id;
             var PostParticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
@@ -233,27 +233,27 @@ namespace Test.Controllers
                 FilterParticipants(post);
                 post.Status = PostStatus.Closed;
                 _postService.Update(id, post);
-                _postService.Save();
+                await _postService.Save();
                 return Redirect("../detail/" + post.Id);
             }
             return View("NotFound", "Home");
         }
 
         [HttpPost]
-        public async void CheckPostExpiration()
+        public async Task CheckPostExpiration()
         {
             DateTime currentTime = DateTime.Now;
             var expiredPosts = _postService.GetAll().Where(p => p.ExpireTime <= currentTime).ToList();
             foreach (var post in expiredPosts)
             {
-                FilterParticipants(post);
+                await FilterParticipants(post);
                 post.Status = PostStatus.Closed;
                 _postService.Update(post.Id, post);
             }
-            _postService.Save();
+            await _postService.Save();
         }
 
-        public async void DeletePost()
+        public async Task DeletePost()
         {
             DateTime currentTime = DateTime.Now;
             DateTime expirationThreshold = currentTime.AddMinutes(-1);
@@ -262,12 +262,7 @@ namespace Test.Controllers
             {
                 _postService.Delete(post);
             }
-            _postService.Save();
-        }
-
-        private void AddMinutes()
-        {
-            throw new NotImplementedException();
+            await _postService.Save();
         }
     }
 }
