@@ -135,8 +135,6 @@ namespace Test.Controllers
             var post = _postService.GetByIdInclude(id);
             if (post != default)
             {
-                ViewData["Expired Date"] = post.ExpireTime.HasValue ? post.ExpireTime.Value
-                .ToString("dddd, dd MMMM yyyy") : "<not available>"; ;
                 return View(post);
             }
             return RedirectToAction("NotFoundPage", "Home");
@@ -216,13 +214,9 @@ namespace Test.Controllers
                 _notificationService.Send("Sorry", post.Title, urlLink, lastParticipant.UserId);
                 diff--;
             }
-
-            if (post.Status != PostStatus.Closed) 
+            foreach (var person in PostParticipants)
             {
-                foreach (var person in PostParticipants)
-                {
-                    _notificationService.Send("Congrats", post.Title, urlLink, person.UserId);
-                }
+                _notificationService.Send("Congrats", post.Title, urlLink, person.UserId);
             }
         }
 
@@ -258,12 +252,16 @@ namespace Test.Controllers
 
         public async Task DeletePost()
         {
-            DateTime currentTime = DateTime.Now;
-            DateTime expirationThreshold = currentTime.AddMinutes(-10);
-            var deletePosts = _postService.GetAll().Where(p => p.ExpireTime <= expirationThreshold).ToList();
-            foreach(var post in deletePosts)
+            var expiredPosts = _postService.GetAll().Where(p => p.Status == PostStatus.Closed).ToList();
+            foreach (var post in expiredPosts)
             {
-                _postService.Delete(post);
+                DateTime currentTime = DateTime.UtcNow;
+                DateTime expirationThreshold = post.ExpireTime.ToUniversalTime().AddMinutes(2);
+
+                if (currentTime >= expirationThreshold)
+                {
+                    _postService.Delete(post);
+                }
             }
             await _postService.Save();
         }
