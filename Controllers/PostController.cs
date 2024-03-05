@@ -32,7 +32,7 @@ namespace Test.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             ViewData["UserId"] = _userManager.GetUserId(this.User);
             var allPosts = _postService.GetAllInclude();
@@ -41,7 +41,7 @@ namespace Test.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Search(string searchString)
+        public IActionResult Search(string searchString)
         {
             var allPosts = _postService.GetAllInclude();
             var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
@@ -54,7 +54,7 @@ namespace Test.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Filter(Tag tag)
+        public IActionResult Filter(Tag tag)
         {
             var allPosts = _postService.GetAllInclude();
             var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
@@ -63,7 +63,7 @@ namespace Test.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -139,7 +139,7 @@ namespace Test.Controllers
                 .ToString("dddd, dd MMMM yyyy") : "<not available>"; ;
                 return View(post);
             }
-            return RedirectToAction("NotFound", "Home");
+            return RedirectToAction("NotFoundPage", "Home");
         }
 
         [Authorize]
@@ -151,7 +151,7 @@ namespace Test.Controllers
             {
                 return View(post);
             }
-            return RedirectToAction("NotFound", "Home");
+            return RedirectToAction("NotFoundPage", "Home");
         }
 
         [HttpPost]
@@ -183,7 +183,7 @@ namespace Test.Controllers
                 _participantService.Add(participant);
                 return Redirect("../detail/" + post.Id);
             }
-            return RedirectToAction("NotFound", "Home");
+            return RedirectToAction("NotFoundPage", "Home");
         }
 
         [Authorize]
@@ -198,11 +198,11 @@ namespace Test.Controllers
                 _participantService.Save();
                 return Redirect("../detail/" + post.Id);
             }
-            return View("NotFound", "Home");
+            return View("NotFoundPage", "Home");
         }
 
         [Authorize]
-        public async Task FilterParticipants(Post post)
+        public void FilterParticipants(Post post)
         {
             var urlLink = "~/post/detail/" + post.Id;
             var PostParticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
@@ -217,9 +217,12 @@ namespace Test.Controllers
                 diff--;
             }
 
-            foreach (var person in PostParticipants)
+            if (post.Status != PostStatus.Closed) 
             {
-                _notificationService.Send("Congrats", post.Title, urlLink, person.UserId);
+                foreach (var person in PostParticipants)
+                {
+                    _notificationService.Send("Congrats", post.Title, urlLink, person.UserId);
+                }
             }
         }
 
@@ -228,7 +231,7 @@ namespace Test.Controllers
         {   
             var post = _postService.GetById(id);
 
-            if (post != default || post.Status != PostStatus.Closed)
+            if (post != default && post.Status != PostStatus.Closed)
             {
                 FilterParticipants(post);
                 post.Status = PostStatus.Closed;
@@ -236,7 +239,7 @@ namespace Test.Controllers
                 await _postService.Save();
                 return Redirect("../detail/" + post.Id);
             }
-            return View("NotFound", "Home");
+            return View("NotFoundPage", "Home");
         }
 
         [HttpPost]
@@ -246,7 +249,7 @@ namespace Test.Controllers
             var expiredPosts = _postService.GetAll().Where(p => p.ExpireTime <= currentTime).ToList();
             foreach (var post in expiredPosts)
             {
-                await FilterParticipants(post);
+                FilterParticipants(post);
                 post.Status = PostStatus.Closed;
                 _postService.Update(post.Id, post);
             }
@@ -256,7 +259,7 @@ namespace Test.Controllers
         public async Task DeletePost()
         {
             DateTime currentTime = DateTime.Now;
-            DateTime expirationThreshold = currentTime.AddMinutes(-1);
+            DateTime expirationThreshold = currentTime.AddMinutes(-10);
             var deletePosts = _postService.GetAll().Where(p => p.ExpireTime <= expirationThreshold).ToList();
             foreach(var post in deletePosts)
             {
