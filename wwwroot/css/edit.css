@@ -80,3 +80,16 @@ h1 {
     .form-group .btn:hover {
         background-color: rgb(71, 123, 220);
     }
+
+/* Responsive Styles */
+@media only screen and (max-width: 1000px) {
+    .form-control {
+        width: 500px;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .form-control {
+        width: 400px;
+    }
+}
