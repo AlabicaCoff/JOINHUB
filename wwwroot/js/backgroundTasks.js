@@ -1,17 +1,26 @@
-function runBackgroundTasks() {
-    $.ajax({
-        url: '@Url.Action("BackgroundTasks", "Post")',
-        type: 'POST',
-        success: function (data) {
-            console.log(data.status);
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
+function runBackgroundTasks(print) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/post/BackgroundTasks', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                console.log(print);
+            } else {
+                console.error(xhr.responseText);
+            }
         }
-    });
+    };
+    xhr.send();
 }
 
-$(document).ready(function () {
-    runBackgroundTasks();
-    setInterval(runBackgroundTasks, 60000);
+document.addEventListener('DOMContentLoaded', function () {
+    var alreadyScheduled = sessionStorage.getItem('backgroundTasksScheduled');
+
+    if (!alreadyScheduled) {
+        runBackgroundTasks("Init");
+        sessionStorage.setItem('backgroundTasksScheduled', true);
+    }
+    setInterval(function () {
+        runBackgroundTasks("Count");
+    }, 5000);
 });

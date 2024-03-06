@@ -47,7 +47,8 @@ namespace Test.Controllers
             var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
             if (!string.IsNullOrEmpty(searchString))
             {
-                var matchedResult = activePosts.Where(p => p.Title.ToLower().Contains(searchString.ToLower()) || p.Description.ToLower().Contains(searchString.ToLower())).ToList();
+                var matchedResult = activePosts.Where(p => p.Title.ToLower().Contains(searchString.ToLower()) 
+                    || p.Description.ToLower().Contains(searchString.ToLower())).ToList();
                 return View("Index", matchedResult);
             }
             return View("Index", allPosts);
@@ -193,32 +194,38 @@ namespace Test.Controllers
             if (participant != default || post != default || post.Status != PostStatus.Closed)
             {
                 _participantService.Delete(participant);
-                _participantService.Save();
+                await _participantService.Save();
                 return Redirect("../detail/" + post.Id);
             }
             return View("NotFoundPage", "Home");
         }
 
         [Authorize]
-        public void FilterParticipants(Post post)
+        public async Task FilterParticipantsAsync(Post post)
         {
             var urlLink = "~/post/detail/" + post.Id;
-            var PostParticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
-            var diff = PostParticipants.Count() - post.NumberOfParticipants;
+            var postParticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
+            var diff = postParticipants.Count - post.NumberOfParticipants;
 
-            while (diff > 0)
+            if (diff > 0)
             {
-                var lastParticipant = PostParticipants.OrderBy(pp => pp.Id).LastOrDefault();
-                _participantService.Delete(lastParticipant);
-                PostParticipants.Remove(lastParticipant);
-                _notificationService.Send("Sorry", post.Title, urlLink, lastParticipant.UserId);
-                diff--;
+                var excessParticipants = postParticipants.OrderByDescending(pp => pp.Id).Take((int)diff).ToList();
+                foreach (var participant in excessParticipants)
+                {
+                    _participantService.Delete(participant);
+                    postParticipants.Remove(participant);
+                    _notificationService.Send("Sorry", post.Title, urlLink, participant.UserId);
+                }
             }
-            foreach (var person in PostParticipants)
+
+            if (postParticipants.Count > 0)
             {
-                _notificationService.Send("Congrats", post.Title, urlLink, person.UserId);
-                PostParticipants.Remove(person);
+                foreach (var participant in postParticipants)
+                {
+                    _notificationService.Send("Congrats", post.Title, urlLink, participant.UserId);
+                }
             }
+            
         }
 
         [Authorize]
@@ -228,7 +235,7 @@ namespace Test.Controllers
 
             if (post != default && post.Status != PostStatus.Closed)
             {
-                FilterParticipants(post);
+                await FilterParticipantsAsync(post);
                 post.Status = PostStatus.Closed;
                 _postService.Update(id, post);
                 await _postService.Save();
@@ -244,7 +251,7 @@ namespace Test.Controllers
             var expiredPosts = _postService.GetAll().Where(p => p.ExpireTime <= currentTime && p.Status == PostStatus.Active).ToList();
             foreach (var post in expiredPosts)
             {
-                FilterParticipants(post);
+                await FilterParticipantsAsync(post);
                 post.Status = PostStatus.Closed;
                 _postService.Update(post.Id, post);
             }
@@ -257,7 +264,7 @@ namespace Test.Controllers
             foreach (var post in expiredPosts)
             {
                 DateTime currentTime = DateTime.UtcNow;
-                DateTime expirationThreshold = post.ExpireTime.ToUniversalTime().AddMinutes(1);
+                DateTime expirationThreshold = post.ExpireTime.ToUniversalTime().AddMinutes(2);
 
                 if (currentTime >= expirationThreshold)
                 {
