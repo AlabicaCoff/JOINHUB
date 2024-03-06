@@ -9,6 +9,6 @@ namespace Test.Data.Services
         void Add(Post_Participant post_participant);
         void Update(int id, Post_Participant post_participant);
         void Delete(Post_Participant post_participant);
-        void Save();
+        Task Save();
     }
 }

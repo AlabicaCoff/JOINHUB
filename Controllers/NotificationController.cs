@@ -44,7 +44,7 @@ namespace Test.Controllers
                 _notificationService.Save();
                 return Redirect(noti.Link);
             }
-            return View("NotFound", "Home");
+            return View("NotFoundPage", "Home");
         }
     }
 }

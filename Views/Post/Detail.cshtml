@@ -23,7 +23,7 @@
 <p>Posted at @Model.CreatedTime.ToString("dddd, dd MMMM yyyy")</p>
 @if (Model.ExpireTime != null)
 {
-    <p>Expired at @ViewData["Expired Date"]</p>
+    <p>Expired at @Model.ExpireTime</p>
 }
 
 <section>
