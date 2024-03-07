@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using Test.Areas.Identity.Data;
 using Test.Data;
 using Test.Data.Enum;
@@ -48,5 +49,13 @@ namespace Test.Controllers
             }
             return View("NotFoundPage", "Error");
         }
-    }
+
+        public IActionResult CheckUnread()
+        {
+            var userId = _userManager.GetUserId(User);
+            var checkUnread = _notificationService.CheckUnread(userId);
+            return Json(new { unread = checkUnread });
+
+		}
+	}
 }
