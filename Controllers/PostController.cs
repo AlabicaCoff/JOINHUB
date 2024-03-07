@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿#nullable disable
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -138,7 +140,7 @@ namespace Test.Controllers
             {
                 return View(post);
             }
-            return RedirectToAction("NotFoundPage", "Home");
+            return RedirectToAction("NotFoundPage", "Error");
         }
 
         [Authorize]
@@ -150,7 +152,7 @@ namespace Test.Controllers
             {
                 return View(post);
             }
-            return RedirectToAction("NotFoundPage", "Home");
+            return RedirectToAction("NotFoundPage", "Error");
         }
 
         [HttpPost]
@@ -182,7 +184,7 @@ namespace Test.Controllers
                 _participantService.Add(participant);
                 return Redirect("../detail/" + post.Id);
             }
-            return RedirectToAction("NotFoundPage", "Home");
+            return RedirectToAction("NotFoundPage", "Error ");    
         }
 
         [Authorize]
@@ -197,11 +199,11 @@ namespace Test.Controllers
                 await _participantService.Save();
                 return Redirect("../detail/" + post.Id);
             }
-            return View("NotFoundPage", "Home");
+            return View("NotFoundPage", "Error");
         }
 
         [Authorize]
-        public async Task FilterParticipantsAsync(Post post)
+        public void FilterParticipants(Post post)
         {
             var urlLink = "~/post/detail/" + post.Id;
             var postParticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
@@ -225,7 +227,7 @@ namespace Test.Controllers
                     _notificationService.Send("Congrats", post.Title, urlLink, participant.UserId);
                 }
             }
-            
+
         }
 
         [Authorize]
@@ -235,13 +237,13 @@ namespace Test.Controllers
 
             if (post != default && post.Status != PostStatus.Closed)
             {
-                await FilterParticipantsAsync(post);
+                FilterParticipants(post);
                 post.Status = PostStatus.Closed;
                 _postService.Update(id, post);
                 await _postService.Save();
                 return Redirect("../detail/" + post.Id);
             }
-            return View("NotFoundPage", "Home");
+            return View("NotFoundPage", "Error");
         }
 
         [HttpPost]
@@ -251,7 +253,7 @@ namespace Test.Controllers
             var expiredPosts = _postService.GetAll().Where(p => p.ExpireTime <= currentTime && p.Status == PostStatus.Active).ToList();
             foreach (var post in expiredPosts)
             {
-                await FilterParticipantsAsync(post);
+                FilterParticipants(post);
                 post.Status = PostStatus.Closed;
                 _postService.Update(post.Id, post);
             }
@@ -269,6 +271,9 @@ namespace Test.Controllers
                 if (currentTime >= expirationThreshold)
                 {
                     _postService.Delete(post);
+                    var urlLink = "~/post/detail/" + post.Id;
+                    var noti = _notificationService.GetByLink(urlLink);
+                    _notificationService.Delete(noti);
                 }
             }
             await _postService.Save();

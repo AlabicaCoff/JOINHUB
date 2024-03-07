@@ -23,6 +23,7 @@ namespace Test.Models
         public Tag? Tag { get; set; }
         [Display(Name = "Number of Participants")]
         public int? NumberOfParticipants { get; set; }
+        public string? Location { get; set; }
 
         // Relationships
         public List<Post_Participant>? Post_Participants { get; set; }

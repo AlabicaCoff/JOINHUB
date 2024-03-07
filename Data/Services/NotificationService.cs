@@ -32,6 +32,12 @@ namespace Test.Data.Services
             return result;
         }
 
+        public Notification GetByLink(string link)
+        {
+            var result = _context.Notifications.SingleOrDefault(n => n.Link == link);
+            return result;
+        }
+
         public void Update(int id, Notification notification)
         {
             _context.Notifications.Update(notification);

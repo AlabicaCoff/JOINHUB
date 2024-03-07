@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿#nullable disable
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Test.Areas.Identity.Data;
 using Test.Data.Enum;
@@ -10,7 +12,6 @@ namespace Test.Models
         [Key]
         public int Id { get; set; }
         public string Title { get; set; }
-        public string Description { get; set; }
         public NotificationStatus Status { get; set; }
         public string Link { get; set; }
 
@@ -21,7 +22,6 @@ namespace Test.Models
 
         public Notification()
         {
-            this.Description = "Click this notification to see more detail";
             this.Status = NotificationStatus.unread;
         }
     }
