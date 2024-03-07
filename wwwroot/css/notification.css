@@ -36,18 +36,28 @@
     width: 95%;
     height: 45px;
     padding: 10px;
+    align-items: center;
 }
 .status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 20%;
     height: 100%;
     padding: 10px;
 }
 .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 60%;
     height: 100%;
     padding: 10px;
 }
 .toPostBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 20%;
     height: 100%;
     padding: 10px;

@@ -11,149 +11,20 @@
         <h1>@ViewData["Title"]</h1>
     </div>
     <div class="contentBox">
-        <div class="notiContent">
-            <div class="status">
-                <p>aaaaa</p>
+        @foreach (var item in Model)
+        {
+            <div class="notiContent">
+                <div class="status">
+                    <p>@item.Status</p>
+                </div>
+                <div class="title">
+                    <p>@item.Title</p>
+                </div>
+                <div class="toPostBtn">
+                    <button onclick="window.location.href='notification/read/@item.Id';"></button>
+                </div>
             </div>
-            <div class="title">
-                <p>aaaaa</p>
-            </div>
-            <div class="toPostBtn">
-                <button></button>
-            </div>
-        </div>
-
-        <div class="notiContent">
-            <div class="status">
-                <p>aaaaa</p>
-            </div>
-            <div class="title">
-                <p>aaaaa</p>
-            </div>
-            <div class="toPostBtn">
-                <button></button>
-            </div>
-        </div>
-
-        <div class="notiContent">
-            <div class="status">
-                <p>aaaaa</p>
-            </div>
-            <div class="title">
-                <p>aaaaa</p>
-            </div>
-            <div class="toPostBtn">
-                <button></button>
-            </div>
-        </div>
-
-        <div class="notiContent">
-            <div class="status">
-                <p>aaaaa</p>
-            </div>
-            <div class="title">
-                <p>aaaaa</p>
-            </div>
-            <div class="toPostBtn">
-                <button></button>
-            </div>
-        </div>
-
-        <div class="notiContent">
-            <div class="status">
-                <p>aaaaa</p>
-            </div>
-            <div class="title">
-                <p>aaaaa</p>
-            </div>
-            <div class="toPostBtn">
-                <button></button>
-            </div>
-        </div>
-
-        <div class="notiContent">
-            <div class="status">
-                <p>aaaaa</p>
-            </div>
-            <div class="title">
-                <p>aaaaa</p>
-            </div>
-            <div class="toPostBtn">
-                <button></button>
-            </div>
-        </div>
-
-        <div class="notiContent">
-            <div class="status">
-                <p>aaaaa</p>
-            </div>
-            <div class="title">
-                <p>aaaaa</p>
-            </div>
-            <div class="toPostBtn">
-                <button></button>
-            </div>
-        </div>
-
-        <div class="notiContent">
-            <div class="status">
-                <p>aaaaa</p>
-            </div>
-            <div class="title">
-                <p>aaaaa</p>
-            </div>
-            <div class="toPostBtn">
-                <button></button>
-            </div>
-        </div>
-
-        <div class="notiContent">
-            <div class="status">
-                <p>aaaaa</p>
-            </div>
-            <div class="title">
-                <p>aaaaa</p>
-            </div>
-            <div class="toPostBtn">
-                <button></button>
-            </div>
-        </div>
-
-        <div class="notiContent">
-            <div class="status">
-                <p>aaaaa</p>
-            </div>
-            <div class="title">
-                <p>aaaaa</p>
-            </div>
-            <div class="toPostBtn">
-                <button></button>
-            </div>
-        </div>
-
-        <div class="notiContent">
-            <div class="status">
-                <p>aaaaa</p>
-            </div>
-            <div class="title">
-                <p>aaaaa</p>
-            </div>
-            <div class="toPostBtn">
-                <button></button>
-            </div>
-        </div>
-
-        <div class="notiContent">
-            <div class="status">
-                <p>aaaaa</p>
-            </div>
-            <div class="title">
-                <p>aaaaa</p>
-            </div>
-            <div class="toPostBtn">
-                <button></button>
-            </div>
-        </div>
+        }
     </div>
 </div>
 
