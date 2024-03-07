@@ -1,0 +1,279 @@
+﻿.shadow-box {
+    box-shadow: 0px 2px 5px grey;
+    border-radius: 20px;
+}
+
+/* Title related rules */
+.title-container {
+    width: 85vw;
+    background-color: white;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    padding-inline: 3vw;
+    padding-top: 3vh;
+    padding-bottom: 2vh;
+}
+
+.title-post {
+    width: 60vw;
+    overflow-wrap: break-word;
+    text-align: start;
+    margin-bottom: 5px;
+}
+
+.upper-title-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: start;
+}
+
+    .upper-title-section h1 {
+        font-size: 2.35em;
+        margin-top: 5px;
+        margin-bottom: 3px;
+    }
+
+    .upper-title-section b {
+        font-size: 1.5em;
+    }
+
+.status-section {
+    margin-top: 10px;
+    text-align: end;
+}
+
+#tag {
+    position: relative;
+    display: block;
+    user-select: none;
+    width: auto;
+    text-align: center;
+    padding: 5px;
+    padding-inline: 10px;
+    border: black solid 1px;
+    border-radius: 10px;
+}
+
+#author-tag {
+    color: white;
+    background-color: rgb(71, 123, 220);
+    padding: 5px;
+    padding-inline: 10px;
+    margin-inline: 3px;
+    border-radius: 7px;
+}
+
+#current-participant {
+    margin-top: 5px;
+    font-size: 1.25em;
+}
+
+/* description related rules */
+.description-container {
+    width: 30vw;
+    padding-inline: 1vw;
+    text-align: center;
+    overflow-wrap: break-word;
+}
+
+/* participant related rules */
+.participant-container {
+    width: 28vw;
+    padding-inline: 1vw;
+    text-align: center;
+    overflow-wrap: break-word;
+}
+
+.participant {
+    color: white;
+    background-color: rgb(71, 123, 220);
+    padding: 6px;
+    margin-inline: 3px;
+    border-radius: 25px;
+}
+
+.no-participant-msg {
+    color: red;
+}
+
+/* interaction related rules */
+.interation-options {
+    width: 25vw;
+}
+
+#buttons-section {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    #buttons-section td {
+        border: 0px solid transparent;
+        background-clip: padding-box;
+    }
+
+    #buttons-section tr > td + td {
+        border-left-width: 10px;
+    }
+
+    #buttons-section tr + tr > td {
+        border-top-width: 10px;
+    }
+
+.styled-button {
+    width: 100%;
+    border-radius: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 1.5em;
+    box-shadow: 0px 0px 3px grey;
+}
+
+/* include obsolete for when you can't click but it's still there*/
+.obsolete-button {
+    text-align: center;
+    color: white;
+    background-color: lightgray;
+    user-select: none;
+}
+
+obsolete-desc {
+    position: relative;
+}
+
+    .obsolete-desc span {
+        opacity: 0;
+        transition: opacity 0.2s;
+        position: absolute;
+        pointer-events: none;
+        white-space: nowrap;
+        background-color: black;
+        border-radius: 3px;
+        padding: 2px 4px;
+        color: white;
+        font-family: sans-serif;
+        font-size: 12px;
+    }
+
+    .obsolete-desc:hover > span {
+        opacity: 1;
+    }
+
+.active-button {
+    cursor: pointer;
+    border: solid transparent 0px;
+    transition: 0.5s;
+}
+    .active-button:hover {
+        box-shadow: 0px 0px 8px grey;
+    }
+
+    .active-button span {
+        transition: 0.5s;
+    }
+
+    .active-button:hover span {
+        letter-spacing: 3px;
+    }
+
+    .active-button:active span {
+        letter-spacing: 8px;
+    }
+
+.join-button {
+    background-color: rgb(71, 123, 220);
+    color: white;
+}
+
+    .join-button:hover {
+        background-color: rgb(102, 153, 255);
+    }
+
+    .join-button:active {
+        background-color: rgb(240, 240, 240);
+        color: rgb(102, 153, 255);
+    }
+
+.unjoin-button {
+    background-color: rgb(230, 172, 0);
+    color: white;
+}
+
+    .unjoin-button:hover {
+        background-color: rgb(255, 210, 77);
+    }
+
+    .unjoin-button:active {
+        background-color: rgb(240, 240, 240);
+        color: rgb(255, 210, 77);
+    }
+
+.edit-button {
+    background-color: rgb(46, 184, 46);
+    color: white;
+}
+
+    .edit-button:hover {
+        background-color: rgb(112, 219, 112);
+    }
+
+    .edit-button:active {
+        background-color: rgb(240, 240, 240);
+        color: rgb(112, 219, 112);
+    }
+
+.close-button {
+    background-color: rgb(230, 46, 0);
+    color: white;
+}
+
+    .close-button:hover {
+        background-color: rgb(255, 92, 51);
+    }
+
+    .close-button:active {
+        background-color: rgb(240, 240, 240);
+        color: rgb(255, 92, 51);
+    }
+
+.content-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 1000px) {
+    .content-container {
+        flex-direction: row;
+    }
+
+        .content-container div {
+            margin: 0px;
+        }
+}
+
+@media only screen and (max-width: 800px) {
+    .content-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .content-container > div {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+    .description-container {
+        width: 80vw;
+        padding-inline: 3vw;
+    }
+
+    .participant-container {
+        width: 80vw;
+        padding-inline: 3vw;
+    }
+
+    .interation-options {
+        width: 65vw;
+    }
+}
