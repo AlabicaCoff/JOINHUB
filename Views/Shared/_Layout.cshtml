@@ -12,6 +12,7 @@
     <header>
         <div class="navBar">
             <a class="logo" href="/">JOIN HUB</a>
+            <p>User ID: @ViewData["UserID"]</p>
             <div class="group">
                 <ul class="navigation">
                     @if (User.Identity.IsAuthenticated)
@@ -19,7 +20,12 @@
                         <li><a class="item" href="/post/create">Post</a></li>
                         <li><a class="item" href="/post/mypost">My Post</a></li>
                         <li><a class="item" href="/post/myactivity">My Activity</a></li>
-                        <li><a class="item" href="/notification">Notifications</a></li>
+                        <li>
+                            <a class="item" href="/notification" id="notiBtn">
+                                <ion-icon name="notifications-outline" class="notiBtn"></ion-icon>
+                                <span class="btnBadge"></span>
+                            </a>
+                        </li>
                         <li><a class="item" href="/Identity/Account/Logout">Logout</a></li>
                     }
                     else

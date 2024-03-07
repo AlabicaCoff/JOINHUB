@@ -1,40 +1,159 @@
 ﻿@model IEnumerable<Notification>
-
+@section AddToHead {
+    <link href="@Url.Content("~/css/notification.css")" rel="stylesheet" type="text/css" />
+}
 @{
     ViewData["Title"] = "My Notifications";
 }
 
-<div class="row">
-    <div class="col-md-8 offset-md-2">
-        <table class="table w-auto">
-            <thead>
-                <tr class="text-center">
-                    <th>@Html.DisplayNameFor(model => model.Title)</th>
-                    <th>@Html.DisplayNameFor(model => model.Status)</th>
-                    <th>@Html.DisplayNameFor(model => model.UserId)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td class="align-middle">
-                            @item.Title
-                        </td>
-                        <td class="align-middle">
-                            @item.Status
-                        </td>
-                        <td class="align-middle">
-                            @item.UserId
-                        </td>
-                        <td class="align-middle">
-                            <a href="~/notification/read/@item.Id">Click</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <p>User ID: @ViewData["UserId"]</p>
+<div class="notiBox">
+    <div class="topBox">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div class="contentBox">
+        <div class="notiContent">
+            <div class="status">
+                <p>aaaaa</p>
+            </div>
+            <div class="title">
+                <p>aaaaa</p>
+            </div>
+            <div class="toPostBtn">
+                <button></button>
+            </div>
+        </div>
+
+        <div class="notiContent">
+            <div class="status">
+                <p>aaaaa</p>
+            </div>
+            <div class="title">
+                <p>aaaaa</p>
+            </div>
+            <div class="toPostBtn">
+                <button></button>
+            </div>
+        </div>
+
+        <div class="notiContent">
+            <div class="status">
+                <p>aaaaa</p>
+            </div>
+            <div class="title">
+                <p>aaaaa</p>
+            </div>
+            <div class="toPostBtn">
+                <button></button>
+            </div>
+        </div>
+
+        <div class="notiContent">
+            <div class="status">
+                <p>aaaaa</p>
+            </div>
+            <div class="title">
+                <p>aaaaa</p>
+            </div>
+            <div class="toPostBtn">
+                <button></button>
+            </div>
+        </div>
+
+        <div class="notiContent">
+            <div class="status">
+                <p>aaaaa</p>
+            </div>
+            <div class="title">
+                <p>aaaaa</p>
+            </div>
+            <div class="toPostBtn">
+                <button></button>
+            </div>
+        </div>
+
+        <div class="notiContent">
+            <div class="status">
+                <p>aaaaa</p>
+            </div>
+            <div class="title">
+                <p>aaaaa</p>
+            </div>
+            <div class="toPostBtn">
+                <button></button>
+            </div>
+        </div>
+
+        <div class="notiContent">
+            <div class="status">
+                <p>aaaaa</p>
+            </div>
+            <div class="title">
+                <p>aaaaa</p>
+            </div>
+            <div class="toPostBtn">
+                <button></button>
+            </div>
+        </div>
+
+        <div class="notiContent">
+            <div class="status">
+                <p>aaaaa</p>
+            </div>
+            <div class="title">
+                <p>aaaaa</p>
+            </div>
+            <div class="toPostBtn">
+                <button></button>
+            </div>
+        </div>
+
+        <div class="notiContent">
+            <div class="status">
+                <p>aaaaa</p>
+            </div>
+            <div class="title">
+                <p>aaaaa</p>
+            </div>
+            <div class="toPostBtn">
+                <button></button>
+            </div>
+        </div>
+
+        <div class="notiContent">
+            <div class="status">
+                <p>aaaaa</p>
+            </div>
+            <div class="title">
+                <p>aaaaa</p>
+            </div>
+            <div class="toPostBtn">
+                <button></button>
+            </div>
+        </div>
+
+        <div class="notiContent">
+            <div class="status">
+                <p>aaaaa</p>
+            </div>
+            <div class="title">
+                <p>aaaaa</p>
+            </div>
+            <div class="toPostBtn">
+                <button></button>
+            </div>
+        </div>
+
+        <div class="notiContent">
+            <div class="status">
+                <p>aaaaa</p>
+            </div>
+            <div class="title">
+                <p>aaaaa</p>
+            </div>
+            <div class="toPostBtn">
+                <button></button>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -1,0 +1,54 @@
+﻿.notiBox {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 700px;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+}
+.topBox {
+    width: 95%;
+    height: 10%;
+    padding: 10px;
+    background-color: rgb(21, 51, 169);
+    text-align: center;
+}
+    .topBox h1 {
+        color: whitesmoke;
+        font-size: 1.5em;
+        letter-spacing: 0.3rem;
+        font-weight: 400;
+    }
+
+.contentBox {
+    width: 95%;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.notiContent {
+    display: flex;
+    flex-direction: row;
+    width: 95%;
+    height: 45px;
+    padding: 10px;
+}
+.status {
+    width: 20%;
+    height: 100%;
+    padding: 10px;
+}
+.title {
+    width: 60%;
+    height: 100%;
+    padding: 10px;
+}
+.toPostBtn {
+    width: 20%;
+    height: 100%;
+    padding: 10px;
+}
