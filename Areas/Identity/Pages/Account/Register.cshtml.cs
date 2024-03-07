@@ -127,8 +127,17 @@ namespace Test.Areas.Identity.Pages.Account
                 user.Fullname = Input.Fullname;
 
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
+
+				var existingUser = await _userManager.FindByEmailAsync(Input.Email);
+				if (existingUser != null)
+				{
+					ModelState.AddModelError(string.Empty, "Email is already taken.");
+					return Page();
+				}
+
+				await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+				var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
