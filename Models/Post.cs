@@ -16,12 +16,14 @@ namespace Test.Models
         public string Description { get; set; }
         public DateTime CreatedTime { get; set; }
         [Display(Name = "Expired Date")]
-        public DateTime? ExpireTime { get; set; }
+        [Required]
+        public DateTime ExpireTime { get; set; }
         public PostStatus Status { get; set; }
         [Display(Name = "Tag")]
         public Tag? Tag { get; set; }
         [Display(Name = "Number of Participants")]
         public int? NumberOfParticipants { get; set; }
+        public string? Location { get; set; }
 
         // Relationships
         public List<Post_Participant>? Post_Participants { get; set; }

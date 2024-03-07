@@ -84,6 +84,11 @@ namespace Test.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
 
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "User Name")]
+            public string UserName { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -121,9 +126,18 @@ namespace Test.Areas.Identity.Pages.Account
 
                 user.Fullname = Input.Fullname;
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
+
+				var existingUser = await _userManager.FindByEmailAsync(Input.Email);
+				if (existingUser != null)
+				{
+					ModelState.AddModelError(string.Empty, "Email is already taken.");
+					return Page();
+				}
+
+				await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+				var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {

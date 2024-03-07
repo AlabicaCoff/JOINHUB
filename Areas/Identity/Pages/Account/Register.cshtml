@@ -16,10 +16,16 @@
             <span asp-validation-for="Input.Fullname" class="error"></span>
         </div>
         <div>
-            <input asp-for="Input.Email" class="input" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <input asp-for="Input.Email" class="input" autocomplete="email" aria-required="true" placeholder="Email" />
         </div>
         <div>
             <span asp-validation-for="Input.Email" class="error"></span>
+        </div>
+        <div>
+            <input asp-for="Input.UserName" class="input" autocomplete="username" aria-required="true" placeholder="User Name" />
+        </div>
+        <div>
+            <span asp-validation-for="Input.UserName" class="error"></span>
         </div>
         <div>
             <input asp-for="Input.Password" class="input" autocomplete="new-password" aria-required="true" placeholder="Password" />

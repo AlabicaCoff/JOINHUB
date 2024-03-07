@@ -32,6 +32,12 @@ namespace Test.Data.Services
             return result;
         }
 
+        public Notification GetByLink(string link)
+        {
+            var result = _context.Notifications.SingleOrDefault(n => n.Link == link);
+            return result;
+        }
+
         public void Update(int id, Notification notification)
         {
             _context.Notifications.Update(notification);
@@ -46,7 +52,7 @@ namespace Test.Data.Services
         public void Send(string title, string postTitle, string link, string userId)
         {
             var notificationTitle = (title == "Congrats") ? "Congrats! you got a permission to join this post" + postTitle
-                : "Sorry! you don't got a permission to join this post" + postTitle;
+            : "Sorry! you don't got a permission to join this post" + postTitle;
             var notification = new Notification()
             {
                 Title = notificationTitle,

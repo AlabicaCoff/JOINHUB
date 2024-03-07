@@ -39,9 +39,9 @@ namespace Test.Data.Services
             _context.Post_Participants.Update(post_participant);
         }
 
-        public void Save()
+        public async Task Save()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

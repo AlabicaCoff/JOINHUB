@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿#nullable disable
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +34,7 @@ namespace Test.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             ViewData["UserId"] = _userManager.GetUserId(this.User);
             var allPosts = _postService.GetAllInclude();
@@ -41,20 +43,21 @@ namespace Test.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Search(string searchString)
+        public IActionResult Search(string searchString)
         {
             var allPosts = _postService.GetAllInclude();
             var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
             if (!string.IsNullOrEmpty(searchString))
             {
-                var matchedResult = activePosts.Where(p => p.Title.ToLower().Contains(searchString.ToLower()) || p.Description.ToLower().Contains(searchString.ToLower())).ToList();
+                var matchedResult = activePosts.Where(p => p.Title.ToLower().Contains(searchString.ToLower()) 
+                    || p.Description.ToLower().Contains(searchString.ToLower())).ToList();
                 return View("Index", matchedResult);
             }
             return View("Index", allPosts);
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Filter(Tag tag)
+        public IActionResult Filter(Tag tag)
         {
             var allPosts = _postService.GetAllInclude();
             var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
@@ -63,7 +66,7 @@ namespace Test.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -135,11 +138,9 @@ namespace Test.Controllers
             var post = _postService.GetByIdInclude(id);
             if (post != default)
             {
-                ViewData["Expired Date"] = post.ExpireTime.HasValue ? post.ExpireTime.Value
-                .ToString("dddd, dd MMMM yyyy") : "<not available>"; ;
                 return View(post);
             }
-            return RedirectToAction("NotFound", "Home");
+            return RedirectToAction("NotFoundPage", "Error");
         }
 
         [Authorize]
@@ -151,7 +152,7 @@ namespace Test.Controllers
             {
                 return View(post);
             }
-            return RedirectToAction("NotFound", "Home");
+            return RedirectToAction("NotFoundPage", "Error");
         }
 
         [HttpPost]
@@ -183,7 +184,7 @@ namespace Test.Controllers
                 _participantService.Add(participant);
                 return Redirect("../detail/" + post.Id);
             }
-            return RedirectToAction("NotFound", "Home");
+            return RedirectToAction("NotFoundPage", "Error ");    
         }
 
         [Authorize]
@@ -195,32 +196,38 @@ namespace Test.Controllers
             if (participant != default || post != default || post.Status != PostStatus.Closed)
             {
                 _participantService.Delete(participant);
-                _participantService.Save();
+                await _participantService.Save();
                 return Redirect("../detail/" + post.Id);
             }
-            return View("NotFound", "Home");
+            return View("NotFoundPage", "Error");
         }
 
         [Authorize]
-        public async Task FilterParticipants(Post post)
+        public void FilterParticipants(Post post)
         {
             var urlLink = "~/post/detail/" + post.Id;
-            var PostParticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
-            var diff = PostParticipants.Count() - post.NumberOfParticipants;
+            var postParticipants = _participantService.GetAll().Where(pp => pp.PostId == post.Id).ToList();
+            var diff = postParticipants.Count - post.NumberOfParticipants;
 
-            while (diff > 0)
+            if (diff > 0)
             {
-                var lastParticipant = PostParticipants.OrderBy(pp => pp.Id).LastOrDefault();
-                _participantService.Delete(lastParticipant);
-                PostParticipants.Remove(lastParticipant);
-                _notificationService.Send("Sorry", post.Title, urlLink, lastParticipant.UserId);
-                diff--;
+                var excessParticipants = postParticipants.OrderByDescending(pp => pp.Id).Take((int)diff).ToList();
+                foreach (var participant in excessParticipants)
+                {
+                    _participantService.Delete(participant);
+                    postParticipants.Remove(participant);
+                    _notificationService.Send("Sorry", post.Title, urlLink, participant.UserId);
+                }
             }
 
-            foreach (var person in PostParticipants)
+            if (postParticipants.Count > 0)
             {
-                _notificationService.Send("Congrats", post.Title, urlLink, person.UserId);
+                foreach (var participant in postParticipants)
+                {
+                    _notificationService.Send("Congrats", post.Title, urlLink, participant.UserId);
+                }
             }
+
         }
 
         [Authorize]
@@ -228,7 +235,7 @@ namespace Test.Controllers
         {   
             var post = _postService.GetById(id);
 
-            if (post != default || post.Status != PostStatus.Closed)
+            if (post != default && post.Status != PostStatus.Closed)
             {
                 FilterParticipants(post);
                 post.Status = PostStatus.Closed;
@@ -236,17 +243,17 @@ namespace Test.Controllers
                 await _postService.Save();
                 return Redirect("../detail/" + post.Id);
             }
-            return View("NotFound", "Home");
+            return View("NotFoundPage", "Error");
         }
 
         [HttpPost]
         public async Task CheckPostExpiration()
         {
             DateTime currentTime = DateTime.Now;
-            var expiredPosts = _postService.GetAll().Where(p => p.ExpireTime <= currentTime).ToList();
+            var expiredPosts = _postService.GetAll().Where(p => p.ExpireTime <= currentTime && p.Status == PostStatus.Active).ToList();
             foreach (var post in expiredPosts)
             {
-                await FilterParticipants(post);
+                FilterParticipants(post);
                 post.Status = PostStatus.Closed;
                 _postService.Update(post.Id, post);
             }
@@ -255,14 +262,27 @@ namespace Test.Controllers
 
         public async Task DeletePost()
         {
-            DateTime currentTime = DateTime.Now;
-            DateTime expirationThreshold = currentTime.AddMinutes(-1);
-            var deletePosts = _postService.GetAll().Where(p => p.ExpireTime <= expirationThreshold).ToList();
-            foreach(var post in deletePosts)
+            var expiredPosts = _postService.GetAll().Where(p => p.Status == PostStatus.Closed).ToList();
+            foreach (var post in expiredPosts)
             {
-                _postService.Delete(post);
+                DateTime currentTime = DateTime.UtcNow;
+                DateTime expirationThreshold = post.ExpireTime.ToUniversalTime().AddMinutes(2);
+
+                if (currentTime >= expirationThreshold)
+                {
+                    _postService.Delete(post);
+                    var urlLink = "~/post/detail/" + post.Id;
+                    var noti = _notificationService.GetByLink(urlLink);
+                    _notificationService.Delete(noti);
+                }
             }
             await _postService.Save();
+        }
+
+        public async Task BackgroundTasks()
+        {
+            await CheckPostExpiration();
+            await DeletePost();
         }
     }
 }
