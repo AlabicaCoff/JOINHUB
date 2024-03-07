@@ -146,6 +146,7 @@ for details on configuring this project to bundle and minify static web assets. 
     display: flex;
     align-items: center;
     justify-content: center;
+    background-image: url('https://static.vecteezy.com/system/resources/previews/000/679/049/original/seamless-doodle-background.jpg');
 }
 
 footer {
