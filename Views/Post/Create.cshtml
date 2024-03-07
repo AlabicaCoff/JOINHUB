@@ -26,7 +26,7 @@
 			</div>
 			<div class="form-group">
 				<label asp-for="NumberOfParticipants" class="control-label"></label>
-				<input asp-for="NumberOfParticipants" class="form-control" min="0" value="0" />
+				<input asp-for="NumberOfParticipants" class="form-control" min="0" value="@Model.NumberOfParticipants"/>
 				<span asp-validation-for="NumberOfParticipants" class="text-danger"></span>
 			</div>
 			<div class="form-group">
@@ -35,6 +35,11 @@
 					<option hidden disabled selected value=""> -- select an option -- </option>
 				</select>
 				<span asp-validation-for="Tag" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Location" class="control-label"></label>
+				<input asp-for="Location" class="form-control des" />
+				<span asp-validation-for="Location" class="text-danger"></span>
 			</div>
 			<div class="form-group">
 				<label asp-for="ExpireTime" class="control-label"></label>

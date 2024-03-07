@@ -6,6 +6,7 @@ namespace Test.Data.Services
     {
         IEnumerable<Notification> GetAll();
         Notification GetById(int id);
+        Notification GetByLink(string link);
         void Add(Notification notification);
         void Update(int id, Notification notification);
         void Delete(Notification notification);
