@@ -1,7 +1,4 @@
-﻿body{
-}
-
-.logout {
+﻿.logout {
     display: flex;
     flex-direction: column;
     background-color: whitesmoke;
@@ -9,6 +6,7 @@
     width: 400px;
     border-radius: 10px;
     margin: 100px 0;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
 }
 
     .logout h1 {

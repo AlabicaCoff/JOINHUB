@@ -1,7 +1,4 @@
-﻿body {
-}
-
-.register {
+﻿.register {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -10,8 +7,6 @@
     width: 400px;
     border-radius: 10px;
     align-items: center;
-    margin-top: 20px;
-
 }
 
 .register h1 {
