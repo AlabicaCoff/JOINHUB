@@ -1,4 +1,6 @@
 function time() {
+    dt = new Date();
+    tag = document.getElementsByClassName("time");
+    tag
 }
-
-setInterval(doDate, 30000);
+setInterval(time, 30000);

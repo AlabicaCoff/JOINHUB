@@ -1,13 +1,13 @@
 ﻿@using Test.Data.Enum
 @model IEnumerable<Post>
 @section AddToHead {
-    <link href="@Url.Content("~/css/myact.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/my.css")" rel="stylesheet" type="text/css" />
 }
 @{
     ViewData["Title"] = "My Activities";
 }
 
 <div class="center">
-    <h2>My Activities</h2>
+    <h1>My Activities</h1>
     @await Component.InvokeAsync("PostList", new {posts = Model})
 </div>

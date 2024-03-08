@@ -145,6 +145,7 @@ for details on configuring this project to bundle and minify static web assets. 
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: whitesmoke;
 }
 
 .border-top {

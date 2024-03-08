@@ -27,7 +27,7 @@ namespace Test.Models
         public List<Post_Participant>? Post_Participants { get; set; }
         public string? AuthorId { get; set; }
         [ForeignKey("AuthorId")]
-        public Author? Author { get; set; }
+        public Author Author { get; set; }
 
         public Post()
         {
