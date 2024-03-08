@@ -1,17 +1,11 @@
-﻿body {
-}
-
-.register {
+﻿.register {
     position: relative;
     display: flex;
     flex-direction: column;
     background-color: rgb(21, 51, 169);
-    height: 600px;
     width: 400px;
     border-radius: 10px;
     align-items: center;
-    margin-top: 20px;
-
 }
 
 .register h1 {

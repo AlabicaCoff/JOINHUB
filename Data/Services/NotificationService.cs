@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿#nullable disable
+
+using System.Diagnostics;
+using Test.Data.Enum;
 using Test.Models;
 
 namespace Test.Data.Services
@@ -17,7 +20,10 @@ namespace Test.Data.Services
 
         public void Delete(Notification notification)
         {
-            _context.Notifications.Remove(notification);
+            if (notification != null) 
+            {
+				_context.Notifications.Remove(notification);
+			}
         }
 
         public IEnumerable<Notification> GetAll()
@@ -29,6 +35,12 @@ namespace Test.Data.Services
         public Notification GetById(int id)
         {
             var result = _context.Notifications.SingleOrDefault(n => n.Id == id);
+            return result;
+        }
+
+        public Notification GetByLink(string link)
+        {
+            var result = _context.Notifications.SingleOrDefault(n => n.Link == link);
             return result;
         }
 
@@ -46,7 +58,7 @@ namespace Test.Data.Services
         public void Send(string title, string postTitle, string link, string userId)
         {
             var notificationTitle = (title == "Congrats") ? "Congrats! you got a permission to join this post" + postTitle
-                : "Sorry! you don't got a permission to join this post" + postTitle;
+            : "Sorry! you don't got a permission to join this post " + postTitle;
             var notification = new Notification()
             {
                 Title = notificationTitle,
@@ -55,5 +67,11 @@ namespace Test.Data.Services
             };
             Add(notification);
         }
-    }
+
+		public bool CheckUnread(string userId)
+		{
+			var unread = _context.Notifications.Any(n => n.UserId == userId && n.Status == NotificationStatus.unread);
+            return unread;
+		}
+	}
 }

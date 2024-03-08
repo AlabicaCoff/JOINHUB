@@ -1,49 +1,30 @@
 ﻿@model IEnumerable<Notification>
-
+@section AddToHead {
+    <link href="@Url.Content("~/css/notification.css")" rel="stylesheet" type="text/css" />
+}
 @{
     ViewData["Title"] = "My Notifications";
 }
 
-<div class="row">
-    <div class="col-md-8 offset-md-2">
-        <table class="table w-auto">
-            <thead>
-                <tr class="text-center">
-                    <th>@Html.DisplayNameFor(model => model.Id)</th>
-                    <th>@Html.DisplayNameFor(model => model.Title)</th>
-                    <th>@Html.DisplayNameFor(model => model.Description)</th>
-                    <th>@Html.DisplayNameFor(model => model.Status)</th>
-                    <th>@Html.DisplayNameFor(model => model.Link)</th>
-                    <th>@Html.DisplayNameFor(model => model.UserId)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Id)
-                        </td>
-                        <td class="align-middle">
-                            <a asp-controller="Notification" asp-action="Read" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Link)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.UserId)
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <p>User ID: @ViewData["UserId"]</p>
+<div class="notiBox">
+    <div class="topBox">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div class="contentBox">
+        @foreach (var item in Model)
+        {
+            <div class="notiContent">
+                <div class="status">
+                    <p>@item.Status</p>
+                </div>
+                <div class="title">
+                    <p>@item.Title</p>
+                </div>
+                <div class="toPostBtn">
+                    <button onclick="window.location.href='notification/read/@item.Id';"></button>
+                </div>
+            </div>
+        }
     </div>
 </div>
 

@@ -20,12 +20,13 @@ for details on configuring this project to bundle and minify static web assets. 
     justify-content: space-between;
     align-items: center;
     z-index: 100;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
 }
 
 .logo {
     color: whitesmoke;
     text-decoration: none;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: 700;
     letter-spacing: 0.1rem;
 }
@@ -50,7 +51,7 @@ for details on configuring this project to bundle and minify static web assets. 
 .item {
     position: relative;
     text-decoration: none;
-    font-size: 1em;
+    font-size: 1.2em;
     color: whitesmoke;
     text-transform: uppercase;
     letter-spacing: 0.2em;
@@ -71,6 +72,16 @@ for details on configuring this project to bundle and minify static web assets. 
         transform: scaleX(1);
         transform-origin: left;
     }
+
+.btnBadge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    background-color: orangered;
+    border-radius: 50%
+}
 
 .navBar .search {
     position: relative;
@@ -135,30 +146,41 @@ for details on configuring this project to bundle and minify static web assets. 
     display: none;
 }
 
-
 .container {
     width: 100vw;
-    margin-top: 50px;
+    height: 100vh;
+    margin: 50px 0;
 }
 
 .main {
+    width: 100vw;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: whitesmoke;
+    background-image: url('https://static.vecteezy.com/system/resources/previews/000/679/049/original/seamless-doodle-background.jpg');
 }
 
-.border-top {
-    border-top: 1px solid #e5e5e5;
-}
-
-.footer {
+footer {
     position: absolute;
-    bottom: 0;
+    bottom: 0px;
     width: 100%;
-    white-space: nowrap;
-    line-height: 60px;
+    height: 50px;
 }
+.copyright {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: rgb(71, 123, 220);
+}
+    .copyright p {
+        color: whitesmoke;
+        text-align: center;
+        font-size: 1em;
+        letter-spacing: 0.2em;
+    }
 
 /* Responsive Styles */
 @media only screen and (max-width: 800px) {
@@ -181,6 +203,7 @@ for details on configuring this project to bundle and minify static web assets. 
         opacity: 0;
         visibility: hidden;
         left: 100%;
+        transition: 0.5s ease-in-out;
     }
 
     .navBar.open .navigation {
@@ -195,6 +218,7 @@ for details on configuring this project to bundle and minify static web assets. 
         height: calc(100vh-50px);
         padding: 40px;
         border-top: 1px solid rgba(0,0,0,0.5);
+        transition: 0.5s ease-in-out;
     }
 
         .navBar.open .navigation li a {

@@ -9,10 +9,10 @@
     <div class="login">
         <h1>Log in</h1>
         <div>
-            <input asp-for="Input.Email" class="input" aria-required="true" placeholder="name@example.com" />
+            <input asp-for="Input.UserName" class="input" aria-required="true" placeholder="Username / Email" />
         </div>
         <div>
-            <span asp-validation-for="Input.Email" class="error"></span>
+            <span asp-validation-for="Input.UserName" class="error"></span>
         </div>
         <div>
             <input asp-for="Input.Password" class="input" aria-required="true" placeholder="Password" />
@@ -28,7 +28,6 @@
         </div>
     </div>
 </form>
-
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

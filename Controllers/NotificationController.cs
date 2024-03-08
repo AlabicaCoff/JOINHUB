@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿#nullable disable
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using Test.Areas.Identity.Data;
 using Test.Data;
 using Test.Data.Enum;
@@ -36,11 +39,23 @@ namespace Test.Controllers
             var noti = _notificationService.GetById(id);
             if (noti != default)
             {
+                if (noti.Status == NotificationStatus.read)
+                {
+                    return Redirect(noti.Link);
+                }
                 noti.Status = NotificationStatus.read;
                 _notificationService.Save();
                 return Redirect(noti.Link);
             }
-            return View("NotFound", "Home");
+            return View("NotFoundPage", "Error");
         }
-    }
+
+        public IActionResult CheckUnread()
+        {
+            var userId = _userManager.GetUserId(User);
+            var checkUnread = _notificationService.CheckUnread(userId);
+            return Json(new { unread = checkUnread });
+
+		}
+	}
 }

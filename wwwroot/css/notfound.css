@@ -1,0 +1,51 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+    width: 100%;
+    flex-direction: column;
+}
+
+.head {
+    font-size: 15vh;
+    font-weight: 700 !important;
+    background-image: url("https://images.pexels.com/photos/1252890/pexels-photo-1252890.jpeg?cs=srgb&dl=pexels-hristo-fidanov-1252890.jpg&fm=jpg");
+    background-size: cover;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.second_head {
+    margin-top: 20px;
+    font-size: 2vw;
+    letter-spacing: 2px;
+}
+
+.description {
+    margin-top: 15px;
+    font-size: 1.5vw;
+}
+
+.home-btn {
+    margin-top: 20px;
+    border: 0;
+    background-color: blue;
+    border-radius: 16px;
+    color: whitesmoke;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 20px;
+}
+
+.home-btn:hover {
+    background-color: dodgerblue;
+}
