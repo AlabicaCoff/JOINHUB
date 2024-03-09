@@ -57,7 +57,10 @@ function collapse(tag) {
     // const header = {
     //     'flex-direction': ['column', 'row'][index],
     // }
-    crd.querySelector('.header').style['flex-direction'] = ['column', 'row'][index];
+    window.matchMedia('(max-width: 768px)').addEventListener(type, listener)
+    if (window.matchMedia('(max-width: 768px)').matches) {
+        crd.querySelector('.header').style['flex-direction'] = ['column', 'row'][index];
+    }
 
     get_collapse(crd).forEach(
         target => target.display = index ? 'none' : ''
