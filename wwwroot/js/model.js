@@ -68,6 +68,44 @@ class Notification {
     
 }
 
+class El {
+    static tagname = 'div';
+    static attr = {};
+
+    /**
+     * @param {HTMLElement} root
+     */
+    constructor(root, ...arg) {
+        this.root = root;
+        this.init(...arg);
+        this.el = this.build();
+        this.finish();
+    }
+    init(...arg) {}
+
+    finish() {}
+
+    build() {
+        /** @type {typeof El} */ // @ts-ignore
+        const cls = this.constructor;
+        const el = document.createElement(cls.tagname);
+
+        for (const key in cls.attr)
+            el.setAttribute(key, cls.attr[key]);
+
+        this.root.appendChild(el);
+        return el;
+    }
+
+    /**
+     * @param {HTMLElement} root
+     */
+    static preview(root) {
+        const el = new this(root);
+        /* ... */
+        return el;
+    }
+}
 
 // const s = '01-01-1970 00:03:44';
 // const d = new Date(s);
