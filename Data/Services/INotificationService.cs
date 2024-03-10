@@ -12,5 +12,6 @@ namespace Test.Data.Services
         void Delete(Notification notification);
         void Save();
         void Send(string title, string postTitle, string link, string userId);
+        bool CheckUnread(string userId);
     }
 }
