@@ -1,0 +1,9 @@
+.hydrated .container .main {
+    flex-direction: column;
+    width: auto;
+    height: auto;
+}
+.hydrated .container {
+    width: auto;
+    height: auto;
+}
