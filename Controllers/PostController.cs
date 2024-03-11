@@ -30,13 +30,12 @@ namespace Test.Controllers
             _authorService = authorService;
             _participantService = participantService;
             _notificationService = notificationService;
-            this._userManager = userManager;
+            _userManager = userManager;
         }
 
         [AllowAnonymous]
         public IActionResult Index()
         {
-            ViewData["UserId"] = _userManager.GetUserId(this.User);
             var allPosts = _postService.GetAllInclude();
             var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
             return View(allPosts);
@@ -110,7 +109,6 @@ namespace Test.Controllers
             var user = await _userManager.GetUserAsync(User);
             var allPosts = _postService.GetAllInclude();
             var myPosts = allPosts.Where(p => p.AuthorId == user.Id);
-            ViewData["UserId"] = user.Id;
             return View(myPosts);
         }
 
@@ -122,7 +120,6 @@ namespace Test.Controllers
             var allParticipants = _participantService.GetAll();
             var postParticipants =allParticipants.Where(pp => pp.UserId == user.Id).Select(pp => pp.PostId).ToList();
             var posts = allPosts.Where(p => postParticipants.Contains(p.Id));
-            ViewData["UserId"] = user.Id;
             return View(posts);
         }
 
@@ -132,7 +129,6 @@ namespace Test.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(this.User);
-                ViewData["UserId"] = user.Id;
                 ViewData["isParticipant"] = _participantService.GetAll().Any(pp => pp.PostId == id && pp.UserId == user.Id);
             }
             var post = _postService.GetByIdInclude(id);

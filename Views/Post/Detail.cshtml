@@ -31,10 +31,7 @@
         <p>Created by <b id="author-tag">@Model.Author.FullName</b> On <i style="color: gray;">@Model.CreatedTime.ToString()</i></p>
     </div>
     <!-- All details which are not presented in the title container -->
-    @if (Model.ExpireTime != null)
-    {
-        <p style="text-align: end;">Expired on @Model.ExpireTime.ToString()</p>
-    }
+    <p style="text-align: end;">Expired on @Model.ExpireTime.ToString()</p>
     <div class="content-container">
         <div class="description-container shadow-box">
             <h2>Description</h2>
