@@ -105,25 +105,17 @@ namespace Test.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> MyPost()
+        public async Task<IActionResult> MyPost() 
         {
             var user = await _userManager.GetUserAsync(User);
-            var allPosts = _postService.GetAllInclude();
-            var myPosts = allPosts.Where(p => p.AuthorId == user.Id);
-            ViewData["UserId"] = user.Id;
-            return View(myPosts);
+            return View(user.Id);
         }
 
         [Authorize]
-        public async Task<IActionResult> MyActivity()
+        public async Task<IActionResult> MyActivity() 
         {
             var user = await _userManager.GetUserAsync(User);
-            var allPosts = _postService.GetAllInclude();
-            var allParticipants = _participantService.GetAll();
-            var postParticipants =allParticipants.Where(pp => pp.UserId == user.Id).Select(pp => pp.PostId).ToList();
-            var posts = allPosts.Where(p => postParticipants.Contains(p.Id));
-            ViewData["UserId"] = user.Id;
-            return View(posts);
+            return View(user.Id);
         }
 
         [AllowAnonymous]
