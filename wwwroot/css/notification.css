@@ -1,7 +1,7 @@
 ﻿.notiBox {
     display: flex;
     flex-direction: column;
-    width: 400px;
+    width: 600px;
     height: 700px;
     background-color: whitesmoke;
     border-radius: 10px;
@@ -9,7 +9,6 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
 }
 .topBox {
-    width: 95%;
     height: 10%;
     padding: 10px;
     background-color: rgb(21, 51, 169);
@@ -23,11 +22,11 @@
     }
 
 .contentBox {
-    width: 95%;
     height: 100%;
     padding: 10px;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 .notiContent {
@@ -37,7 +36,16 @@
     height: 45px;
     padding: 10px;
     align-items: center;
+    border-style: solid;
+    border-color: rgb(71, 123, 220);
+    border-radius: 5px;
+    margin-bottom: 5px;
 }
+    .notiContent:hover {
+        color: whitesmoke;
+        background-color: rgb(71, 123, 220);
+        transition: 0.5s ease-in-out;
+    }
 .status {
     display: flex;
     justify-content: center;
@@ -61,4 +69,32 @@
     width: 20%;
     height: 100%;
     padding: 10px;
+}
+.detailBtn {
+    cursor: pointer;
+    height: 80%;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(232, 206, 29);
+    font-size: 16px;
+    text-align: center;
+}
+    .detailBtn:hover {
+        transition: 0.5s ease-in-out;
+        background-color: #04AA6D;
+        color: whitesmoke;
+    }
+
+/* Responsive Styles */
+@media only screen and (max-width: 900px){
+    .notiBox{
+        width: 400px;
+    }
+    .topBox{
+        width: 95%;
+    }
+    .contentBox {
+        width: 95%;
+    }
 }

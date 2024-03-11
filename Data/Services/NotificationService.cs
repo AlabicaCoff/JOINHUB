@@ -57,7 +57,7 @@ namespace Test.Data.Services
 
         public void Send(string title, string postTitle, string link, string userId)
         {
-            var notificationTitle = (title == "Congrats") ? "Congrats! you got a permission to join this post" + postTitle
+            var notificationTitle = (title == "Congrats") ? "Congrats! you got a permission to join this post " + postTitle
             : "Sorry! you don't got a permission to join this post " + postTitle;
             var notification = new Notification()
             {
