@@ -1,63 +1,178 @@
 ﻿@using Test.Data.Enum
 @model Post
+@section AddToHead {
+    <link href="@Url.Content("~/css/detail.css")" rel="stylesheet" type="text/css" />
+}
+@section AddNewScript {
+    <script src="@Url.Content("~/js/detail.js")" type="text/javascript"></script>
+}
 
 @{
     ViewData["Title"] = "Detail";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Title: @Model.Title</h1>
-<p>Tag: @Model.Tag</p>
-<p>Status: @Model.Status</p>
-<p>Description: @Model.Description</p>
-<p>@Model.Post_Participants.Count() / @Model.NumberOfParticipants</p>
-<hr />
-<ul>
-    @foreach (var user in Model.Post_Participants)
+<div>
+    <div class="title-container shadow-box">
+        <div class="upper-title-section">
+            <div>
+                <div class="title-post">
+                     <h1>@Model.Title</h1>
+                </div>
+                <div style="display: inline-block">
+                     <div id="tag">@Model.Tag</div>
+                </div>
+            </div>
+            <div class="status-section">
+                <b>@Model.Status</b>
+                <p id="current-participant">@Model.Post_Participants.Count()/@Model.NumberOfParticipants</p>
+            </div>
+        </div>
+        <hr />
+        <p>Created by <b id="author-tag">@Model.Author.FullName</b> On <i style="color: gray;">@Model.CreatedTime.ToString()</i></p>
+    </div>
+    <!-- All details which are not presented in the title container -->
+    @if (Model.ExpireTime != null)
     {
-        <li>@user.ApplicationUser.Fullname</li>
+        <p style="text-align: end;">Expired on @Model.ExpireTime.ToString()</p>
     }
-</ul>
-<hr />
-<p>Author: @Model.Author.FullName</p>
-<p>Posted at @Model.CreatedTime.ToString("dddd, dd MMMM yyyy")</p>
-@if (Model.ExpireTime != null)
-{
-    <p>Expired at @Model.ExpireTime</p>
-}
-
-<section>
-    @if (Model.Status == PostStatus.Active)
-    {
-        @if (User.Identity.IsAuthenticated)
-        {
-            var userId = (string)ViewData["UserId"];
-            @if (userId == Model.AuthorId)
+    <div class="content-container">
+        <div class="description-container shadow-box">
+            <h2>Description</h2>
+            <p>@Model.Description</p>
+        </div>
+        <div class="participant-container shadow-box">
+            <h2>Participants</h2>
+            @if (Model.Post_Participants.Count == 0)
             {
-                <a asp-controller="Post" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-                <a asp-controller="Post" asp-action="Close" asp-route-id="@Model.Id" class="btn btn-primary btn-danger">Close</a>
+                <p class="no-participant-msg">There is currently no participant</p>
             }
             else
             {
-                var isParticipant = (bool)ViewData["isParticipant"];
-                <p>@isParticipant</p>
-                @if (!isParticipant)
-                {
-                    <a asp-controller="Post" asp-action="Join" asp-route-id="@Model.Id" class="btn btn-primary">Join</a>
-                }
-                else
-                {
-                    <a asp-controller="Post" asp-action="Unjoin" asp-route-id="@Model.Id" class="btn btn-primary btn-danger">Cancel</a>
-                }
+                <div class="participant-list">
+                    @foreach (var user in Model.Post_Participants)
+                    {
+                        <p class="participant">@user.ApplicationUser.Fullname</p>
+                    }
+                </div>
             }
-        }
-        else
-        {
-            <p>Please Login to Join this Post</p>
-        }
-    }
-    else
-    {
-        <p>This Post is Closed.</p>
-    }
-</section>
+        </div>
+        <div class="interation-options">
+            <table id="buttons-section">
+                <tr>
+                    <td colspan="2">
+                        @if (Model.Status == PostStatus.Active)
+                        {
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                var userId = (string)ViewData["UserId"];
+                                @if (userId != Model.AuthorId)
+                                {
+                                    var isParticipant = (bool)ViewData["isParticipant"];
+                                    @if (!isParticipant)
+                                    { 
+                                        <form><button asp-controller="Post" asp-action="Join" asp-route-id="@Model.Id" type="submit" class="styled-button active-button join-button"><span>Join</span></button></form>
+                                    }
+                                    else
+                                    {
+                                        <form><button asp-controller="Post" asp-action="Unjoin" asp-route-id="@Model.Id" type="submit" class="styled-button active-button unjoin-button"><span>Unjoin</span></button></form>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="obsolete-desc" onmousemove="obsoleteHover(this, event);">
+                                        <div class="styled-button obsolete-button">Join</div>
+                                        <span>Author cannot join his/her own activity</span>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="obsolete-desc" onmousemove="obsoleteHover(this, event);">
+                                    <div class="styled-button obsolete-button">Join</div>
+                                    <span>Login to proceed</span>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="obsolete-desc" onmousemove="obsoleteHover(this, event);">
+                                <div class="styled-button obsolete-button">Join</div>
+                                <span>This post is closed</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 50%">
+                        @if (Model.Status == PostStatus.Active)
+                        {
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                var userId = (string)ViewData["UserId"];
+                                @if (userId == Model.AuthorId)
+                                {
+                                    <form><button asp-controller="Post" asp-action="Edit" asp-route-id="@Model.Id" type="submit" class="styled-button active-button edit-button"><span>Edit</span></button></form>
+                                }
+                                else
+                                {
+                                    <div class="obsolete-desc" onmousemove="obsoleteHover(this, event);">
+                                        <div class="styled-button obsolete-button">Edit</div>
+                                        <span>Only the author can edit the activity</span>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="obsolete-desc" onmousemove="obsoleteHover(this, event);">
+                                    <div class="styled-button obsolete-button">Edit</div>
+                                    <span>Login to proceed</span>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="obsolete-desc" onmousemove="obsoleteHover(this, event);">
+                                <div class="styled-button obsolete-button">Edit</div>
+                                <span>This post is closed</span>
+                            </div>
+                        }
+                    </td>
+                    <td style="width: 50%">
+                        @if (Model.Status == PostStatus.Active)
+                        {
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                var userId = (string)ViewData["UserId"];
+                                @if (userId == Model.AuthorId)
+                                {
+                                    <form><button asp-controller="Post" asp-action="Close" asp-route-id="@Model.Id" type="submit" class="styled-button active-button close-button"><span>Close</span></button></form>
+                                }
+                                else
+                                {
+                                    <div class="obsolete-desc" onmousemove="obsoleteHover(this, event);">
+                                        <div class="styled-button obsolete-button">Close</div>
+                                        <span>Only the author can close the activity</span>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="obsolete-desc" onmousemove="obsoleteHover(this, event);">
+                                    <div class="styled-button obsolete-button">Close</div>
+                                    <span>Login to proceed</span>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="obsolete-desc" onmousemove="obsoleteHover(this, event);">
+                                <div class="styled-button obsolete-button">Close</div>
+                                <span>This post is closed</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
