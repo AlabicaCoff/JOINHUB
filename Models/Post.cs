@@ -22,6 +22,7 @@ namespace Test.Models
         [Display(Name = "Tag")]
         public Tag? Tag { get; set; }
         [Display(Name = "Number of Participants")]
+        [Required(ErrorMessage = "Max Number of Participants is required")]
         public int? NumberOfParticipants { get; set; }
         public string? Location { get; set; }
 
