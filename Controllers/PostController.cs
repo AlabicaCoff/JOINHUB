@@ -75,6 +75,7 @@ namespace Test.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Post post)
         {
+            // Comment here because the thing just wouldn't work! Model[2] Author is invalid!
             if (!ModelState.IsValid)
             {
                 return View(post);

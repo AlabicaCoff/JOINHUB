@@ -2,16 +2,28 @@
 @model Post
 @section AddToHead {
     <link href="@Url.Content("~/css/detail.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/fliptimer.css")" rel="stylesheet" type="text/css" />
 }
 @section AddNewScript {
+    @if (Model.Status == PostStatus.Active)
+    {
+        <script>
+            @* load expire time just once*@
+            const expireTime = new Date("@Model.ExpireTime.ToString()").getTime(); 
+            let docBody = document.body;
+            const workerPath = "@Url.Content("~/js/timerWorker.js")";
+            docBody.setAttribute("onload", "startTimerWorker(workerPath)");
+        </script>
+    }
     <script src="@Url.Content("~/js/detail.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/js/fliptimer.js")" type="text/javascript"></script>
 }
 
 @{
     ViewData["Title"] = "Detail";
 }
 
-<div style="align-items: start;">
+<div style="align-items: start; margin-bottom: 20px;">
     <div class="title-container shadow-box">
         <div class="upper-title-section">
             <div>
@@ -30,11 +42,56 @@
         <hr />
         <p>Created by <b id="author-tag">@Model.Author.FullName</b> On <i style="color: gray;">@Model.CreatedTime.ToString()</i></p>
     </div>
+
     <!-- All details which are not presented in the title container -->
-    @if (Model.ExpireTime != null)
-    {
-        <p style="text-align: end;">Expired on @Model.ExpireTime.ToString()</p>
-    }
+    <div class="time-related-containter">
+        <div class="fliptimer-container">
+            <div class="fliptimer-segment">
+                <span>Hours</span>
+                <div class="fliptimer-subsegment">
+                    <div class="flip-card" id="hours-tens">
+                        <div class="top">-</div>
+                        <div class="bottom">-</div>
+                    </div>
+                    <div class="flip-card" id="hours-units">
+                        <div class="top">-</div>
+                        <div class="bottom">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="fliptimer-segment">
+                <span>Minutes</span>
+                <div class="fliptimer-subsegment">
+                    <div class="flip-card" id="minutes-tens">
+                        <div class="top">-</div>
+                        <div class="bottom">-</div>
+                    </div>
+                    <div class="flip-card" id="minutes-units">
+                        <div class="top">-</div>
+                        <div class="bottom">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="fliptimer-segment">
+                <span>Seconds</span>
+                <div class="fliptimer-subsegment">
+                    <div class="flip-card" id="seconds-tens">
+                        <div class="top">-</div>
+                        <div class="bottom">-</div>
+                    </div>
+                    <div class="flip-card" id="seconds-units">
+                        <div class="top">-</div>
+                        <div class="bottom">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (Model.ExpireTime != null)
+        {
+            <span>Expired on @Model.ExpireTime.ToString()</span>
+        }
+    </div>
+    
     <div class="content-container">
         <div class="description-container shadow-box">
             <h2>Description</h2>
@@ -49,9 +106,21 @@
             else
             {
                 <div class="participant-list">
-                    @foreach (var user in Model.Post_Participants)
-                    {
-                        <p class="participant">@user.ApplicationUser.Fullname</p>
+                    @{
+                        var sortedList = Model.Post_Participants.OrderBy(q => q.Id).ToList();
+                        var parCount = 1;
+                        foreach (var user in sortedList)
+                        {
+                            if (parCount <= Model.NumberOfParticipants)
+                            {
+                                <p class="participant">@user.ApplicationUser.Fullname</p>
+                            }
+                            else
+                            {
+                                <p class="participant-late">@user.ApplicationUser.Fullname</p>
+                            }
+                            parCount++;
+                        }
                     }
                 </div>
             }

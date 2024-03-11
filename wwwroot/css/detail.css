@@ -85,12 +85,19 @@
     overflow-wrap: break-word;
 }
 
-.participant {
+.participant, .participant-late {
     color: white;
-    background-color: rgb(71, 123, 220);
     padding: 6px;
     margin-inline: 3px;
     border-radius: 25px;
+}
+
+.participant {
+    background-color: rgb(71, 123, 220);
+}
+
+.participant-late {
+    background-color: red;
 }
 
 .no-participant-msg {
@@ -159,6 +166,7 @@ obsolete-desc {
         opacity: 1;
     }
 
+/* base css rule for all active buttons */
 .active-button {
     cursor: pointer;
     border: solid transparent 0px;
