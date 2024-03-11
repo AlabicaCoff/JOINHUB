@@ -12,7 +12,7 @@
     <header>
         <div class="navBar">
             <a class="logo" href="/">JOIN HUB</a>
-            <p>User ID: @ViewData["UserID"]</p>
+            <p>User ID: @User.Identity.Name</p>
             <div class="group">
                 <ul class="navigation">
                     @if (User.Identity.IsAuthenticated)
