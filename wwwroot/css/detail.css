@@ -1,4 +1,5 @@
 ﻿.shadow-box {
+    background-color: white;
     box-shadow: 0px 2px 5px grey;
     border-radius: 20px;
 }
@@ -6,7 +7,6 @@
 /* Title related rules */
 .title-container {
     width: 85vw;
-    background-color: white;
     margin-top: 20px;
     margin-bottom: 30px;
     padding-inline: 3vw;
@@ -43,6 +43,11 @@
     text-align: end;
 }
 
+.title-detail {
+    display: flex;
+    justify-content: space-between;
+}
+
 #tag {
     position: relative;
     display: block;
@@ -69,7 +74,22 @@
     font-size: 1.25em;
 }
 
-/* description related rules */
+/* location related rules */
+.location-container {
+    padding: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-inline: 1vw;
+    width: 89vw;
+    text-align: center;
+    justify-content: center;
+    overflow-wrap: break-word;
+}
+    .location-container span {
+        font-size: 1.3em;
+    }
+
+    /* description related rules */
 .description-container {
     width: 30vw;
     padding-inline: 1vw;
@@ -85,12 +105,19 @@
     overflow-wrap: break-word;
 }
 
-.participant {
+.participant, .participant-late {
     color: white;
-    background-color: rgb(71, 123, 220);
     padding: 6px;
     margin-inline: 3px;
     border-radius: 25px;
+}
+
+.participant {
+    background-color: rgb(71, 123, 220);
+}
+
+.participant-late {
+    background-color: red;
 }
 
 .no-participant-msg {
@@ -159,6 +186,7 @@ obsolete-desc {
         opacity: 1;
     }
 
+/* base css rule for all active buttons */
 .active-button {
     cursor: pointer;
     border: solid transparent 0px;
@@ -262,6 +290,18 @@ obsolete-desc {
             margin-top: 10px;
             margin-bottom: 10px;
         }
+
+    .title-detail {
+        gap: 10px;
+        flex-direction: column;
+        justify-content: start;
+    }
+
+    .location-container {
+        width: 80vw;
+        padding-inline: 3vw;
+        margin-bottom: 10px;
+    }
 
     .description-container {
         width: 80vw;
