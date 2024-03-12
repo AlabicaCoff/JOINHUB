@@ -23,7 +23,7 @@ namespace Test.Models
         [Required]
         public DateTime ExpireTime { get; set; }
 
-        [JsonInclude]
+        
         public PostStatus Status { get; set; }
 
         [Display(Name = "Tag")]
@@ -34,7 +34,6 @@ namespace Test.Models
         public string? Location { get; set; }
 
         // Relationships
-        [JsonInclude]
         public List<Post_Participant>? Post_Participants { get; set; }
 
         [JsonIgnore]

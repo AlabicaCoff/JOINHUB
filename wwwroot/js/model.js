@@ -1,13 +1,13 @@
 // @ts-check
 /**
  * @typedef {Object} Author
- * @prop {string} Id
- * @prop {string} Username
- * @prop {string} FullName
+ * @prop {string} id
+ * @prop {string} username
+ * @prop {string} fullname
  */
 /**
  * @typedef {Object} Post_Participants
- * @prop {string} UserId
+ * @prop {string} userId
  */
 /**
  * @typedef {Object} RawPost
@@ -25,21 +25,21 @@
  */
 /**
  * @typedef {Object} Post
- * @prop {number} Id
- * @prop {string} Title // c
- * @prop {string} Description // c
- * @prop {Date} CreatedTime // <- string
- * @prop {Date} ExpireTime // c <- string
- * @prop {number} Status // c
- * @prop {number?} Tag // c
- * @prop {number?} NumberOfParticipants // c max members
- * @prop {string?} Location // c
+ * @prop {number} id
+ * @prop {string} title // c
+ * @prop {string} description // c
+ * @prop {Date} createdTime // <- string
+ * @prop {Date} expireTime // c <- string
+ * @prop {number} status // c
+ * @prop {number?} tag // c
+ * @prop {number?} numberOfParticipants // c max members
+ * @prop {string?} location // c
  * @prop {number} current_number // c <- Post_Participants
- * @prop {Author} Author
+ * @prop {Author} author
  */
 
 
-/** @return {HTMLElement} */
+/** @return {SVGElement} */
 function createIcon(icon) {
     // @ts-ignore
     return lucide.createElement(lucide[icon]);
@@ -60,8 +60,10 @@ function setAttr(ele, obj) {
 
 /** @param {string[]} ls */
 function lastchain(obj, ls) {
-    const last = ls.pop();
-    ls.forEach(
+    const newls = [...ls];
+    const last = newls.pop();
+
+    newls.forEach(
         next => obj = obj[next]
     );
     return [obj, last];
@@ -86,6 +88,7 @@ function time_str(dt) {
     }
 }
 
+
 class Component {
     static tagName = 'div';
     static className = '';
@@ -97,15 +100,13 @@ class Component {
         this.finish();
     }
 
-    init(userid) {
-        this.userid = userid;
-    }
+    init(...arg) {}
 
     finish() {}
 
     /** @returns {string} */
     html() {
-        return `<p>\${this.constructor.name}</p>`;
+        return `<p>${this.constructor.name}</p>`;
     }
 
     /** @returns {HTMLElement} */
@@ -121,7 +122,7 @@ class Component {
         const { tagName, className } = this.constructor;
         
         return this.root.appendChild(Tag(
-            { tagName, className }
+            { tagName, class: className }
         ));
     }
 
@@ -134,20 +135,14 @@ class Component {
 
     ico(icon, cls='') {
         const ele = createIcon(icon);
-        ele.className = cls;
+        ele.setAttribute('class', cls);
 
         return ele.outerHTML;
-    }
-
-    /** @param {HTMLElement} root */
-    static preview(root) {
-        const instance = new this(root);
-        instance.ele.innerHTML = instance.html();
     }
     
     // render and map
     render() {
-        this.ele.innerHTML = eval(this.html());
+        this.ele.innerHTML = this.html();
     }
 
     async get(url) {
@@ -161,6 +156,10 @@ class Row extends Component {
     
     /** @type {Card[]} */
     cards = [];
+
+    init(userid) {
+        this.userid = userid;
+    }
 
     async get(manifest_url) {
         /** @type {string[]} */
@@ -196,7 +195,7 @@ class Card extends Component{
     async finish() {
         const post = await this.get();
 
-        this.my = post.Id == this.root.userid;
+        this.ismy = post.author.id == this.root.userid; //!
         this.render();
         this.setattr(post);
         this.#refresh(post);
@@ -209,12 +208,19 @@ class Card extends Component{
     
     /** @return {Promise<Post>} */
     async get() {
-        const raw = await super.get(this.url);
+        let raw = await super.get(this.url);
+
+        // // ensure first uppercase
+        // let raw = Object.fromEntries(
+        //     Object.entries(raw).map(
+        //         ([k, v]) => [capital(k), v]
+        //     )
+        // );
         return {
             ...raw, ...{
-                CreatedTime: new Date(raw.CreatedTime),
-                ExpireTime: new Date(raw.ExpireTime),
-                current_number: raw.Post_Participants.length
+                createdTime: new Date(raw.createdTime),
+                expireTime: new Date(raw.expireTime),
+                current_number: raw.post_Participants.length
             }
         };
     }
@@ -224,8 +230,8 @@ class Card extends Component{
         for (const [sel, keys, now] of this.changemap(post)) {
             const eleobj = this.find(sel);
             const [ lastobj, lastkey ] = lastchain(eleobj, keys);
-            
-            if (lastobj[lastkey] != now) {
+
+            if (lastobj != null && lastobj[lastkey] != now) {
                 lastobj[lastkey] = now;
             }
         }
@@ -243,23 +249,23 @@ class Card extends Component{
             user = this.find('.user'),
             ctime = this.find('.ctime');
         var 
-            p_toggle = 0;
+            p_toggle = 1;
 
         // append .list element to .prop
         [[
-            'loc', 'MapPin', post.Location
+            'loc', 'MapPin', post.location
         ],[
-            'etime', 'TimerOff', time_str(post.ExpireTime)
+            'etime', 'TimerOff', time_str(post.expireTime)
         ]]
         .forEach(([cls, ico, text]) => {
             if (text != null) {
                 prop.appendChild(Tag({
-                    className: 'list'
+                    class: 'list'
                 }))
                 .append(
                     createIcon(ico),
                     Tag({
-                        className: `prop-text ${cls}`,
+                        class: `prop-text ${cls}`,
                         textContent: text.toString()
                     })
                 );
@@ -267,15 +273,14 @@ class Card extends Component{
         });
 
         // set non-dynamic attr
-        setAttr(ctime, {
-            textContent: time_str(post.CreatedTime),
-        });
+        ctime.textContent = time_str(post.createdTime)
+
         setAttr(title, {
-            href: `/Post/Detail/${post.Author.Id}`,
+            href: `/Post/Detail/${post.id}`,
             target: '_blank',
         });
         setAttr(user, {
-            textContent: post.Author.FullName + ' · ' + post.Author.Username
+            textContent: post.author.fullname + ' · ' + post.author.username
         });
 
         // handle event
@@ -295,7 +300,9 @@ class Card extends Component{
                 p_toggle = Number(!p_toggle);
         }
 
-        window.matchMedia('(max-width: 768px)').onchange = e => {
+        window.matchMedia(
+            '(max-width: 768px)'
+        ).onchange = e => {
             let i = Number(e.matches);
             header.style['flex-direction'] = ['row', 'column'][i];
         };
@@ -308,24 +315,24 @@ class Card extends Component{
     changemap(post) {
         const txt = ['textContent'];
         return [[
-            'a.title', txt, post.Title
+            'a.title', txt, post.title
         ],[
-            '.content', txt, post.Description
+            '.content', txt, post.description
         ],[
-            '.prop .loc', txt, post.Location
+            '.prop .loc', txt, post.location
         ],[
-            '.foot .tag', txt, post.Tag // convert enum
+            '.foot .tag', txt, post.tag // convert enum
         ],[
-            '.prop .etime', txt, time_str(post.ExpireTime)
+            '.prop .etime', txt, time_str(post.expireTime)
         ],[
-            '.people .cap', txt, `${post.current_number}/${post.NumberOfParticipants}`
+            '.people .cap', txt, `${post.current_number}/${post.numberOfParticipants}`
        // ],[
-       //     '.header', ['style', 'background-color'], post.Status // convert enum, combine post.Id 
+       //     '.header', ['style', 'background-color'], post.status // convert enum, combine post.id 
         ],[
             '.frame .bar', ['style', 'width'], (() => {
                 let width = 0;
-                if (post.NumberOfParticipants) {
-                    width = post.current_number/post.NumberOfParticipants * 100 + 5;
+                if (post.numberOfParticipants) {
+                    width = post.current_number/post.numberOfParticipants * 100 + 2.8;
                 }
                 return `${width}%`;
             })()
@@ -336,28 +343,28 @@ class Card extends Component{
         return /*html*/`
             <div class="header">
                 <div class="list people">
-                    \${this.ico('UsersRound')}
-                    \${this.tag('cap')}
+                    ${this.ico('UsersRound')}
+                    ${this.tag('cap')}
                 </div>
-                \${this.tag('prop')}
+                ${this.tag('prop')}
             </div>
             <div class="frame">
-                \${this.tag('bar')}
+                ${this.tag('bar')}
                 <div class="top">
                     <div class="left" onmouseover="Card.show_copy(this)" onmouseleave="Card.hide_copy(this)">
-                        \${this.tag('title', 'a')}
+                        ${this.tag('title', 'a')}
                         <div class="copy" onclick="Card.copylink(this)">
-                            \${this.ico('ClipboardCopy')}
+                            ${this.ico('ClipboardCopy')}
                         </div>
                     </div>
-                    \${this.ico('PanelTopClose', 'toggle-panel')} 
+                    ${this.ico('PanelTopClose', 'toggle-panel')} 
                 </div>
-                \${this.tag('content')}
+                ${this.tag('content')}
                 <div class="foot">
                     <div class="left">
-                        \${this.tag('tag')} · \${this.tag('ctime')}
+                        ${this.tag('tag')} · ${this.tag('ctime')}
                     </div>
-                    \${this.tag('user')}
+                    ${this.tag('user')}
                 </div>
             </div>
         `;

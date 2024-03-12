@@ -107,14 +107,16 @@ namespace Test.Controllers
         public async Task<IActionResult> MyPost() 
         {
             var user = await _userManager.GetUserAsync(User);
-            return View(user.Id);
+            ViewData["userid"] = user.Id;
+            return View();
         }
 
         [Authorize]
         public async Task<IActionResult> MyActivity() 
         {
             var user = await _userManager.GetUserAsync(User);
-            return View(user.Id);
+            ViewData["userid"] = user.Id;
+            return View();
         }
 
         [AllowAnonymous]

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Test.Areas.Identity.Data;
 using Test.Data.Services;
-using System.Text.Json;
 
 
 namespace Test.Controllers {
@@ -15,43 +14,42 @@ namespace Test.Controllers {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         public JsonResult post(int id) {
-            var post = _post.GetById(id);
+            var post = _post.GetByIdInclude(id);
             return Json(post);
         }
 
-        private JsonResult manifest(IEnumerable<Models.Post> posts) {
+        private string[] manifest(IEnumerable<Models.Post> posts) {
             var url = Url.Action(nameof(this.post));
-
             var IDs = posts
                 .Select(p => p.Id)
-                .Select(id => $"{url}/{id}");
+                .Select(id => $"{url}/{id}")
+                .ToArray();
             
-            return Json(IDs);
+            return IDs;
         }
 
         [Authorize]
-        public JsonResult ActivityOf(string userid) {
-            var allPosts = _post.GetAllInclude();
+        public async Task<JsonResult> myactivity() {
+            var user = await _userManager.GetUserAsync(User);
 
             var postParticipants = _participant.GetAll()
-                .Where(pp => pp.UserId == userid)
+                .Where(pp => pp.UserId == user.Id)
                 .Select(pp => pp.PostId)
                 .ToList();
 
-            var posts = allPosts
+            var posts = _post.GetAllInclude()
                 .Where(p => postParticipants.Contains(p.Id));
 
-            return manifest(posts);
+            return Json(manifest(posts));
         }
 
         [Authorize]
-        public JsonResult PostOf(string userid) {
-            var allPosts = _post.GetAllInclude();
+        public async Task<JsonResult> mypost() {
+            var user = await _userManager.GetUserAsync(User);            
+            var posts = _post.GetAllInclude()
+                .Where(p => p.AuthorId == user.Id);
 
-            var posts = allPosts
-                .Where(p => p.AuthorId == userid);
-
-            return manifest(posts);
+            return Json(manifest(posts));
         }
     }
 }
@@ -61,5 +59,4 @@ namespace Test.Controllers {
     https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/overview
     https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializeroptions?view=net-8.0
     https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/ignore-properties
-
 */

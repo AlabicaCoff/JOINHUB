@@ -1,5 +1,8 @@
-﻿namespace Test.Data.Enum
+﻿using System.Text.Json.Serialization;
+
+namespace Test.Data.Enum
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum Tag
     {
         Gaming,
