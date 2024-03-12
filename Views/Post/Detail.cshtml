@@ -40,14 +40,39 @@
             </div>
         </div>
         <hr />
-        <p>Created by <b id="author-tag">@Model.Author.FullName</b> On <i style="color: gray;">@Model.CreatedTime.ToString()</i></p>
+        <div class="title-detail">
+            <span>Created by <b id="author-tag">@Model.Author.FullName</b> On <i style="color: gray;">@Model.CreatedTime.ToString()</i></span>
+            @if (Model.ExpireTime != null)
+            {
+                <span>Expired on <i style="color: gray;">@Model.ExpireTime.ToString()</i></span>
+            }
+        </div>
     </div>
 
     <!-- All details which are not presented in the title container -->
     <div class="time-related-containter">
+        <div style="text-align: center; font-size: 1.8em; color: red; margin-bottom: 25px; font-weight: 600;">
+            <span>Time left until the post is expired</span>
+        </div>
         <div class="fliptimer-container">
             <div class="fliptimer-segment">
-                <span>Hours</span>
+                <div class="fliptimer-subsegment">
+                    <div class="flip-card" id="days-more-than">
+                        <div class="top">-</div>
+                        <div class="bottom">-</div>
+                    </div>
+                    <div class="flip-card" id="days-tens">
+                        <div class="top">-</div>
+                        <div class="bottom">-</div>
+                    </div>
+                    <div class="flip-card" id="days-units">
+                        <div class="top">-</div>
+                        <div class="bottom">-</div>
+                    </div>
+                </div>
+                <span>Days</span>
+            </div>
+            <div class="fliptimer-segment">
                 <div class="fliptimer-subsegment">
                     <div class="flip-card" id="hours-tens">
                         <div class="top">-</div>
@@ -58,9 +83,9 @@
                         <div class="bottom">-</div>
                     </div>
                 </div>
+                <span>Hours</span>
             </div>
             <div class="fliptimer-segment">
-                <span>Minutes</span>
                 <div class="fliptimer-subsegment">
                     <div class="flip-card" id="minutes-tens">
                         <div class="top">-</div>
@@ -71,9 +96,9 @@
                         <div class="bottom">-</div>
                     </div>
                 </div>
+                <span>Minutes</span>
             </div>
             <div class="fliptimer-segment">
-                <span>Seconds</span>
                 <div class="fliptimer-subsegment">
                     <div class="flip-card" id="seconds-tens">
                         <div class="top">-</div>
@@ -84,12 +109,16 @@
                         <div class="bottom">-</div>
                     </div>
                 </div>
+                <span>Seconds</span>
             </div>
         </div>
-        @if (Model.ExpireTime != null)
-        {
-            <span>Expired on @Model.ExpireTime.ToString()</span>
-        }
+    </div>
+
+    <div style="display: flex; justify-content: center;">
+        <div class="location-container shadow-box">
+            <img alt="map-pin" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLW1hcC1waW4iPjxwYXRoIGQ9Ik0yMCAxMGMwIDYtOCAxMi04IDEycy04LTYtOC0xMmE4IDggMCAwIDEgMTYgMFoiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEwIiByPSIzIi8+PC9zdmc+">
+            <span><b>Location :</b> @Model.Location</span>
+        </div>
     </div>
     
     <div class="content-container">
@@ -117,7 +146,10 @@
                             }
                             else
                             {
-                                <p class="participant-late">@user.ApplicationUser.Fullname</p>
+                                <div class="obsolete-desc" onmousemove="obsoleteHover(this, event);">
+                                    <p class="participant-late">@user.ApplicationUser.Fullname</p>
+                                    <span>This person will be kicked when the post is closed.</span>
+                                </div>
                             }
                             parCount++;
                         }
