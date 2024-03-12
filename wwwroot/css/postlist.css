@@ -80,12 +80,12 @@
             font-weight: 600;
         }
 
-        .crd .prop img {
+        .crd .prop svg {
             width: var(--size1);
             height: var(--size1);
         }
 
-    .crd .joinb {
+    .crd .btn {
         margin-top: auto;
         padding: .52rem 2.4rem .52rem 2.4rem;
         align-self: center;
@@ -99,7 +99,7 @@
         background-color: var(--b6);
     }
 
-    .crd .joinb:hover{
+    .crd .btn:hover{
         color: rgba(0, 0, 0, 1);
         box-shadow: 0 12px 28px 0 var(--b5), 0 2px 4px 0 var(--b5);
         background-color: var(--b12);
@@ -122,7 +122,7 @@
     }
 
     .crd .bar {
-        width: 105%;
+        width: 0%;
         height: 2.5px;
         margin-bottom: 9px;
 
@@ -183,11 +183,11 @@
                 background-color: var(--b9);
             }
             
-            .crd .copy img {
+            .crd .copy svg {
                 opacity: .6;
             }
 
-                .crd .copy img:hover {
+                .crd .copy svg:hover {
                     opacity: .4;
                 }
 

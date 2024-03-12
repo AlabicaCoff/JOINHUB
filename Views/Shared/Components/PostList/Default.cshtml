@@ -1,43 +1,11 @@
-@model IEnumerable<Post>
-@{
-    //var ctime = $"{Model.CreatedTime:yyyyMMddHHmm}"
-}
+@model string
 
 <link href="@Url.Content("~/css/postlist.css")" rel="stylesheet"/>
+<script src="@Url.Content("~/js/lucide.js")"></script>
+<script src="@Url.Content("~/js/postlist.js")"></script>
 <script defer src="@Url.Content("~/js/render.js")"></script>
 
 <div class="row">
-    @foreach (var item in Model) {
-        <div class="oldcrd">
-            <div class="header">
-                <span class="left">
-                    <span class="number">@item.Post_Participants.Count/@item.NumberOfParticipants</span>
-                    <a class="title" href="">@item.Title</a>
-                </span>
-                <div class="right">
-                    <span class="status">@item.Status</span>
-                    <span class="time">@Html.DisplayFor(modelItem => item.ExpireTime)</span>
-                </div>
-            </div>
-                
-            <div class="content">
-                <span class="text">@item.Description</span>
-            </div>
-
-            <div class="foot">
-                <div class="right">
-                    <span class="author">
-                        @item.Author.FullName · <script></script>
-                    </span>
-                    <span class="time"> </span>
-                </div>
-                @if (item.Tag is not null) {
-                    <a class="tag" href="" >@item.Tag</a>
-                }
-            </div>
-        </div>
-    }
-
     <div id="0" class="crd">
         <div class="header">
             <div class="people list">
