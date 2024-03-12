@@ -1,0 +1,54 @@
+﻿.index-container {
+    display: flex;
+    width: 100%;
+}
+
+.tag-container {
+    left: 0px;
+    margin-right: 4vw;
+}
+
+    .tag-container h3 {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        padding: 10px;
+        box-shadow: 0px 2px 5px grey;
+        background-color: white;
+        text-align: center;
+    }
+
+    .tag-container ul {
+        left: 0px;
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+.tag {
+    box-shadow: 0px 3px 5px rgb(0, 0, 0, 0.3);
+    width: 90%;
+    text-align: right;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: rgb(71, 123, 220);
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    transition: 0.5s;
+}
+
+    .tag a {
+        font-weight: 600;
+        color: white;
+        text-decoration: none;
+        transition: 0.5s;
+    }
+
+        .tag a:hover {
+            color: rgb(232, 206, 29);
+        }
+
+    .tag:hover {
+        background-color: rgb(102, 153, 255);
+        text-align: right;
+        width: 130%;
+    }
