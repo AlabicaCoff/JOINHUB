@@ -67,13 +67,22 @@
     gap: 2em;
 }
 
-    .fliptimer-container span {
+.time-left-msg {
+    text-align: center;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.fliptimer-container span {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+    .fliptimer-container span, .time-left-msg {
         color: rgb(240, 66, 66);
-        font-size: 2em;
         font-weight: 600;
         -webkit-text-stroke-width: 1px;
         -webkit-text-stroke-color: rgb(238, 43, 43);
-        margin-bottom: 10px;
         text-shadow: 0px 3px 5px rgb(0, 0, 0, 0.5);
     }
 
@@ -115,5 +124,9 @@
 
     .fliptimer-segment span {
         font-size: 1.6em;
+    }
+
+    .time-left-msg {
+        font-size: 1.5em;
     }
 }
