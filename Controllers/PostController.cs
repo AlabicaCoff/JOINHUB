@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
+using System.Drawing.Imaging;
 using System.Linq;
+using System.Text;
 using Test.Areas.Identity.Data;
 using Test.Data;
 using Test.Data.Enum;
@@ -61,7 +63,23 @@ namespace Test.Controllers
             var allPosts = _postService.GetAllInclude();
             var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
             var filteredPosts = activePosts.Where(p => p.Tag == tag);
-            return View("Index", filteredPosts);
+            var msg = "";
+            foreach (var post in filteredPosts)
+            {
+                msg += "<tr>" +
+                        "<td class=\"align-middle\">" + post.Title + "</td>" +
+                        "<td class=\"align-middle\">" + post.Author.FullName + "</td>" +
+                        "<td class=\"align-middle\">" + post.Description + "</td>" +
+                        "<td class=\"align-middle\">" + post.Status + "</td>" +
+                        "<td class=\"align-middle\">" + post.Tag + "</td>" +
+                        "<td class=\"align-middle\">" + post.Post_Participants.Count() + "</td>" +
+                        "<td class=\"align-middle\">" + post.NumberOfParticipants + "</td>" +
+                        "<td class=\"align-middle\">" + post.CreatedTime + "</td>" +
+                        "<td class=\"align-middle\">" + post.ExpireTime + "</td>" +
+                        "<td class=\"align-middle\">" + "<a href=\"~/post/detail/" + post.Id + "\">Click</a></td>" +
+                        "</tr>";
+            }
+            return Content(msg, "text/plain", Encoding.UTF8);
         }
 
         [Authorize]
@@ -130,6 +148,7 @@ namespace Test.Controllers
             {
                 var user = await _userManager.GetUserAsync(this.User);
                 ViewData["isParticipant"] = _participantService.GetAll().Any(pp => pp.PostId == id && pp.UserId == user.Id);
+                ViewData["UserId"] = user.Id;
             }
             var post = _postService.GetByIdInclude(id);
             if (post != default)

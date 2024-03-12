@@ -10,6 +10,7 @@ namespace Test.Models
         public int Id { get; set; }
         [Display(Name = "Title")]
         [Required(ErrorMessage = "Title is required")]
+        [StringLength(90)]
         public string Title { get; set; }
         [Display(Name = "Description")]
         [Required(ErrorMessage = "Description is required")]
@@ -24,6 +25,7 @@ namespace Test.Models
         [Display(Name = "Number of Participants")]
         [Required(ErrorMessage = "Max Number of Participants is required")]
         public int? NumberOfParticipants { get; set; }
+        [StringLength(90)]
         public string? Location { get; set; }
 
         // Relationships

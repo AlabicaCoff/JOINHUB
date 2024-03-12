@@ -46,6 +46,24 @@ function notiBackgroundTasks() {
     xhr2.send();
 };
 
+function filterPost(serverpage) {
+    var xhr3 = new XMLHttpRequest();
+    xhr3.open('GET', serverpage, true);
+
+    xhr3.onreadystatechange = function () {
+        if (xhr3.readyState === 4) {
+            var tbody = document.getElementById('index-tbody');
+            if (xhr3.status >= 200 && xhr3.status < 300) {
+                tbody.innerHTML = xhr3.responseText;
+            }
+            else {
+                console.error(xhr1.responseText);
+            }
+        };
+    };
+    xhr3.send();
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var firstRun = sessionStorage.getItem('postBackgroundTasks');
 
