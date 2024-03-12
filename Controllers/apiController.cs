@@ -14,27 +14,23 @@ namespace Test.Controllers {
         private readonly INotificationService _notification = notification;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
 
-        public JsonResult post(int id, int option) {
-            var options = new JsonSerializerOptions{
-                IncludeFields = option == 1
-            };
+        public JsonResult post(int id) {
             var post = _post.GetById(id);
-            
-            return Json(post, options);
+            return Json(post);
         }
 
-        private string manifest(IEnumerable<Models.Post> posts) {
+        private JsonResult manifest(IEnumerable<Models.Post> posts) {
             var url = Url.Action(nameof(this.post));
 
             var IDs = posts
                 .Select(p => p.Id)
                 .Select(id => $"{url}/{id}");
             
-            return string.Join("\n", IDs);
+            return Json(IDs);
         }
 
         [Authorize]
-        public string ActivityOf(string userid) {
+        public JsonResult ActivityOf(string userid) {
             var allPosts = _post.GetAllInclude();
 
             var postParticipants = _participant.GetAll()
@@ -44,12 +40,12 @@ namespace Test.Controllers {
 
             var posts = allPosts
                 .Where(p => postParticipants.Contains(p.Id));
-            
+
             return manifest(posts);
         }
 
         [Authorize]
-        public string PostOf(string userid) {
+        public JsonResult PostOf(string userid) {
             var allPosts = _post.GetAllInclude();
 
             var posts = allPosts

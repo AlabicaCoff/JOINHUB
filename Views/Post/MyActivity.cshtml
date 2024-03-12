@@ -1,7 +1,8 @@
 ﻿@using Test.Data.Enum
-@model IEnumerable<Post>
+@model string
+
 @section AddToHead {
-    <link href="@Url.Content("~/css/my.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/my.css")" rel="stylesheet"/>
 }
 @{
     ViewData["Title"] = "My Activities";
