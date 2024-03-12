@@ -35,12 +35,19 @@ namespace Test.Controllers
             _userManager = userManager;
         }
 
+        private string[] manifest(IEnumerable<Post> posts) {            
+            return posts
+                .Select(p => p.Id)
+                .Select(id => $"/api/post/{id}")
+                .ToArray();
+        }
+
         [AllowAnonymous]
         public IActionResult Index()
         {
             var allPosts = _postService.GetAllInclude();
             var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
-            return View(activePosts);
+            return View(manifest(activePosts));
         }
 
         [AllowAnonymous]
@@ -52,34 +59,9 @@ namespace Test.Controllers
             {
                 var matchedResult = activePosts.Where(p => p.Title.ToLower().Contains(searchString.ToLower()) 
                     || p.Description.ToLower().Contains(searchString.ToLower())).ToList();
-                return View("Index", matchedResult);
+                return View("Index", manifest(matchedResult));
             }
-            return View("Index", allPosts);
-        }
-
-        [AllowAnonymous]
-        public IActionResult Filter(Tag tag)
-        {
-            var allPosts = _postService.GetAllInclude();
-            var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
-            var filteredPosts = activePosts.Where(p => p.Tag == tag);
-            var msg = "";
-            foreach (var post in filteredPosts)
-            {
-                msg += "<tr>" +
-                        "<td class=\"align-middle\">" + post.Title + "</td>" +
-                        "<td class=\"align-middle\">" + post.Author.FullName + "</td>" +
-                        "<td class=\"align-middle\">" + post.Description + "</td>" +
-                        "<td class=\"align-middle\">" + post.Status + "</td>" +
-                        "<td class=\"align-middle\">" + post.Tag + "</td>" +
-                        "<td class=\"align-middle\">" + post.Post_Participants.Count() + "</td>" +
-                        "<td class=\"align-middle\">" + post.NumberOfParticipants + "</td>" +
-                        "<td class=\"align-middle\">" + post.CreatedTime + "</td>" +
-                        "<td class=\"align-middle\">" + post.ExpireTime + "</td>" +
-                        "<td class=\"align-middle\">" + "<a href=\"~/post/detail/" + post.Id + "\">Click</a></td>" +
-                        "</tr>";
-            }
-            return Content(msg, "text/plain", Encoding.UTF8);
+            return View("Index", manifest(allPosts));
         }
 
         [Authorize]
@@ -123,23 +105,19 @@ namespace Test.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> MyPost()
+        public async Task<IActionResult> MyPost() 
         {
             var user = await _userManager.GetUserAsync(User);
-            var allPosts = _postService.GetAllInclude();
-            var myPosts = allPosts.Where(p => p.AuthorId == user.Id);
-            return View(myPosts);
+            ViewData["userid"] = user.Id;
+            return View();
         }
 
         [Authorize]
-        public async Task<IActionResult> MyActivity()
+        public async Task<IActionResult> MyActivity() 
         {
             var user = await _userManager.GetUserAsync(User);
-            var allPosts = _postService.GetAllInclude();
-            var allParticipants = _participantService.GetAll();
-            var postParticipants =allParticipants.Where(pp => pp.UserId == user.Id).Select(pp => pp.PostId).ToList();
-            var posts = allPosts.Where(p => postParticipants.Contains(p.Id));
-            return View(posts);
+            ViewData["userid"] = user.Id;
+            return View();
         }
 
         [AllowAnonymous]

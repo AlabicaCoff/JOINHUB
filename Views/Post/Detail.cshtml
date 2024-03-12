@@ -8,11 +8,12 @@
     @if (Model.Status == PostStatus.Active)
     {
         <script>
-            @* load expire time just once*@
+            @* load expire time just once *@
             const expireTime = new Date("@Model.ExpireTime.ToString()").getTime(); 
             let docBody = document.body;
             const workerPath = "@Url.Content("~/js/timerWorker.js")";
-            docBody.setAttribute("onload", "startTimerWorker(workerPath)");
+            docBody.setAttribute("onload", "startTimerWorker(workerPath, expireTime)");
+            console.log(expireTime);
         </script>
     }
     <script src="@Url.Content("~/js/detail.js")" type="text/javascript"></script>
@@ -52,7 +53,7 @@
     <!-- All details which are not presented in the title container -->
 
     <div class="time-related-containter">
-        <div style="text-align: center; font-size: 1.8em; color: red; margin-bottom: 25px; font-weight: 600;">
+        <div class="time-left-msg">
             <span>Time left until the post is expired</span>
         </div>
         <div class="fliptimer-container">
@@ -118,7 +119,14 @@
     <div style="display: flex; justify-content: center;">
         <div class="location-container shadow-box">
             <img alt="map-pin" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLW1hcC1waW4iPjxwYXRoIGQ9Ik0yMCAxMGMwIDYtOCAxMi04IDEycy04LTYtOC0xMmE4IDggMCAwIDEgMTYgMFoiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEwIiByPSIzIi8+PC9zdmc+">
-            <span><b>Location :</b> @Model.Location</span>
+            @if (Model.Location != "")
+            {
+                <span><b>Location :</b> <i>No location</i></span>
+            }
+            else
+            {
+                <span><b>Location :</b> @Model.Location</span>
+            }
         </div>
     </div>    
     <div class="content-container">
@@ -275,5 +283,8 @@
                 </tr>
             </table>
         </div>
+    </div>
+    <div class="back-button-segment">
+        <a href="/"><button class="styled-button active-button"> Back to Main Menu</button></a>
     </div>
 </div>
