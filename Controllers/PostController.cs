@@ -40,7 +40,7 @@ namespace Test.Controllers
         {
             var allPosts = _postService.GetAllInclude();
             var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
-            return View(allPosts);
+            return View(activePosts);
         }
 
         [AllowAnonymous]

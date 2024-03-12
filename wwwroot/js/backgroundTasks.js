@@ -71,7 +71,17 @@ document.addEventListener('DOMContentLoaded', function () {
         postBackgroundTasks("Init");
         sessionStorage.setItem('postBackgroundTasks', true);
     }
-    notiBackgroundTasks()
-    setInterval(postBackgroundTasks("Count"), 1000);
-    setInterval(notiBackgroundTasks(), 1000)
-});
+
+    var now = new Date();
+    var secUntilNextMin = 60 - now.getSeconds();
+
+    notiBackgroundTasks();
+    setTimeout(function () {
+        postBackgroundTasks("Count");
+        notiBackgroundTasks();
+        setInterval(function () {
+            postBackgroundTasks("Count");
+            notiBackgroundTasks();
+        }, 60000);
+    }, secUntilNextMin * 1000);
+}); 
