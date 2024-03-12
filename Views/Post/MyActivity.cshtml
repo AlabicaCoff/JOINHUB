@@ -1,11 +1,16 @@
 ﻿@using Test.Data.Enum
-@model IEnumerable<Post>
+@using Test.ViewComponents
+@using Test.record
+@using Test.Controllers
+
 @section AddToHead {
-    <link href="@Url.Content("~/css/my.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/my.css")" rel="stylesheet"/>
+    <script src="@Url.Content("~/js/lucide.js")"></script>
 }
 @{
     ViewData["Title"] = "My Activities";
+    var endpoint = Url.Action("myactivity", "api");
 }
 
 <h1>My Activities</h1>
-@await Component.InvokeAsync("PostList", new {posts = Model})
+@await Component.InvokeAsync("PostList", new {userID = ViewData["userid"], url = endpoint})

@@ -8,6 +8,21 @@
         "**/Thumbs.db": true,
         "**/obj": true,
         "**/bin": true,
-        "**/wwwroot/lib": true
-    }
+        "**/wwwroot/lib": true,
+        "**/lucide.js": true
+    },
+    "mssql.connections": [
+        {
+            "server": "tcp:MSI,1433",
+            "database": "web-test-db",
+            "authenticationType": "SqlLogin",
+            "user": "Group1",
+            "password": "",
+            "emptyPasswordInput": false,
+            "savePassword": true,
+            "profileName": "new-db",
+            "encrypt": "Optional",
+            "trustServerCertificate": true
+        }
+    ],
 }

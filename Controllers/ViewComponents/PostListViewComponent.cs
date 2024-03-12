@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using Test.Models;
+using Test.record;
 
 namespace Test.ViewComponents {
     public class PostListViewComponent: ViewComponent {
-        public async Task<IViewComponentResult> InvokeAsync(IEnumerable<Post> posts) {
-            return View(posts);
+        public async Task<IViewComponentResult> InvokeAsync(string userID, string url) {
+            return View(new PLdata(userID, url));
         }
     }
 }
