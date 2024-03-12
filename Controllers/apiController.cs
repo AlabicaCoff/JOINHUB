@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Test.Areas.Identity.Data;
 using Test.Data.Services;
+using Test.Data.Enum;
 
 
 namespace Test.Controllers {
@@ -16,6 +17,20 @@ namespace Test.Controllers {
         public JsonResult post(int id) {
             var post = _post.GetByIdInclude(id);
             return Json(post);
+        }
+
+        public JsonResult filter(int id) {
+            var allPosts = _post.GetAllInclude();
+            var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
+            var filtered = activePosts.Where(p => (int) p.Tag == id);
+
+            return Json(manifest(filtered));
+        }
+
+        public JsonResult all() {
+            var allPosts = _post.GetAllInclude();
+
+            return Json(manifest(allPosts));
         }
 
         private string[] manifest(IEnumerable<Models.Post> posts) {
@@ -51,6 +66,9 @@ namespace Test.Controllers {
 
             return Json(manifest(posts));
         }
+
+        
+
     }
 }
 /*
