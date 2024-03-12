@@ -1,5 +1,5 @@
 ﻿@using Test.Data.Enum
-@model IEnumerable<Post>
+@model string[]
 @section AddToHead {
     <link href="@Url.Content("~/css/index.css")" rel="stylesheet" type="text/css" />
 }
@@ -19,72 +19,28 @@
                 @foreach (Tag tag in Enum.GetValues(typeof(Tag)))
                 {
                     <li class="tag">
-                        <a asp-controller="Post" asp-action="Filter" asp-route-tag="@tag">@tag</a>
+                        <a id="@((int)tag)" onclick="select(this)">@tag</a>
                     </li>
                 }
             </ul>
         </div>
 
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
+        <link href="@Url.Content("~/css/postlist.css")" rel="stylesheet"/>
+        <script src="@Url.Content("~/js/lucide.js")"></script>
+        <script src="@Url.Content("~/js/model.js")"></script>
+        <script>
 
-                <table class="table w-auto">
-                    <thead>
-                        <tr class="text-center" style="background-color: red;">
-                            <th>@Html.DisplayNameFor(model => model.Title)</th>
-                            <th>@Html.DisplayNameFor(model => model.Author.FullName)</th>
-                            <th>@Html.DisplayNameFor(model => model.Description)</th>
-                            <th>@Html.DisplayNameFor(model => model.Status)</th>
-                            <th>@Html.DisplayNameFor(model => model.Tag)</th>
-                            <th>Participants</th>
-                            <th>@Html.DisplayNameFor(model => model.NumberOfParticipants)</th>
-                            <th>@Html.DisplayNameFor(model => model.CreatedTime)</th>
-                            <th>@Html.DisplayNameFor(model => model.ExpireTime)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <a asp-controller="Post" asp-action="Detail" asp-route-id="@item.Id">
-                                <tr>
-                                    <td class="align-middle">
-                                        @item.Title
-                                    </td>
-                                    <td class="align-middle">
-                                        @item.Author.FullName
-                                    </td>
-                                    <td class="align-middle">
-                                        @item.Description
-                                    </td>
-                                    <td class="align-middle">
-                                        @item.Status
-                                    </td>
-                                    <td class="align-middle">
-                                        @item.Tag
-                                    </td>
-                                    <td class="align-middle">
-                                        @item.Post_Participants.Count()
-                                    </td>
-                                    <td class="align-middle">
-                                        @item.NumberOfParticipants
-                                    </td>
-                                    <td class="align-middle">
-                                        @item.CreatedTime
-                                    </td>
-                                    <td class="align-middle">
-                                        @item.ExpireTime
-                                    </td>
-                                    <td class="align-middle">
-                                        <a href="~/post/detail/@item.Id">Click</a>
-                                    </td>
-                                </tr>
-                            </a>
-                        }
-                    </tbody>
+            const row = new Row(
+                document.querySelector('.content-container'), null
+            );
 
-                </table>
-                <p>User ID: @ViewData["UserId"]</p>
-            </div>
-        </div>
+            row.manifest = '@(string.Join(" ", Model))'.split(' ');
+            row.generate_cards();
+
+            async function select(ele) {
+                await row.get(`/api/filter/${ele.id}`);
+                row.generate_cards();
+            }
+        </script>
     </div>
 </div>

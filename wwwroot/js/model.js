@@ -165,8 +165,10 @@ class Row extends Component {
         /** @type {string[]} */
         this.manifest = await super.get(manifest_url);
     }
-
+    
     generate_cards() {
+        // reset
+        this.ele.innerHTML = '';
         this.manifest?.map(
             url => this.add(url)
         );
@@ -384,3 +386,4 @@ class Card extends Component{
         );
     }
 }
+
