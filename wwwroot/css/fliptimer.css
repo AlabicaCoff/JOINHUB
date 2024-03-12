@@ -1,0 +1,132 @@
+﻿.flip-card {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    color: rgb(30, 30, 30);
+    /*color: rgb(240, 66, 66);*/
+    font-size: 3rem;
+    /*font-weight: 500;*/
+    font-family: Arial, Helvatica, san-serif;
+    box-shadow: 0px 3px 7px 0 rgb(0, 0, 0, 0.4);
+    border-radius: 0.2em;
+}
+
+.top, .bottom, .flip-card .top-flip, .flip-card .bottom-flip {
+    height: 0.19em;
+    line-height: 1;
+    padding: 0.3em;
+    overflow: hidden;
+}
+
+.top, .flip-card .top-flip {
+    background-color: rgb(237, 237, 237);
+    border-top-right-radius: 0.2em;
+    border-top-left-radius: 0.2em;
+    border-bottom: 1px solid rgb(0, 0, 0, 0.1);
+}
+
+.bottom, .flip-card .bottom-flip {
+    background-color: rgb(252, 252, 252);
+    display: flex;
+    align-items: flex-end;
+    border-bottom-right-radius: 0.2em;
+    border-bottom-left-radius: 0.2em;
+}
+
+.flip-card .top-flip {
+    position: absolute;
+    width: 47.5%;
+    animation: flip-top 250ms ease-in;
+    transform-origin: bottom;
+}
+
+@keyframes flip-top {
+    100% {
+        transform: rotateX(90deg);
+    }
+}
+
+.flip-card .bottom-flip {
+    position: absolute;
+    bottom: 0;
+    width: 47.5%;
+    animation: flip-bottom 250ms ease-out 250ms;
+    transform-origin: top;
+    transform: rotateX(90deg);
+}
+
+@keyframes flip-bottom {
+    100% {
+        transform: rotateX(0deg);
+    }
+}
+
+.fliptimer-container {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+}
+
+.time-left-msg {
+    text-align: center;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.fliptimer-container span {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+    .fliptimer-container span, .time-left-msg {
+        color: rgb(240, 66, 66);
+        font-weight: 600;
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: rgb(238, 43, 43);
+        text-shadow: 0px 3px 5px rgb(0, 0, 0, 0.5);
+    }
+
+.timeleft {
+    position: absolute;
+    right: 5vw;
+    font-weight: 700;
+    transform: rotate(90deg);
+}
+
+.fliptimer-segment {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.fliptimer-subsegment {
+    display: flex;
+    gap: 0.5em;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 1000px) {
+    .flip-card {
+        font-size: 3rem;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .fliptimer-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 1em;
+    }
+
+    .flip-card {
+        font-size: 2.8rem;
+    }
+
+    .fliptimer-segment span {
+        font-size: 1.6em;
+    }
+
+    .time-left-msg {
+        font-size: 1.5em;
+    }
+}

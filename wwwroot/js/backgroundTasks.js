@@ -46,6 +46,24 @@ function notiBackgroundTasks() {
     xhr2.send();
 };
 
+function filterPost(serverpage) {
+    var xhr3 = new XMLHttpRequest();
+    xhr3.open('GET', serverpage, true);
+
+    xhr3.onreadystatechange = function () {
+        if (xhr3.readyState === 4) {
+            var tbody = document.getElementById('index-tbody');
+            if (xhr3.status >= 200 && xhr3.status < 300) {
+                tbody.innerHTML = xhr3.responseText;
+            }
+            else {
+                console.error(xhr1.responseText);
+            }
+        };
+    };
+    xhr3.send();
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var firstRun = sessionStorage.getItem('postBackgroundTasks');
 
@@ -53,7 +71,17 @@ document.addEventListener('DOMContentLoaded', function () {
         postBackgroundTasks("Init");
         sessionStorage.setItem('postBackgroundTasks', true);
     }
-    notiBackgroundTasks()
-    setInterval(postBackgroundTasks("Count"), 1000);
-    setInterval(notiBackgroundTasks(), 1000)
-});
+
+    var now = new Date();
+    var secUntilNextMin = 60 - now.getSeconds();
+
+    notiBackgroundTasks();
+    setTimeout(function () {
+        postBackgroundTasks("Count");
+        notiBackgroundTasks();
+        setInterval(function () {
+            postBackgroundTasks("Count");
+            notiBackgroundTasks();
+        }, 60000);
+    }, secUntilNextMin * 1000);
+}); 

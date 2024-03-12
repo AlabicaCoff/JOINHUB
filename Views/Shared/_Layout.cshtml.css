@@ -34,6 +34,7 @@ for details on configuring this project to bundle and minify static web assets. 
     font-weight: 700;
     letter-spacing: 0.1rem;
     padding: 0 20px;
+    font-family: "poppins", sans-serif;
 }
     .logo:hover {
         transition: 0.5s ease-in-out;
@@ -45,6 +46,7 @@ for details on configuring this project to bundle and minify static web assets. 
     font-weight: 450;
     letter-spacing: 0.1rem;
     padding: 0 20px;
+    font-family: "poppins", sans-serif;
 }
 .group {
     display: flex;
@@ -161,17 +163,17 @@ for details on configuring this project to bundle and minify static web assets. 
 
 .container {
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     margin: 50px 0;
 }
 
 .main {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('https://static.vecteezy.com/system/resources/previews/000/679/049/original/seamless-doodle-background.jpg');
+    background-image: url('https://cdn.dribbble.com/users/2156796/screenshots/19992280/media/7d2ee3a4d15d1f335419059066067694.gif');
 }
 
 footer {

@@ -12,6 +12,7 @@ namespace Test.Models
 
         [Display(Name = "Title")]
         [Required(ErrorMessage = "Title is required")]
+        [StringLength(90)]
         public string Title { get; set; }
 
         [Display(Name = "Description")]
@@ -30,7 +31,9 @@ namespace Test.Models
         public Tag? Tag { get; set; }
 
         [Display(Name = "Number of Participants")]
+        [Required(ErrorMessage = "Max Number of Participants is required")]
         public int? NumberOfParticipants { get; set; }
+        [StringLength(90)]
         public string? Location { get; set; }
 
         // Relationships
@@ -40,7 +43,7 @@ namespace Test.Models
         public string? AuthorId { get; set; }
         
         [ForeignKey("AuthorId")]
-        public Author Author { get; set; }
+        public Author? Author { get; set; }
 
         public Post()
         {
