@@ -36,6 +36,7 @@
         cursor: pointer;
     }
         .form button:hover {
-            color: whitesmoke;
-            background-color: rgb(21, 51, 169);
+            color: black;
+            background-color: rgb(232, 206, 29);
+            transition: 0.5s ease-in-out;
         }

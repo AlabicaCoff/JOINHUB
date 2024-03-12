@@ -1,9 +1,9 @@
-﻿@model IEnumerable<Notification>
+﻿@model ICollection<Notification>
 @section AddToHead {
     <link href="@Url.Content("~/css/notification.css")" rel="stylesheet" type="text/css" />
 }
 @{
-    ViewData["Title"] = "My Notifications";
+    ViewData["Title"] = "Notifications";
 }
 
 <div class="notiBox">
@@ -11,6 +11,12 @@
         <h1>@ViewData["Title"]</h1>
     </div>
     <div class="contentBox">
+        @if (Model.Count == 0)
+        {
+            <div class="notiContent">
+                <p class="notThing">You don't have any notifications.</p>
+            </div>
+        }
         @foreach (var item in Model)
         {
             <div class="notiContent">
