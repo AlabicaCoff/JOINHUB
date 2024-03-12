@@ -45,9 +45,11 @@
 }
 
 .form button {
-    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
     height: 40px;
-    margin: 15px auto 10%;
     color: whitesmoke;
     background-color: rgb(71, 123, 220);
     font-weight: bold;
