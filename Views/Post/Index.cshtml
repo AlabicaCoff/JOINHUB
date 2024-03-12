@@ -10,7 +10,7 @@
             @foreach (Tag tag in Enum.GetValues(typeof(Tag)))
             {
                 <li>
-                    <a asp-controller="Post" asp-action="Filter" asp-route-tag="@tag">@tag</a>
+                    <a onclick="filterPost('/post/filter?tag=@tag')">@tag</a>
                 </li>
             }
         </ul>
@@ -20,7 +20,7 @@
 <div class="row">
     <div class="col-md-8 offset-md-2">
 
-        <table class="table w-auto">
+        <table id="index-table" class="table w-auto">
             <thead>
                 <tr class="text-center">
                     <th>@Html.DisplayNameFor(model => model.Title)</th>
@@ -34,7 +34,7 @@
                     <th>@Html.DisplayNameFor(model => model.ExpireTime)</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="index-tbody">
                 @foreach (var item in Model)
                 {
                     <a asp-controller="Post" asp-action="Detail" asp-route-id="@item.Id">

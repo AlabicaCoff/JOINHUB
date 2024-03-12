@@ -65,6 +65,13 @@ h1 {
     margin-top: 4px;
 }
 
+.form-group .text-grey {
+    color: slategray;
+    display: block;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
 .form-group .btn {
     display: block;
     width: 100%;
