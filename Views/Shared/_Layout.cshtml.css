@@ -22,6 +22,10 @@ for details on configuring this project to bundle and minify static web assets. 
     z-index: 100;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
 }
+.leftSide{
+    display: flex;
+    flex-direction: row;
+}
 
 .logo {
     color: whitesmoke;
@@ -29,10 +33,19 @@ for details on configuring this project to bundle and minify static web assets. 
     font-size: 1.7rem;
     font-weight: 700;
     letter-spacing: 0.1rem;
+    padding: 0 20px;
 }
     .logo:hover {
-        color: rgb(232, 206, 29)
+        transition: 0.5s ease-in-out;
+        color: rgb(232, 206, 29);
     }
+.user {
+    color: whitesmoke;
+    font-size: 1.5rem;
+    font-weight: 450;
+    letter-spacing: 0.1rem;
+    padding: 0 20px;
+}
 .group {
     display: flex;
     align-items: center;
@@ -158,7 +171,7 @@ for details on configuring this project to bundle and minify static web assets. 
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('https://static.vecteezy.com/system/resources/previews/000/679/049/original/seamless-doodle-background.jpg');
+    background-image: url('https://cdn.dribbble.com/users/2156796/screenshots/19992280/media/7d2ee3a4d15d1f335419059066067694.gif');
 }
 
 footer {
@@ -183,7 +196,7 @@ footer {
     }
 
 /* Responsive Styles */
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 900px) {
 
     .searchBtn {
         left: 0;

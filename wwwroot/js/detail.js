@@ -30,13 +30,13 @@ function startTimerWorker(workerPath) {
     worker.onmessage = function (message) {
         console.log("Worker received the current time!")
         let currentTime = parseInt(message.data);
-        if (expireTime < currentTime - 3000) { // if the expire time is met
+        if (expireTime < currentTime) { // if the expire time is met
             worker.terminate();
             worker = undefined;
             location.reload(); // when reload, the post state must enter closed so the webworker will never start again
         }
         else {
-            if (expireTime >= currentTime - 1000) {
+            if (expireTime >= currentTime) {
                 let timeDiff = expireTime - currentTime;
                 updateFlip(timeDiff); // update flip timer
             }
