@@ -17,6 +17,7 @@
 			<div class="form-group">
 				<label asp-for="Title" class="control-label"></label>
 				<input asp-for="Title" class="form-control" />
+				<span class="text-grey">Title must be less than 90 characters</span>
 				<span asp-validation-for="Title" class="text-danger"></span>
 			</div>
 			<div class="form-group">
@@ -26,7 +27,7 @@
 			</div>
 			<div class="form-group">
 				<label asp-for="NumberOfParticipants" class="control-label"></label>
-				<input asp-for="NumberOfParticipants" class="form-control" min="0"/>
+				<input asp-for="NumberOfParticipants" class="form-control" min="0" value="0"/>
 				<span asp-validation-for="NumberOfParticipants" class="text-danger"></span>
 			</div>
 			<div class="form-group">
@@ -39,6 +40,7 @@
 			<div class="form-group">
 				<label asp-for="Location" class="control-label"></label>
 				<input asp-for="Location" class="form-control des" />
+				<span class="text-grey">Location must be less than 90 characters</span>
 				<span asp-validation-for="Location" class="text-danger"></span>
 			</div>
 			<div class="form-group">
