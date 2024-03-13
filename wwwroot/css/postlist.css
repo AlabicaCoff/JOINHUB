@@ -268,7 +268,7 @@
         padding-right: 32px;
         border-radius: var(--r) var(--r) 0 0;
         justify-content: space-evenly;
-        cursor: pointer;
+        cursor: cell;
     }
 
     .crd .header * {
