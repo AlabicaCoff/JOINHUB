@@ -9,7 +9,7 @@
     {
         <script>
             @* load expire time just once *@
-            const expireTime = new Date("@Model.ExpireTime.ToString()").getTime(); 
+            const expireTime = new Date("@Model.ExpireTime.ToString("o")").getTime(); 
             let docBody = document.body;
             const workerPath = "@Url.Content("~/js/timerWorker.js")";
             docBody.setAttribute("onload", "startTimerWorker(workerPath, expireTime)");
@@ -31,9 +31,12 @@
                 <div class="title-post">
                      <h1>@Model.Title</h1>
                 </div>
-                <div style="display: inline-block">
-                     <div id="tag">@Model.Tag</div>
-                </div>
+                @if (Model.Tag != null)
+                {
+                    <div style="display: inline-block">
+                         <div id="tag">@Model.Tag</div>
+                    </div>
+                }
             </div>
             <div class="status-section">
                 <b>@Model.Status</b>
