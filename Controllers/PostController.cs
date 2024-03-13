@@ -266,8 +266,8 @@ namespace Test.Controllers
                 {
                     _postService.Delete(post);
                     var urlLink = "~/post/detail/" + post.Id;
-                    var noti = _notificationService.GetByLink(urlLink);
-                    _notificationService.Delete(noti);
+                    var notis = _notificationService.GetByLink(urlLink);
+                    _notificationService.DeleteAll(notis);
                 }
             }
             await _postService.Save();
