@@ -74,6 +74,12 @@
     font-size: 1.25em;
 }
 
+/* time related rules */
+.time-related-containter {
+    margin-top: 9vh;
+    margin-bottom: 3vh;
+}
+
 /* location related rules */
 .location-container {
     padding: 10px;
@@ -89,7 +95,7 @@
         font-size: 1.3em;
     }
 
-    /* description related rules */
+/* description related rules */
 .description-container {
     width: 30vw;
     padding-inline: 1vw;
@@ -269,9 +275,32 @@ obsolete-desc {
     justify-content: space-between;
 }
 
-/* Responsive Styles */
-@media only screen and (max-width: 1000px) {
-    .content-container {
+.back-button-segment {
+    display: flex;
+    background-color: white;
+    margin-top: 50px;
+    padding: 10px;
+    width: 100%;
+    font-size: 0.6em;
+}
+
+.back-button-segment button {
+    color: black;
+    background-color: white;
+    text-decoration: none;
+}
+
+    .back-button-segment button:before {
+        content: "\003C";
+    }
+
+    .back-button-segment button:hover {
+        background-color: rgb(240, 240, 240);
+    }
+
+    /* Responsive Styles */
+    @media only screen and (max-width: 1000px) {
+        .content-container {
         flex-direction: row;
     }
 
