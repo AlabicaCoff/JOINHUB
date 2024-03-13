@@ -163,14 +163,16 @@ for details on configuring this project to bundle and minify static web assets. 
 
 .container {
     margin: 50px 0;
+    width: 100%;
+    min-height: 100%;
 }
 
 .main {
     width: 100%;
-    min-height: 90vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
+    /*justify-content: center;*/
     background-image: url('https://cdn.dribbble.com/users/2156796/screenshots/19992280/media/7d2ee3a4d15d1f335419059066067694.gif');
 }
 

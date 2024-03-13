@@ -1,6 +1,8 @@
 ﻿.index-container {
     width: 100%;
     margin-bottom: 30px;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .welcome-segment {
