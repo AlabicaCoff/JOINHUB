@@ -59,12 +59,12 @@ function updateFlip(timeLeft, initial = false) {
 function flip(flipCard, newValue) {
     const topHalf = flipCard.querySelector(".top");
     const startValue = topHalf.textContent;
-    if (newValue == startValue) return;
+    if (newValue == startValue) return; // Return if the value is the same
 
     const bottomHalf = flipCard.querySelector(".bottom");
-    const topFlip = document.createElement("div"); // Create animation div element
+    const topFlip = document.createElement("div"); // Create animated div element
     topFlip.classList.add("top-flip");
-    const bottomFlip = document.createElement("div"); // Create animation div element
+    const bottomFlip = document.createElement("div"); // Create animated div element
     bottomFlip.classList.add("bottom-flip");
 
     topHalf.textContent = startValue;

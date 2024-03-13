@@ -2,12 +2,14 @@
 @model LogoutModel
 @section AddToHead {
     <link href="@Url.Content("~/css/logout.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/sharedStyles.css")" rel="stylesheet" type="text/css" />
 }
 @{
     ViewData["Title"] = "Log out";
 }
 
-<div class="logout">
+<div class="align-content-center">
+    <div class="logout">
     <h1>@ViewData["Title"]</h1>
     @{
         if (User.Identity?.IsAuthenticated ?? false)
@@ -21,4 +23,5 @@
             <p>You have successfully logged out of the application.</p>
         }
     }
+</div>
 </div>
