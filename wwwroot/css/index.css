@@ -1,5 +1,6 @@
 ﻿.index-container {
     width: 100%;
+    margin-bottom: 30px;
 }
 
 .welcome-segment {
@@ -25,12 +26,13 @@
     }
 
 .content-container {
+    position: relative; 
     display: flex;
+    justify-content: start;
 }
 
 .tag-container {
     left: 0px;
-    margin-right: 4vw;
 }
 
     .tag-container h3 {
@@ -48,7 +50,7 @@
         padding-left: 0;
     }
 
-.tag {
+.tag-selector {
     box-shadow: 0px 3px 5px rgb(0, 0, 0, 0.3);
     width: 90%;
     text-align: right;
@@ -61,19 +63,27 @@
     transition: 0.5s;
 }
 
-    .tag a {
+    .tag-selector a {
+        user-select: none;
         font-weight: 600;
         color: white;
         text-decoration: none;
-        transition: 0.5s;
+        transition: 0.3s;
     }
 
-        .tag a:hover {
+        .tag-selector a:hover {
+            cursor: pointer;
             color: rgb(232, 206, 29);
         }
 
-    .tag:hover {
+    .tag-selector:hover {
         background-color: rgb(102, 153, 255);
         text-align: right;
-        width: 130%;
+        width: 110%;
     }
+
+.post-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}

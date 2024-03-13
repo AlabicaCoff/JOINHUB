@@ -301,13 +301,6 @@ class Card extends Component{
                 );
                 p_toggle = Number(!p_toggle);
         }
-
-        window.matchMedia(
-            '(max-width: 768px)'
-        ).onchange = e => {
-            let i = Number(e.matches);
-            header.style['flex-direction'] = ['row', 'column'][i];
-        };
     }
 
     /** 

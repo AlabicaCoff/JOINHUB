@@ -62,9 +62,9 @@ function flip(flipCard, newValue) {
     if (newValue == startValue) return;
 
     const bottomHalf = flipCard.querySelector(".bottom");
-    const topFlip = document.createElement("div"); // Create animation div element
+    const topFlip = document.createElement("div"); // Create animated div element
     topFlip.classList.add("top-flip");
-    const bottomFlip = document.createElement("div"); // Create animation div element
+    const bottomFlip = document.createElement("div"); // Create animated div element
     bottomFlip.classList.add("bottom-flip");
 
     topHalf.textContent = startValue;
