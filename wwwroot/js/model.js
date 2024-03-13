@@ -51,7 +51,9 @@ function createElement({tagName='div', ...obj}) {
 }
 
 /** @param {HTMLElement} ele */
-function setAttr(ele, obj) {
+function setAttr(ele, {text='', ...obj}) {
+    ele.textContent = text;
+    
     for (const key in obj) {
         ele.setAttribute(key, obj[key]);
     }
@@ -83,7 +85,7 @@ function time_str(dt) {
     for (const [chr, n] of time) {
         if (n) {
             let str = n.toString() + chr;
-            return diff > 0 ? `${str} ago` : `in ${str}`;
+            return diff > 0 ? `${str} ago` : `Expire in ${str}`;
         }
     }
 }
@@ -159,6 +161,7 @@ class Row extends Component {
 
     init(userid) {
         this.userid = userid;
+        setInterval(() => this.update(), 4000);
     }
 
     async get(manifest_url) {
@@ -169,6 +172,8 @@ class Row extends Component {
     generate_cards() {
         // reset
         this.ele.innerHTML = '';
+        this.cards.length = 0;
+
         this.manifest?.map(
             url => this.add(url)
         );
@@ -176,7 +181,6 @@ class Row extends Component {
 
     add(post_url) {
         const card = new Card(this.ele, post_url);
-
         this.cards.push(card);
         this.ele.appendChild(card.ele);
     }
@@ -197,7 +201,7 @@ class Card extends Component{
     async finish() {
         const post = await this.get();
 
-        this.ismy = post.author.id == this.root.userid; //!
+        this.ismy = post.author.id == this.root.userid;
         this.render();
         this.setattr(post);
         this.#refresh(post);
@@ -206,6 +210,7 @@ class Card extends Component{
     async update() {
         const post = await this.get();
         this.#refresh(post);
+        console.log('update', this.url);
     }
     
     /** @return {Promise<Post>} */
@@ -248,7 +253,7 @@ class Card extends Component{
             header = this.find('.header'),
             content = this.find('.content'),
             foot = this.find('.foot'),
-            user = this.find('.user'),
+            user = this.find('.username'),
             ctime = this.find('.ctime');
         var 
             p_toggle = 1;
@@ -268,7 +273,7 @@ class Card extends Component{
                     createIcon(ico),
                     createElement({
                         class: `prop-text ${cls}`,
-                        textContent: text.toString()
+                        text: text.toString()
                     })
                 );
             }
@@ -279,10 +284,9 @@ class Card extends Component{
 
         setAttr(title, {
             href: `/Post/Detail/${post.id}`,
-            target: '_blank',
         });
         setAttr(user, {
-            textContent: post.author.fullname + ' · ' + post.author.username
+            text: post.author.fullname + ' · ' + post.author.username
         });
 
         // handle event
@@ -301,6 +305,8 @@ class Card extends Component{
                 );
                 p_toggle = Number(!p_toggle);
         }
+
+        header.onclick = () => this.update();
 
         // window.matchMedia(
         //     '(max-width: 768px)'
@@ -366,7 +372,7 @@ class Card extends Component{
                     <div class="left">
                         ${this.tag('tag')} · ${this.tag('ctime')}
                     </div>
-                    ${this.tag('user')}
+                    ${this.tag('username')}
                 </div>
             </div>
         `;
