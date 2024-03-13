@@ -59,7 +59,7 @@ function updateFlip(timeLeft, initial = false) {
 function flip(flipCard, newValue) {
     const topHalf = flipCard.querySelector(".top");
     const startValue = topHalf.textContent;
-    if (newValue == startValue) return;
+    if (newValue == startValue) return; // Return if the value is the same
 
     const bottomHalf = flipCard.querySelector(".bottom");
     const topFlip = document.createElement("div"); // Create animated div element

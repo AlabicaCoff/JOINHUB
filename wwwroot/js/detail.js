@@ -18,11 +18,10 @@ function obsoleteHover(obj, event) {
     hover_msg.style.top = posY + 'px';
 }
 
-function startTimerWorker(workerPath, expire) {
+function startTimerWorker(workerPath) {
     // this function is guarantee to be called when the post is still active
     // update to current first
-    expire = parseInt(expire);
-    updateFlip(expire - new Date().getTime(), true);
+    updateFlip(expireTime - new Date().getTime(), true);
     console.log("Webworker started succesfully!");
 
     if (typeof(worker) === "undefined") {
@@ -32,14 +31,14 @@ function startTimerWorker(workerPath, expire) {
     worker.onmessage = function (message) {
         console.log("Worker received the current time!")
         let currentTime = parseInt(message.data);
-        if (expire < currentTime) { // if the expire time is met
+        if (expireTime < currentTime) { // if the expire time is met
             worker.terminate();
             worker = undefined;
             location.reload(); // when reload, the post state must enter closed so the webworker will never start again
         }
         else {
-            if (expire >= currentTime) {
-                let timeDiff = expire - currentTime;
+            if (expireTime >= currentTime) {
+                let timeDiff = expireTime - currentTime;
                 updateFlip(timeDiff); // update flip timer
             }
         }
