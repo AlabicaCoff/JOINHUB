@@ -1,11 +1,11 @@
-function postBackgroundTasks(print) {
+function postBackgroundTasks() {
     var xhr1 = new XMLHttpRequest();
     xhr1.open('POST', '/post/BackgroundTasks', true);
     xhr1.setRequestHeader('Content-Type', 'application/json');
     xhr1.onreadystatechange = function () {
         if (xhr1.readyState === 4) {
             if (xhr1.status >= 200 && xhr1.status < 300) {
-                console.log(print);
+
             }
             else {
                 console.error(xhr1.responseText);
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var firstRun = sessionStorage.getItem('postBackgroundTasks');
 
     if (!firstRun) {
-        postBackgroundTasks("Init");
+        postBackgroundTasks();
         sessionStorage.setItem('postBackgroundTasks', true);
     }
 
@@ -77,10 +77,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     notiBackgroundTasks();
     setTimeout(function () {
-        postBackgroundTasks("Count");
+        postBackgroundTasks();
         notiBackgroundTasks();
         setInterval(function () {
-            postBackgroundTasks("Count");
+            postBackgroundTasks();
             notiBackgroundTasks();
         }, 60000);
     }, secUntilNextMin * 1000);

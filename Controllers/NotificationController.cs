@@ -39,12 +39,11 @@ namespace Test.Controllers
             var noti = _notificationService.GetById(id);
             if (noti != default)
             {
-                if (noti.Status == NotificationStatus.read)
+                if (noti.Status == NotificationStatus.unread)
                 {
-                    return Redirect(noti.Link);
+                    noti.Status = NotificationStatus.read;
+                    _notificationService.Save();
                 }
-                noti.Status = NotificationStatus.read;
-                _notificationService.Save();
                 return Redirect(noti.Link);
             }
             return View("NotFoundPage", "Error");
