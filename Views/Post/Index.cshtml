@@ -2,9 +2,31 @@
 @model string[]
 @section AddToHead {
     <link href="@Url.Content("~/css/index.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/my.css")" rel="stylesheet" />
+    <script src="@Url.Content("~/js/lucide.js")"></script>
 }
 @{
-    ViewData["Title"] = "List of Posts";
+    ViewData["Title"] = "Main Menu";
+    var endpoint = Url.Action("index", "api");
+}
+@section AddNewScript {
+    <script src="@Url.Content("~/js/lucide.js")"></script>
+    <script src="@Url.Content("~/js/model.js")"></script>
+    <script>
+
+        const row = new Row(
+            document.querySelector('.post-container'), null
+        );
+
+        row.manifest = '@(string.Join(" ", Model))'.split(' ');
+        row.generate_cards();
+
+        async function select(ele) {
+            await row.get(`/api/filter/${ele.id}`);
+            row.generate_cards();
+        }
+    </script>
+
 }
 
 <div class="index-container">
@@ -18,7 +40,7 @@
             <ul>
                 @foreach (Tag tag in Enum.GetValues(typeof(Tag)))
                 {
-                    <li class="tag">
+                    <li class="tag-selector">
                         <a id="@((int)tag)" onclick="select(this)">@tag</a>
                     </li>
                 }
@@ -26,21 +48,8 @@
         </div>
 
         <link href="@Url.Content("~/css/postlist.css")" rel="stylesheet"/>
-        <script src="@Url.Content("~/js/lucide.js")"></script>
-        <script src="@Url.Content("~/js/model.js")"></script>
-        <script>
 
-            const row = new Row(
-                document.querySelector('.content-container'), null
-            );
-
-            row.manifest = '@(string.Join(" ", Model))'.split(' ');
-            row.generate_cards();
-
-            async function select(ele) {
-                await row.get(`/api/filter/${ele.id}`);
-                row.generate_cards();
-            }
-        </script>
+        <div class="post-container">
+        </div>
     </div>
 </div>

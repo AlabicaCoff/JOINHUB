@@ -162,8 +162,6 @@ for details on configuring this project to bundle and minify static web assets. 
 }
 
 .container {
-    width: 100vw;
-    height: 100%;
     margin: 50px 0;
 }
 

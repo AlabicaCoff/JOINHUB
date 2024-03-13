@@ -21,6 +21,7 @@ function obsoleteHover(obj, event) {
 function startTimerWorker(workerPath, expire) {
     // this function is guarantee to be called when the post is still active
     // update to current first
+    expire = parseInt(expire);
     updateFlip(expire - new Date().getTime(), true);
     console.log("Webworker started succesfully!");
 
