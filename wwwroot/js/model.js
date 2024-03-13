@@ -28,8 +28,8 @@
  * @prop {number} id
  * @prop {string} title // c
  * @prop {string} description // c
- * @prop {Date} createdTime // <- string
- * @prop {Date} expireTime // c <- string
+ * @prop {Date} createdTime // 
+ * @prop {Date} expireTime // c 
  * @prop {number} status // c
  * @prop {number?} tag // c
  * @prop {number?} numberOfParticipants // c max members
@@ -45,7 +45,7 @@ function createIcon(icon) {
     return lucide.createElement(lucide[icon]);
 }
 
-function Tag({tagName='div', ...obj}) {
+function createElement({tagName='div', ...obj}) {
     const ele = document.createElement(tagName);
     return setAttr(ele, obj);
 }
@@ -121,7 +121,7 @@ class Component {
         // @ts-ignore
         const { tagName, className } = this.constructor;
         
-        return this.root.appendChild(Tag(
+        return this.root.appendChild(createElement(
             { tagName, class: className }
         ));
     }
@@ -261,12 +261,12 @@ class Card extends Component{
         ]]
         .forEach(([cls, ico, text]) => {
             if (text != null) {
-                prop.appendChild(Tag({
+                prop.appendChild(createElement({
                     class: 'list'
                 }))
                 .append(
                     createIcon(ico),
-                    Tag({
+                    createElement({
                         class: `prop-text ${cls}`,
                         textContent: text.toString()
                     })
@@ -302,12 +302,12 @@ class Card extends Component{
                 p_toggle = Number(!p_toggle);
         }
 
-        window.matchMedia(
-            '(max-width: 768px)'
-        ).onchange = e => {
-            let i = Number(e.matches);
-            header.style['flex-direction'] = ['row', 'column'][i];
-        };
+        // window.matchMedia(
+        //     '(max-width: 768px)'
+        // ).onchange = e => {
+        //     let i = Number(e.matches);
+        //     header.style['flex-direction'] = ['row', 'column'][i];
+        // };
     }
 
     /** 
@@ -334,7 +334,7 @@ class Card extends Component{
             '.frame .bar', ['style', 'width'], (() => {
                 let width = 0;
                 if (post.numberOfParticipants) {
-                    width = post.current_number/post.numberOfParticipants * 100 + 2.8;
+                    width = post.current_number/post.numberOfParticipants * 100;
                 }
                 return `${width}%`;
             })()
