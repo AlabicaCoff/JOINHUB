@@ -12,7 +12,7 @@
             const expireTime = new Date("@Model.ExpireTime.ToString("o")").getTime(); 
             let docBody = document.body;
             const workerPath = "@Url.Content("~/js/timerWorker.js")";
-            docBody.setAttribute("onload", "startTimerWorker(workerPath, expireTime)");
+            docBody.setAttribute("onload", "startTimerWorker(workerPath)");
             console.log(expireTime);
         </script>
     }
