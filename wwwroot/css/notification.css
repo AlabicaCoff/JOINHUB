@@ -14,6 +14,7 @@
     padding: 10px;
     background-color: rgb(21, 51, 169);
     text-align: center;
+    position: relative;
 }
 
     .topBox h1 {
@@ -22,6 +23,14 @@
         letter-spacing: 0.3rem;
         font-weight: 400;
     }
+
+.readAll {
+    color: whitesmoke;
+    text-align: center;
+    position: absolute;
+    right: 20px;
+    top: 35px;
+}
 
 .contentBox {
     height: 100%;

@@ -9,6 +9,7 @@
 <div class="notiBox">
     <div class="topBox">
         <h1>@ViewData["Title"]</h1>
+        <a onclick="readAllNotification()" href="#" class="readAll">Read All</a>
     </div>
     <div class="contentBox">
         @if (Model.Count == 0)
@@ -21,7 +22,7 @@
         {
             <div class="notiContent">
                 <div class="status">
-                    <p>@item.Status</p>
+                    <p id="noti_@item.Id">@item.Status</p>
                 </div>
                 <div class="title">
                     <p>@item.Title</p>
@@ -32,5 +33,6 @@
             </div>
         }
     </div>
+    <hr />
 </div>
 
