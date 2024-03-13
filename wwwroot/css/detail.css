@@ -4,6 +4,14 @@
     border-radius: 20px;
 }
 
+.detail-page-container {
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 /* Title related rules */
 .title-container {
     width: 85vw;
@@ -76,7 +84,7 @@
 
 /* time related rules */
 .time-related-containter {
-    margin-top: 9vh;
+    margin-top: 5vh;
     margin-bottom: 3vh;
 }
 
@@ -273,11 +281,13 @@ obsolete-desc {
 .content-container {
     display: flex;
     justify-content: space-between;
+    width: 91vw;
 }
 
 .back-button-segment {
     display: flex;
     margin-top: 50px;
+    margin-left: 4vw;
     padding: 10px;
     width: 100%;
     font-size: 0.6em;
@@ -300,8 +310,8 @@ obsolete-desc {
     /* Responsive Styles */
     @media only screen and (max-width: 1000px) {
         .content-container {
-        flex-direction: row;
-    }
+            flex-direction: row;
+        }
 
         .content-container div {
             margin: 0px;

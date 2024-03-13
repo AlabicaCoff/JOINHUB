@@ -22,7 +22,7 @@ namespace Test.Controllers {
         public JsonResult filter(int id) {
             var allPosts = _post.GetAllInclude();
             var activePosts = allPosts.Where(p => p.Status == PostStatus.Active).ToList();
-            var filtered = activePosts.Where(p => (int) p.Tag == id);
+            var filtered = activePosts.Where(p => (p.Tag != null) ? ((int) p.Tag == id) : false);
 
             return Json(manifest(filtered));
         }
