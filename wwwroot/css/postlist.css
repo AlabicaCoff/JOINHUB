@@ -37,6 +37,7 @@
 .row {
     flex-direction: column;
     margin-top: 24px;
+    margin-bottom: 20px;
     gap: 24px;
 }
 
@@ -272,7 +273,7 @@
     }
 
     .crd .header * {
-        flex-direction: row;
+        /*flex-direction: row;*/
     }
     
     .crd .prop {

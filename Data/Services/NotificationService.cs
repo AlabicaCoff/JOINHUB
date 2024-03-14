@@ -26,6 +26,17 @@ namespace Test.Data.Services
 			}
         }
 
+        public void DeleteAll(IEnumerable<Notification> notifications)
+        {
+            if (notifications != null)
+            {
+                foreach (var notification in notifications)
+                {
+                    _context.Notifications.Remove(notification);
+                }
+            }
+        }
+
         public IEnumerable<Notification> GetAll()
         {
             var result = _context.Notifications.ToList();
@@ -38,9 +49,9 @@ namespace Test.Data.Services
             return result;
         }
 
-        public Notification GetByLink(string link)
+        public IEnumerable<Notification> GetByLink(string link)
         {
-            var result = _context.Notifications.SingleOrDefault(n => n.Link == link);
+            var result = _context.Notifications.Where(n => n.Link == link);
             return result;
         }
 

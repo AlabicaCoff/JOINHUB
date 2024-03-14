@@ -1,36 +1,40 @@
 ﻿@model ICollection<Notification>
 @section AddToHead {
     <link href="@Url.Content("~/css/notification.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/sharedStyles.css")" rel="stylesheet" type="text/css" />
 }
 @{
     ViewData["Title"] = "Notifications";
 }
 
-<div class="notiBox">
-    <div class="topBox">
-        <h1>@ViewData["Title"]</h1>
-    </div>
-    <div class="contentBox">
-        @if (Model.Count == 0)
-        {
-            <div class="notiContent">
-                <p class="notThing">You don't have any notifications.</p>
-            </div>
-        }
-        @foreach (var item in Model)
-        {
-            <div class="notiContent">
-                <div class="status">
-                    <p>@item.Status</p>
+<div class="align-content-center">
+    <div class="notiBox">
+        <div class="topBox">
+            <h1>@ViewData["Title"]</h1>
+            <a onclick="readAllNotification()" href="#" class="readAll">Read All</a>
+        </div>
+        <div class="contentBox">
+            @if (Model.Count == 0)
+            {
+                <div class="notiContent">
+                    <p class="notThing">You don't have any notifications.</p>
                 </div>
-                <div class="title">
-                    <p>@item.Title</p>
+            }
+            @foreach (var item in Model)
+            {
+                <div class="notiContent">
+                    <div class="status">
+                        <p id="noti_@item.Id">@item.Status</p>
+                    </div>
+                    <div class="title">
+                        <p>@item.Title</p>
+                    </div>
+                    <div class="toPostBtn">
+                        <button onclick="window.location.href='notification/read/@item.Id';" class="detailBtn">Detail.</button>
+                    </div>
                 </div>
-                <div class="toPostBtn">
-                    <button onclick="window.location.href='notification/read/@item.Id';" class="detailBtn">Detail.</button>
-                </div>
-            </div>
-        }
+            }
+        </div>
+        <hr />
     </div>
 </div>
-

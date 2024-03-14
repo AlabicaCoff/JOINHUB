@@ -36,11 +36,11 @@
 .flip-card .top-flip {
     position: absolute;
     width: 47.5%;
-    animation: flip-top 250ms ease-in;
+    animation: flip-top-anim 250ms ease-in;
     transform-origin: bottom;
 }
 
-@keyframes flip-top {
+@keyframes flip-top-anim {
     100% {
         transform: rotateX(90deg);
     }
@@ -50,12 +50,12 @@
     position: absolute;
     bottom: 0;
     width: 47.5%;
-    animation: flip-bottom 250ms ease-out 250ms;
+    animation: flip-bottom-anim 250ms ease-out 250ms;
     transform-origin: top;
     transform: rotateX(90deg);
 }
 
-@keyframes flip-bottom {
+@keyframes flip-bottom-anim {
     100% {
         transform: rotateX(0deg);
     }

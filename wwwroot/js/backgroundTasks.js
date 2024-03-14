@@ -1,18 +1,18 @@
-function postBackgroundTasks(print) {
+function postBackgroundTasks() {
     var xhr1 = new XMLHttpRequest();
     xhr1.open('POST', '/post/BackgroundTasks', true);
-    xhr1.setRequestHeader('Content-Type', 'application/json');
+
     xhr1.onreadystatechange = function () {
         if (xhr1.readyState === 4) {
             if (xhr1.status >= 200 && xhr1.status < 300) {
-                console.log(print);
+
             }
             else {
                 console.error(xhr1.responseText);
             }
         };
     };
-    xhr1.send(print);
+    xhr1.send();
 };
 
 function notiBackgroundTasks() {
@@ -46,29 +46,37 @@ function notiBackgroundTasks() {
     xhr2.send();
 };
 
-function filterPost(serverpage) {
+function readAllNotification() {
     var xhr3 = new XMLHttpRequest();
-    xhr3.open('GET', serverpage, true);
-
+    xhr3.open('Post', '/notification/readall', true);
+    xhr3.setRequestHeader('Content-Type', 'application/json');
     xhr3.onreadystatechange = function () {
         if (xhr3.readyState === 4) {
-            var tbody = document.getElementById('index-tbody');
             if (xhr3.status >= 200 && xhr3.status < 300) {
-                tbody.innerHTML = xhr3.responseText;
+                var data = JSON.parse(xhr3.responseText);
+                if (data.notificationsId && data.notificationsId.length > 0) {
+                    data.notificationsId.forEach(function (notiId) {
+                        var readNotiStatus = document.getElementById("noti_" + notiId);
+                        if (readNotiStatus) {
+                            readNotiStatus.innerHTML = "read";
+                        }
+                    });
+                    notiBackgroundTasks();
+                }
             }
             else {
-                console.error(xhr1.responseText);
+                console.error(xhr3.responseText);
             }
         };
     };
     xhr3.send();
-}
+};
 
 document.addEventListener('DOMContentLoaded', function () {
     var firstRun = sessionStorage.getItem('postBackgroundTasks');
 
     if (!firstRun) {
-        postBackgroundTasks("Init");
+        postBackgroundTasks();
         sessionStorage.setItem('postBackgroundTasks', true);
     }
 
@@ -77,10 +85,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     notiBackgroundTasks();
     setTimeout(function () {
-        postBackgroundTasks("Count");
+        postBackgroundTasks();
         notiBackgroundTasks();
         setInterval(function () {
-            postBackgroundTasks("Count");
+            postBackgroundTasks();
             notiBackgroundTasks();
         }, 60000);
     }, secUntilNextMin * 1000);
