@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "SearchNotFound";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section AddToHead {
+    <link href="@Url.Content("~/css/notfound.css")" rel="stylesheet" type="text/css" />
+}
+
+<div class="wrapper">
+    <h1 class="head">Sorry!</h1>
+    <h2 class="second_head">No Post Matching</h2>
+    <p class="description">Please check the message</p>
+    <a class="home-btn" href="/">Go to Homepage!</a>
+</div>

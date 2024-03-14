@@ -15,7 +15,8 @@ using Test.Data.Enum;
 using Test.Data.Services;
 using Test.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-
+using System.Text.Json;
+ 
 namespace Test.Controllers
 {
     public class PostController : Controller
@@ -35,11 +36,13 @@ namespace Test.Controllers
             _userManager = userManager;
         }
 
-        private string[] manifest(IEnumerable<Post> posts) {            
-            return posts
+        private string[] manifest(IEnumerable<Post> posts) {
+            var result = posts
                 .Select(p => p.Id)
                 .Select(id => $"/api/post/{id}")
                 .ToArray();
+            
+            return result;
         }
 
         [AllowAnonymous]
@@ -59,9 +62,9 @@ namespace Test.Controllers
             {
                 var matchedResult = activePosts.Where(p => p.Title.ToLower().Contains(searchString.ToLower()) 
                     || p.Description.ToLower().Contains(searchString.ToLower())).ToList();
-                return View("Index", manifest(matchedResult));
+                return View("SearchNotFound", manifest(matchedResult));
             }
-            return View("Index", manifest(allPosts));
+            return View("Index", manifest(activePosts));
         }
 
         [Authorize]
@@ -260,7 +263,7 @@ namespace Test.Controllers
             foreach (var post in expiredPosts)
             {
                 DateTime currentTime = DateTime.UtcNow;
-                DateTime expirationThreshold = post.ExpireTime.ToUniversalTime().AddMinutes(2);
+                DateTime expirationThreshold = post.ExpireTime.ToUniversalTime().AddMinutes(30);
 
                 if (currentTime >= expirationThreshold)
                 {

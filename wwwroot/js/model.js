@@ -3,7 +3,7 @@
  * @typedef {Object} Author
  * @prop {string} id
  * @prop {string} username
- * @prop {string} fullname
+ * @prop {string} fullName
  */
 /**
  * @typedef {Object} Post_Participants
@@ -28,8 +28,8 @@
  * @prop {number} id
  * @prop {string} title // c
  * @prop {string} description // c
- * @prop {Date} createdTime // <- string
- * @prop {Date} expireTime // c <- string
+ * @prop {Date} createdTime // 
+ * @prop {Date} expireTime // c 
  * @prop {number} status // c
  * @prop {number?} tag // c
  * @prop {number?} numberOfParticipants // c max members
@@ -45,13 +45,15 @@ function createIcon(icon) {
     return lucide.createElement(lucide[icon]);
 }
 
-function Tag({tagName='div', ...obj}) {
+function createElement({tagName='div', ...obj}) {
     const ele = document.createElement(tagName);
     return setAttr(ele, obj);
 }
 
 /** @param {HTMLElement} ele */
-function setAttr(ele, obj) {
+function setAttr(ele, {text='', ...obj}) {
+    ele.textContent = text;
+    
     for (const key in obj) {
         ele.setAttribute(key, obj[key]);
     }
@@ -69,6 +71,17 @@ function lastchain(obj, ls) {
     return [obj, last];
 }
 
+/** @param {string} txt */
+function cut_txt(txt) {
+    var shorter = txt.slice(0, 299);
+    
+    if (txt.length > 300) {
+        shorter = shorter + '...'
+    }
+    return shorter
+}
+
+
 /** @param {Date} dt */
 function time_str(dt) {
     // @ts-ignore
@@ -81,9 +94,9 @@ function time_str(dt) {
         ['s', normalize.getSeconds()]
     ];
     for (const [chr, n] of time) {
-        if (n) {
+        if (n > 0) {
             let str = n.toString() + chr;
-            return diff > 0 ? `${str} ago` : `in ${str}`;
+            return diff > 0 ? `${str} ago` : `Expire in ${str}`;
         }
     }
 }
@@ -121,7 +134,7 @@ class Component {
         // @ts-ignore
         const { tagName, className } = this.constructor;
         
-        return this.root.appendChild(Tag(
+        return this.root.appendChild(createElement(
             { tagName, class: className }
         ));
     }
@@ -159,24 +172,47 @@ class Row extends Component {
 
     init(userid) {
         this.userid = userid;
+        setInterval(() => this.update(), 3000);
+        setInterval(() => this.generate_cards(), 6000);
     }
 
     async get(manifest_url) {
         /** @type {string[]} */
+        this.m_url = manifest_url;
+        console.log('Row manifest', manifest_url, this.m_url);
         this.manifest = await super.get(manifest_url);
     }
     
     generate_cards() {
-        // reset
-        this.ele.innerHTML = '';
-        this.manifest?.map(
-            url => this.add(url)
-        );
+        if (this.manifest == undefined) {
+            return null;
+        }
+        if (this.m_url != undefined) {
+            this.get(this.m_url);
+        }
+
+        // rm expire url
+        var temp = [...this.cards];
+
+        this.cards
+            .filter(card => !this.manifest.includes(card.url))
+            .forEach(rm_card => {
+                temp = temp.filter(card => card != rm_card);
+                this.ele.removeChild(rm_card.ele);
+            });
+
+        this.cards = temp;
+        
+
+        // add new url
+        const current = this.cards.map(card => card.url);
+        this.manifest
+            .filter(url => !current.includes(url))
+            .forEach(url => this.add(url));
     }
 
     add(post_url) {
         const card = new Card(this.ele, post_url);
-
         this.cards.push(card);
         this.ele.appendChild(card.ele);
     }
@@ -197,7 +233,7 @@ class Card extends Component{
     async finish() {
         const post = await this.get();
 
-        this.ismy = post.author.id == this.root.userid; //!
+        this.ismy = post.author.id == this.root.userid;
         this.render();
         this.setattr(post);
         this.#refresh(post);
@@ -206,6 +242,7 @@ class Card extends Component{
     async update() {
         const post = await this.get();
         this.#refresh(post);
+        console.log('update', this.url);
     }
     
     /** @return {Promise<Post>} */
@@ -234,6 +271,7 @@ class Card extends Component{
             const [ lastobj, lastkey ] = lastchain(eleobj, keys);
 
             if (lastobj != null && lastobj[lastkey] != now) {
+                console.log('change', this.url, lastobj[lastkey], now)
                 lastobj[lastkey] = now;
             }
         }
@@ -248,7 +286,7 @@ class Card extends Component{
             header = this.find('.header'),
             content = this.find('.content'),
             foot = this.find('.foot'),
-            user = this.find('.user'),
+            user = this.find('.username'),
             ctime = this.find('.ctime');
         var 
             p_toggle = 1;
@@ -257,18 +295,18 @@ class Card extends Component{
         [[
             'loc', 'MapPin', post.location
         ],[
-            'etime', 'TimerOff', time_str(post.expireTime)
+            'etime', 'TimerOff', post.expireTime.toLocaleString()
         ]]
         .forEach(([cls, ico, text]) => {
             if (text != null) {
-                prop.appendChild(Tag({
+                prop.appendChild(createElement({
                     class: 'list'
                 }))
                 .append(
                     createIcon(ico),
-                    Tag({
+                    createElement({
                         class: `prop-text ${cls}`,
-                        textContent: text.toString()
+                        text: text.toString()
                     })
                 );
             }
@@ -279,10 +317,9 @@ class Card extends Component{
 
         setAttr(title, {
             href: `/Post/Detail/${post.id}`,
-            target: '_blank',
         });
         setAttr(user, {
-            textContent: post.author.fullname + ' · ' + post.author.username
+            text: post.author.fullName + ' @ ' + post.author.username
         });
 
         // handle event
@@ -301,6 +338,15 @@ class Card extends Component{
                 );
                 p_toggle = Number(!p_toggle);
         }
+
+        header.onclick = () => this.update();
+
+        // window.matchMedia(
+        //     '(max-width: 768px)'
+        // ).onchange = e => {
+        //     let i = Number(e.matches);
+        //     header.style['flex-direction'] = ['row', 'column'][i];
+        // };
     }
 
     /** 
@@ -312,13 +358,15 @@ class Card extends Component{
         return [[
             'a.title', txt, post.title
         ],[
-            '.content', txt, post.description
+            '.content', txt, cut_txt(post.description)
         ],[
             '.prop .loc', txt, post.location
         ],[
             '.foot .tag', txt, post.tag // convert enum
         ],[
-            '.prop .etime', txt, time_str(post.expireTime)
+            '.prop .etime', txt, post.expireTime.toLocaleString()
+        ], [
+            '.ctime', txt, time_str(post.createdTime)
         ],[
             '.people .cap', txt, `${post.current_number}/${post.numberOfParticipants}`
        // ],[
@@ -327,7 +375,7 @@ class Card extends Component{
             '.frame .bar', ['style', 'width'], (() => {
                 let width = 0;
                 if (post.numberOfParticipants) {
-                    width = post.current_number/post.numberOfParticipants * 100 + 2.8;
+                    width = post.current_number/post.numberOfParticipants * 100;
                 }
                 return `${width}%`;
             })()
@@ -359,7 +407,7 @@ class Card extends Component{
                     <div class="left">
                         ${this.tag('tag')} · ${this.tag('ctime')}
                     </div>
-                    ${this.tag('user')}
+                    ${this.tag('username')}
                 </div>
             </div>
         `;
