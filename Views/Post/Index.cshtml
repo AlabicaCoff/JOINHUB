@@ -1,5 +1,7 @@
 ﻿@using Test.Data.Enum
+@using System.Web
 @model string[]
+
 @section AddToHead {
     <link href="@Url.Content("~/css/index.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/css/my.css")" rel="stylesheet" />
@@ -19,16 +21,16 @@
         );
 
         row.manifest = '@(string.Join(" ", Model))'.split(' ');
-        row.generate_cards();
+            
+        row.generate_cards()
 
-        async function select(ele) {
-            await row.get(`/api/filter/${ele.id}`);
+        async function gen(url) {
+            await row.get(url);
             row.generate_cards();
-        }
+        };
+
     </script>
-
 }
-
 <div class="index-container">
     <div class="welcome-segment">
         <span>Welcome to</span>
@@ -41,7 +43,7 @@
                 @foreach (Tag tag in Enum.GetValues(typeof(Tag)))
                 {
                     <li class="tag-selector">
-                        <a id="@((int)tag)" onclick="select(this)">@tag</a>
+                        <a id="@((int)tag)" onclick="gen('/api/filter/@((int)tag)')" >@tag</a>
                     </li>
                 }
             </ul>
