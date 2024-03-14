@@ -71,6 +71,17 @@ function lastchain(obj, ls) {
     return [obj, last];
 }
 
+/** @param {string} txt */
+function cut_txt(txt) {
+    var shorter = txt.slice(0, 299);
+    
+    if (txt.length > 300) {
+        shorter = shorter + '...'
+    }
+    return shorter
+}
+
+
 /** @param {Date} dt */
 function time_str(dt) {
     // @ts-ignore
@@ -338,7 +349,7 @@ class Card extends Component{
         return [[
             'a.title', txt, post.title
         ],[
-            '.content', txt, post.description
+            '.content', txt, cut_txt(post.description)
         ],[
             '.prop .loc', txt, post.location
         ],[
