@@ -178,10 +178,18 @@ class Row extends Component {
 
     async get(manifest_url) {
         /** @type {string[]} */
+        this.m_url = manifest_url;
+        console.log('Row manifest', manifest_url, this.m_url);
         this.manifest = await super.get(manifest_url);
     }
     
     generate_cards() {
+        if (this.manifest == undefined) {
+            return null;
+        }
+        if (this.m_url != undefined) {
+            this.get(this.m_url);
+        }
 
         // rm expire url
         var temp = [...this.cards];
@@ -263,6 +271,7 @@ class Card extends Component{
             const [ lastobj, lastkey ] = lastchain(eleobj, keys);
 
             if (lastobj != null && lastobj[lastkey] != now) {
+                console.log('change', this.url, lastobj[lastkey], now)
                 lastobj[lastkey] = now;
             }
         }
@@ -356,6 +365,8 @@ class Card extends Component{
             '.foot .tag', txt, post.tag // convert enum
         ],[
             '.prop .etime', txt, post.expireTime.toLocaleString()
+        ], [
+            '.ctime', txt, time_str(post.createdTime)
         ],[
             '.people .cap', txt, `${post.current_number}/${post.numberOfParticipants}`
        // ],[
