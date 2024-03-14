@@ -161,7 +161,8 @@ class Row extends Component {
 
     init(userid) {
         this.userid = userid;
-        setInterval(() => this.update(), 4000);
+        setInterval(() => this.update(), 3000);
+        setInterval(() => this.generate_cards(), 6000);
     }
 
     async get(manifest_url) {
@@ -170,13 +171,25 @@ class Row extends Component {
     }
     
     generate_cards() {
-        // reset
-        this.ele.innerHTML = '';
-        this.cards.length = 0;
 
-        this.manifest?.map(
-            url => this.add(url)
-        );
+        // rm expire url
+        var temp = [...this.cards];
+
+        this.cards
+            .filter(card => !this.manifest.includes(card.url))
+            .forEach(rm_card => {
+                temp = temp.filter(card => card != rm_card);
+                this.ele.removeChild(rm_card.ele);
+            });
+
+        this.cards = temp;
+        
+
+        // add new url
+        const current = this.cards.map(card => card.url);
+        this.manifest
+            .filter(url => !current.includes(url))
+            .forEach(url => this.add(url));
     }
 
     add(post_url) {
