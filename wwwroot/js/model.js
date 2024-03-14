@@ -3,7 +3,7 @@
  * @typedef {Object} Author
  * @prop {string} id
  * @prop {string} username
- * @prop {string} fullname
+ * @prop {string} fullName
  */
 /**
  * @typedef {Object} Post_Participants
@@ -83,7 +83,7 @@ function time_str(dt) {
         ['s', normalize.getSeconds()]
     ];
     for (const [chr, n] of time) {
-        if (n) {
+        if (n > 0) {
             let str = n.toString() + chr;
             return diff > 0 ? `${str} ago` : `Expire in ${str}`;
         }
@@ -262,7 +262,7 @@ class Card extends Component{
         [[
             'loc', 'MapPin', post.location
         ],[
-            'etime', 'TimerOff', time_str(post.expireTime)
+            'etime', 'TimerOff', post.expireTime.toLocaleString()
         ]]
         .forEach(([cls, ico, text]) => {
             if (text != null) {
@@ -286,7 +286,7 @@ class Card extends Component{
             href: `/Post/Detail/${post.id}`,
         });
         setAttr(user, {
-            text: post.author.fullname + ' · ' + post.author.username
+            text: post.author.fullName + ' @ ' + post.author.username
         });
 
         // handle event
@@ -331,7 +331,7 @@ class Card extends Component{
         ],[
             '.foot .tag', txt, post.tag // convert enum
         ],[
-            '.prop .etime', txt, time_str(post.expireTime)
+            '.prop .etime', txt, post.expireTime.toLocaleString()
         ],[
             '.people .cap', txt, `${post.current_number}/${post.numberOfParticipants}`
        // ],[

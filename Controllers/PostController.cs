@@ -260,7 +260,7 @@ namespace Test.Controllers
             foreach (var post in expiredPosts)
             {
                 DateTime currentTime = DateTime.UtcNow;
-                DateTime expirationThreshold = post.ExpireTime.ToUniversalTime().AddMinutes(2);
+                DateTime expirationThreshold = post.ExpireTime.ToUniversalTime().AddMinutes(30);
 
                 if (currentTime >= expirationThreshold)
                 {
