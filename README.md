@@ -2,7 +2,7 @@ Mini Project for Web Application Development Subject Final Project
 
 Web board for announcing the search for members to join activities. such as looking for football teammates. find a team to eat buffet.
 
-Using .NET Core Framework and MySQL.
+Using ASP.NET Core MVC and MySQL.
 
 Core Requirements:
 1. can post announcements for members to do activities.
